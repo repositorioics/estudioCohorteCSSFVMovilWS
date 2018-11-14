@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/estudio_sostenible</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.search.autoregister_listeners">false</property>
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.Admision" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.ConsEstudios" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.Diagnostico" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.EghResultados" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.EgoResultados" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.EstadosHoja" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.HojaInfluenza" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.HorarioAtencion" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.InfluenzaMuestra" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.MalariaResultados" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.OrdenLaboratorio" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.Paciente" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.ParametrosSistemas" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.PerifericoResultado" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoInfluenza" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.SerologiaChikMuestra" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.SerologiaDengueMuestra" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.UsuariosView" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.RolesView" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.EscuelaCatalogo" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.EstudioCatalogo" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.ControlCambios" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.MotivoCancelacion" />
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.TipoConsulta" />        
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoZika" />   
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.HojaZika" />  
+    </session-factory>
+</hibernate-configuration>
