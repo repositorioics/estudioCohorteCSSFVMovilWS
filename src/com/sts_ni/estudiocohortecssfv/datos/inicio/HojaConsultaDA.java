@@ -521,6 +521,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 			int codExpediente;
 			int numHojaConsulta;
 			Short usuarioEnfermeria;
+			String valorParametro;
 			
 			
 			String sql = "select max(h.ordenLlegada) "
@@ -540,6 +541,17 @@ public class HojaConsultaDA implements HojaConsultaService {
 			numHojaConsulta = ((query.uniqueResult() == null) ? 1
 					: ((Integer) query.uniqueResult()).intValue()) + 1;
 			
+			sql = "select valores " + 
+					" from ParametrosSistemas p where p.nombreParametro ='INICIO_HOJA_CONSULTA'";
+
+			query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+			valorParametro = query.uniqueResult().toString();
+			
+			if (Integer.valueOf(valorParametro) > numHojaConsulta) {
+				numHojaConsulta = Integer.valueOf(valorParametro);
+			}
+				
 			JSONParser parser = new JSONParser();
 			Object obj = (Object) parser.parse(paramHojaConsulta);
 			JSONObject hojaConsultaJSON = (JSONObject) obj;
