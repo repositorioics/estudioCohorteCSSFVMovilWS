@@ -612,6 +612,16 @@ public class HojaCierreDA implements HojaCierreService {
 	
 			int numHoja = ((query.uniqueResult() == null) ? 1 :
 								((Integer) query.uniqueResult()).intValue()) + 1;
+			
+			sql = "select valores " + 
+					" from ParametrosSistemas p where p.nombreParametro ='INICIO_HOJA_CONSULTA'";
+
+			query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+			String valorParametro = query.uniqueResult().toString();
+			if (Integer.valueOf(valorParametro) > numHoja) {
+				numHoja = Integer.valueOf(valorParametro);
+			}
 
 			nuevaHoja.setCodExpediente(anteriorHoja.getCodExpediente());
 			nuevaHoja.setNumHojaConsulta(numHoja);
@@ -623,25 +633,26 @@ public class HojaCierreDA implements HojaCierreService {
 			nuevaHoja.setTallaCm(anteriorHoja.getTallaCm());
 			nuevaHoja.setTemperaturac(anteriorHoja.getTemperaturac());
 			nuevaHoja.setUsuarioMedico(anteriorHoja.getUsuarioMedico());
-			nuevaHoja.setPas(anteriorHoja.getPas());
-			nuevaHoja.setPad(anteriorHoja.getPad());
-			nuevaHoja.setPresion(anteriorHoja.getPresion());			
-			nuevaHoja.setPas(anteriorHoja.getPas());
-			nuevaHoja.setPad(anteriorHoja.getPad());
-			nuevaHoja.setFciaCard(anteriorHoja.getFciaCard());
-			nuevaHoja.setFciaResp(anteriorHoja.getFciaResp());
+			//estos campos deben quedar en blanco Dr. Ojeda 29112018
+			//nuevaHoja.setPas(anteriorHoja.getPas());
+			//nuevaHoja.setPad(anteriorHoja.getPad());
+			//nuevaHoja.setPresion(anteriorHoja.getPresion());			
+			//nuevaHoja.setPas(anteriorHoja.getPas());
+			//nuevaHoja.setPad(anteriorHoja.getPad());
+			//nuevaHoja.setFciaCard(anteriorHoja.getFciaCard());
+			//nuevaHoja.setFciaResp(anteriorHoja.getFciaResp());
 			nuevaHoja.setLugarAtencion(anteriorHoja.getLugarAtencion());
-			nuevaHoja.setConsulta(anteriorHoja.getConsulta());
+			nuevaHoja.setConsulta("Seguimiento");//siempre debe ser seguimiento. Dr. Ojeda 29112018
 			nuevaHoja.setSegChick(anteriorHoja.getSegChick());
 			nuevaHoja.setTurno(anteriorHoja.getTurno());
-			nuevaHoja.setTemMedc(anteriorHoja.getTemMedc());
+			//nuevaHoja.setTemMedc(anteriorHoja.getTemMedc());
 			nuevaHoja.setFis(anteriorHoja.getFis());
 			nuevaHoja.setFif(anteriorHoja.getFif());
-			nuevaHoja.setUltDiaFiebre(anteriorHoja.getUltDiaFiebre());
-			nuevaHoja.setUltDosisAntipiretico(anteriorHoja.getUltDosisAntipiretico());
-			nuevaHoja.setAmPmUltDiaFiebre(anteriorHoja.getAmPmUltDiaFiebre());
-			nuevaHoja.setHoraUltDosisAntipiretico(anteriorHoja.getHoraUltDosisAntipiretico());
-			nuevaHoja.setAmPmUltDosisAntipiretico(anteriorHoja.getAmPmUltDosisAntipiretico());
+			//nuevaHoja.setUltDiaFiebre(anteriorHoja.getUltDiaFiebre());
+			//nuevaHoja.setUltDosisAntipiretico(anteriorHoja.getUltDosisAntipiretico());
+			//nuevaHoja.setAmPmUltDiaFiebre(anteriorHoja.getAmPmUltDiaFiebre());
+			//nuevaHoja.setHoraUltDosisAntipiretico(anteriorHoja.getHoraUltDosisAntipiretico());
+			//nuevaHoja.setAmPmUltDosisAntipiretico(anteriorHoja.getAmPmUltDosisAntipiretico());
 			nuevaHoja.setEstado('6');
 			
 		} catch (HibernateException e) {
