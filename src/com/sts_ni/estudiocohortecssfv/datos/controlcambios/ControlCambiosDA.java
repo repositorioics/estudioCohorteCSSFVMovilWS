@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ni.com.sts.estudioCohorteCSSFV.modelo.ControlCambios;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
@@ -37,13 +39,209 @@ public class ControlCambiosDA implements ControlCambiosService {
 	
 	private static final HibernateResource HIBERNATE_RESOURCE;
 	private static final String QUERY_ELIMINA_CONTROL_CAMBIOS;
+	private static final String QUERY_OBTENER_CONTROL_CAMBIOS;
 	public static final String Modificacion = "Modificacion";
 	public static final String Discrepancia = "Discrepancia";
 	
 	static {
 		QUERY_ELIMINA_CONTROL_CAMBIOS = "delete from control_cambios where to_char(fecha, 'yyyymmdd') = to_char(cast(:fecha as Date), 'yyyymmdd') " +
 										" and cod_expediente = :CodExpediente and num_hoja_consulta = :NumHojaConsulta and controlador = :Controlador";
+		QUERY_OBTENER_CONTROL_CAMBIOS = "select cc from ControlCambios cc where cc.numHojaConsulta = :numHojaConsulta and cc.codExpediente = :codExpediente";
 		HIBERNATE_RESOURCE = new HibernateResource();
+	}
+	
+	public Map<String, Object> getControlCambios(int numHojaConsulta, int codExpediente){
+		Query query = HIBERNATE_RESOURCE.getSession().createQuery(QUERY_OBTENER_CONTROL_CAMBIOS);
+		query.setParameter("numHojaConsulta", numHojaConsulta);
+		query.setParameter("codExpediente", codExpediente);
+		List<ControlCambios> cambios = query.list();
+		 Map<String, Object> parametros = null;
+		 if (cambios.size()>0) parametros = new HashMap<String, Object>();
+		for(ControlCambios cambio : cambios) {
+			parametros.put(parseNombreCampoToNomreParametro(cambio.getNombreCampo()), cambio.getValorCampo());
+		}
+		return parametros;
+	}
+	
+	private String parseNombreCampoToNomreParametro(String nombreCampo) {
+		//estado general
+		if (nombreCampo.equalsIgnoreCase("Fiebre")) return "fiebrecc";
+		if (nombreCampo.equalsIgnoreCase("Asomnoliento")) return "asomnolientocc";
+		if (nombreCampo.equalsIgnoreCase("Astenia")) return "asteniacc";
+		if (nombreCampo.equalsIgnoreCase("Convulsiones")) return "convulsionescc";
+		if (nombreCampo.equalsIgnoreCase("Hipotermia")) return "hipotermiacc";
+		if (nombreCampo.equalsIgnoreCase("Inquieto")) return "inquietocc";
+		if (nombreCampo.equalsIgnoreCase("Letargia")) return "letargiacc";
+		if (nombreCampo.equalsIgnoreCase("Mal Estado")) return "malEstadocc";
+		if (nombreCampo.equalsIgnoreCase("Perdida Consciencia")) return "perdidaConscienciacc";
+		//cabeza
+		if (nombreCampo.equalsIgnoreCase("Cefalea")) return "cefaleacc";
+		if (nombreCampo.equalsIgnoreCase("Dolor Retroocular")) return "dolorRetroocularcc";
+		if (nombreCampo.equalsIgnoreCase("Fontanela Abombada")) return "fontanelaAbombadacc";
+		if (nombreCampo.equalsIgnoreCase("Hemorragia Suconjuntival")) return "hemorragiaSuconjuntivalcc";
+		if (nombreCampo.equalsIgnoreCase("Ictericia Conuntival")) return "ictericiaConuntivalcc";
+		if (nombreCampo.equalsIgnoreCase("Inyeccion Conjuntival")) return "inyeccionConjuntivalcc";
+		if (nombreCampo.equalsIgnoreCase("Rigidez Cuello")) return "rigidezCuellocc";
+		//cutaneo
+		if (nombreCampo.equalsIgnoreCase("Cianosis Central")) return "cianosisCentralcc";
+		if (nombreCampo.equalsIgnoreCase("Equimosis")) return "equimosiscc";
+		if (nombreCampo.equalsIgnoreCase("Ictericia")) return "ictericiacc";
+		if (nombreCampo.equalsIgnoreCase("Rahs Generalizado")) return "rahsGeneralizadocc";
+		if (nombreCampo.equalsIgnoreCase("Rahs Localizado")) return "rahsLocalizadocc";
+		if (nombreCampo.equalsIgnoreCase("Rahs Macular")) return "rahsMacularcc";
+		if (nombreCampo.equalsIgnoreCase("Rahs Moteada")) return "rahsMoteadacc";
+		if (nombreCampo.equalsIgnoreCase("Rash Eritematoso")) return "rashEritematosocc";
+		if (nombreCampo.equalsIgnoreCase("Rash Papular")) return "rashPapularcc";
+		if (nombreCampo.equalsIgnoreCase("Rubor Facial")) return "ruborFacialcc";
+		//garganta
+		if (nombreCampo.equalsIgnoreCase("Eritema")) return "eritemacc";
+		if (nombreCampo.equalsIgnoreCase("Adenopatias Cervicales")) return "adenopatiasCervicalescc";
+		if (nombreCampo.equalsIgnoreCase("Dolor Garganta")) return "dolorGargantacc";
+		if (nombreCampo.equalsIgnoreCase("Exudado")) return "exudadocc";
+		if (nombreCampo.equalsIgnoreCase("Petequias Mucosa")) return "petequiasMucosacc";
+		//osteomuscular
+		if (nombreCampo.equalsIgnoreCase("Altralgia")) return "altralgiacc";
+		if (nombreCampo.equalsIgnoreCase("Artralgia Distal")) return "artralgiaDistalcc";
+		if (nombreCampo.equalsIgnoreCase("Artralgia Proximal")) return "artralgiaProximalcc";
+		if (nombreCampo.equalsIgnoreCase("Conjuntivitis")) return "conjuntivitiscc";
+		if (nombreCampo.equalsIgnoreCase("Dolor Cuello")) return "dolorCuellocc";
+		if (nombreCampo.equalsIgnoreCase("Edema Codos")) return "edemaCodoscc";
+		if (nombreCampo.equalsIgnoreCase("Edema Hombros")) return "edemaHombroscc";
+		if (nombreCampo.equalsIgnoreCase("Edema Munecas")) return "edemaMunecascc";
+		if (nombreCampo.equalsIgnoreCase("Edema Rodillas")) return "edemaRodillascc";
+		if (nombreCampo.equalsIgnoreCase("Edema Tobillos")) return "edemaTobilloscc";
+		if (nombreCampo.equalsIgnoreCase("Lumbalgia")) return "lumbalgiacc";
+		if (nombreCampo.equalsIgnoreCase("Mialgia")) return "mialgiacc";
+		if (nombreCampo.equalsIgnoreCase("Tenosinovitis")) return "tenosinovitiscc";
+		//deshidratación
+		if (nombreCampo.equalsIgnoreCase("Bebe con sed")) return "bebeConSedcc";
+		if (nombreCampo.equalsIgnoreCase("Fontanela Hundida")) return "fontanelaHundidacc";
+		if (nombreCampo.equalsIgnoreCase("Lengua mucosas secas")) return "lenguaMucosasSecascc";
+		if (nombreCampo.equalsIgnoreCase("Ojos Hundidos")) return "ojosHundidoscc";
+		if (nombreCampo.equalsIgnoreCase("Orina reducida")) return "orinaReducidacc";
+		if (nombreCampo.equalsIgnoreCase("Pliegue cutaneo")) return "pliegueCutaneocc";
+		//renal
+		if (nombreCampo.equalsIgnoreCase("Bilirrubinuria")) return "bilirrubinuriacc";
+		if (nombreCampo.equalsIgnoreCase("Eritrocitos")) return "eritrocitoscc";
+		if (nombreCampo.equalsIgnoreCase("Leucocituria")) return "leucocituriacc";
+		if (nombreCampo.equalsIgnoreCase("Nitritos")) return "nitritoscc";
+		if (nombreCampo.equalsIgnoreCase("Sintomas Urinarios")) return "sintomasUrinarioscc";
+		//respiratorio
+		if (nombreCampo.equalsIgnoreCase("Aleteo Nasal")) return "aleteoNasalcc";
+		if (nombreCampo.equalsIgnoreCase("Apnea")) return "apneacc";
+		if (nombreCampo.equalsIgnoreCase("Congestion Nasal")) return "congestionNasalcc";
+		if (nombreCampo.equalsIgnoreCase("Crepitos")) return "crepitoscc";
+		if (nombreCampo.equalsIgnoreCase("Estirador Reposo")) return "estiradorReposocc";
+		if (nombreCampo.equalsIgnoreCase("Otalgia")) return "otalgiacc";
+		if (nombreCampo.equalsIgnoreCase("Otra Fif")) return "otraFifcc";
+		if (nombreCampo.equalsIgnoreCase("Quejido Espiratorio")) return "quejidoEspiratoriocc";
+		if (nombreCampo.equalsIgnoreCase("Respiracion Rapida")) return "respiracionRapidacc";
+		if (nombreCampo.equalsIgnoreCase("Rinorrea")) return "rinorreacc";
+		if (nombreCampo.equalsIgnoreCase("Roncos")) return "roncoscc";
+		if (nombreCampo.equalsIgnoreCase("Sibilancias")) return "sibilanciascc";
+		if (nombreCampo.equalsIgnoreCase("Tiraje Subcostal")) return "tirajeSubcostalcc";
+		if (nombreCampo.equalsIgnoreCase("Tos")) return "toscc";
+		if (nombreCampo.equalsIgnoreCase("Nueva Fif")) return "nuevaFifcc";
+		//Vacuna
+		if (nombreCampo.equalsIgnoreCase("Lactancia Materna")) return "lactanciaMaternacc";
+		if (nombreCampo.equalsIgnoreCase("Vacuna Influenza")) return "vacunaInfluenzacc";
+		if (nombreCampo.equalsIgnoreCase("Vacunas Completas")) return "vacunasCompletascc";
+		if (nombreCampo.equalsIgnoreCase("Fecha Vacuna")) return "fechaVacunacc";
+		//estado nutricional
+		if (nombreCampo.equalsIgnoreCase("Bajo Peso")) return "bajoPesocc";
+		if (nombreCampo.equalsIgnoreCase("Bajo Peso Severo")) return "bajoPesoSeverocc";
+		if (nombreCampo.equalsIgnoreCase("Normal")) return "normalcc";
+		if (nombreCampo.equalsIgnoreCase("Obeso")) return "obesocc";
+		if (nombreCampo.equalsIgnoreCase("Sobrepeso")) return "sobrePesocc";
+		if (nombreCampo.equalsIgnoreCase("Sospecha Problema")) return "sospechaProblemacc";
+		//referencia
+		if (nombreCampo.equalsIgnoreCase("Interconsulta Pediatrica")) return "interconsultaPediatricacc";
+		if (nombreCampo.equalsIgnoreCase("Referencia Hospital")) return "referenciaHospitalcc";
+		if (nombreCampo.equalsIgnoreCase("Referencia Dengue")) return "referenciaDenguecc";
+		if (nombreCampo.equalsIgnoreCase("Referencia Irag")) return "referenciaIragcc";
+		if (nombreCampo.equalsIgnoreCase("Referencia Chik")) return "referenciaChikcc";
+		if (nombreCampo.equalsIgnoreCase("Eti")) return "eticc";
+		if (nombreCampo.equalsIgnoreCase("Irag")) return "iragcc";
+		if (nombreCampo.equalsIgnoreCase("Neumonia")) return "neumoniacc";
+		//gastrointestinal
+		if (nombreCampo.equalsIgnoreCase("Poco Apetito")) return "pocoApetitocc";
+		if (nombreCampo.equalsIgnoreCase("Nausea")) return "nauseacc";
+		if (nombreCampo.equalsIgnoreCase("Dificultad Alimentarse")) return "dificultadAlimentarsecc";
+		if (nombreCampo.equalsIgnoreCase("Vomito 12 horas")) return "vomito12Horascc";
+		if (nombreCampo.equalsIgnoreCase("Diarrea")) return "diarreacc";
+		if (nombreCampo.equalsIgnoreCase("Diarrea Sangre")) return "diarreaSangrecc";
+		if (nombreCampo.equalsIgnoreCase("Estrenimiento")) return "estrenimientocc";
+		if (nombreCampo.equalsIgnoreCase("Dolor Ab Intermitente")) return "dolorAbIntermitentecc";
+		if (nombreCampo.equalsIgnoreCase("Dolor Ab Continuo")) return "dolorAbContinuocc";
+		if (nombreCampo.equalsIgnoreCase("Epigastralgia")) return "epigastralgiacc";
+		if (nombreCampo.equalsIgnoreCase("Intolerancia Oral")) return "intoleranciaOralcc";
+		if (nombreCampo.equalsIgnoreCase("Distension Abdominal")) return "distensionAbdominalcc";
+		if (nombreCampo.equalsIgnoreCase("Hepatomegalia")) return "hepatomegaliacc";
+		//categoria
+		if (nombreCampo.equalsIgnoreCase("Manifestacion Hemorragica")) return "manifestacionHemorragicacc";
+		if (nombreCampo.equalsIgnoreCase("Prueba Torniquete Positiva")) return "pruebaTorniquetePositivacc";
+		if (nombreCampo.equalsIgnoreCase("Petequia 10 Pt")) return "petequia10Ptcc";
+		if (nombreCampo.equalsIgnoreCase("Petequia 20 Pt")) return "petequia20Ptcc";
+		if (nombreCampo.equalsIgnoreCase("Piel Extremidades Frias")) return "pielExtremidadesFriascc";
+		if (nombreCampo.equalsIgnoreCase("Palidez en Extremidades")) return "palidezEnExtremidadescc";
+		if (nombreCampo.equalsIgnoreCase("Epistaxis")) return "epistaxiscc";
+		if (nombreCampo.equalsIgnoreCase("Gingivorragia")) return "gingivorragiacc";
+		if (nombreCampo.equalsIgnoreCase("Petequias Espontaneas")) return "petequiasEspontaneascc";
+		if (nombreCampo.equalsIgnoreCase("Llenado Capilar 2 seg")) return "llenadoCapilar2Segcc";
+		if (nombreCampo.equalsIgnoreCase("Cianosis")) return "cianosiscc";
+		if (nombreCampo.equalsIgnoreCase("Linfocitos Atipicos")) return "linfocitosaAtipicoscc";
+		if (nombreCampo.equalsIgnoreCase("Hipermenorrea")) return "hipermenorreacc";
+		if (nombreCampo.equalsIgnoreCase("Hematemesis")) return "hematemesiscc";
+		if (nombreCampo.equalsIgnoreCase("Melena")) return "melenacc";
+		if (nombreCampo.equalsIgnoreCase("Hemoconcentración")) return "hemoconcentracioncc";
+		//examenes
+		if (nombreCampo.equalsIgnoreCase("BHC")) return "bhccc";
+		if (nombreCampo.equalsIgnoreCase("Serologia Dengue")) return "serologiaDenguecc";
+		if (nombreCampo.equalsIgnoreCase("Serologia Chik")) return "serologiaChikcc";
+		if (nombreCampo.equalsIgnoreCase("Gota Gruesa")) return "gotaGruesacc";
+		if (nombreCampo.equalsIgnoreCase("Extendido Periferico")) return "extendidoPerifericocc";
+		if (nombreCampo.equalsIgnoreCase("EGO")) return "egocc";
+		if (nombreCampo.equalsIgnoreCase("EGH")) return "eghcc";
+		if (nombreCampo.equalsIgnoreCase("Citologia Fecal")) return "citologiaFecalcc";
+		if (nombreCampo.equalsIgnoreCase("Factor Reumatoideo")) return "factorReumatoideocc";
+		if (nombreCampo.equalsIgnoreCase("Albumina")) return "albuminacc";
+		if (nombreCampo.equalsIgnoreCase("Ast Alt")) return "astAltcc";
+		if (nombreCampo.equalsIgnoreCase("Bilirrubinas")) return "bilirrubinascc";
+		if (nombreCampo.equalsIgnoreCase("CPK")) return "cpkcc";
+		if (nombreCampo.equalsIgnoreCase("Colesterol")) return "colesterolcc";
+		if (nombreCampo.equalsIgnoreCase("Influenza")) return "influenzacc";
+		if (nombreCampo.equalsIgnoreCase("OEL")) return "otroExamenLabcc";
+		//HistExamenFisico
+		if (nombreCampo.equalsIgnoreCase("Historia Examen Fisico")) return "historiaExamenFisicocc";
+		//Diagnóstico
+		if (nombreCampo.equalsIgnoreCase("Diagnostico 1")) return "diagnostico1cc";
+		if (nombreCampo.equalsIgnoreCase("Diagnostico 2")) return "diagnostico2cc";
+		if (nombreCampo.equalsIgnoreCase("Diagnostico 3")) return "diagnostico3cc";
+		if (nombreCampo.equalsIgnoreCase("Diagnostico 4")) return "diagnostico4cc";
+		if (nombreCampo.equalsIgnoreCase("otro diagnostico")) return "otroDiagnosticocc";
+		//planes
+		if (nombreCampo.equalsIgnoreCase("Planes")) return "planescc";
+		//tratamiento
+		if (nombreCampo.equalsIgnoreCase("Acetaminofen")) return "acetaminofencc";
+		if (nombreCampo.equalsIgnoreCase("Asa")) return "asacc";
+		if (nombreCampo.equalsIgnoreCase("Ibuprofen")) return "ibuprofencc";
+		if (nombreCampo.equalsIgnoreCase("Penicilina")) return "penicilinacc";
+		if (nombreCampo.equalsIgnoreCase("Amoxicilina")) return "amoxicilinacc";
+		if (nombreCampo.equalsIgnoreCase("Dicloxacilina")) return "dicloxacilinacc";
+		if (nombreCampo.equalsIgnoreCase("Otro Antibiotico")) return "otroAntibioticocc";
+		if (nombreCampo.equalsIgnoreCase("Otro")) return "otrocc";
+		if (nombreCampo.equalsIgnoreCase("Furazolidona")) return "furazolidonacc";
+		if (nombreCampo.equalsIgnoreCase("Metronidazol Tinidazol")) return "metronidazolTinidazolcc";
+		if (nombreCampo.equalsIgnoreCase("Albendazol Mebendazol")) return "albendazolMebendazolcc";
+		if (nombreCampo.equalsIgnoreCase("Sulfato Ferroso")) return "sulfatoFerrosocc";
+		if (nombreCampo.equalsIgnoreCase("Suero Oral")) return "sueroOralcc";
+		if (nombreCampo.equalsIgnoreCase("Sulfato Zinc")) return "sulfatoZinccc";
+		if (nombreCampo.equalsIgnoreCase("Liquidos Iv")) return "liquidosIvcc";
+		if (nombreCampo.equalsIgnoreCase("Prednisona")) return "prednisonacc";
+		if (nombreCampo.equalsIgnoreCase("Hidrocortisona Iv")) return "hidrocortisonaIvcc";
+		if (nombreCampo.equalsIgnoreCase("Salbutamol")) return "salbutamolcc";
+		if (nombreCampo.equalsIgnoreCase("Oseltamivir")) return "oseltamivircc";
+		return nombreCampo;
 	}
 
 	@Override

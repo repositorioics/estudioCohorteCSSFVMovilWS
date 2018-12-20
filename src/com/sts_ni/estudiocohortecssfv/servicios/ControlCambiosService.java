@@ -1,6 +1,7 @@
 package com.sts_ni.estudiocohortecssfv.servicios;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ni.com.sts.estudioCohorteCSSFV.modelo.ControlCambios;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
@@ -77,4 +78,6 @@ public interface ControlCambiosService {
 
 	public String guardarCtrlGenerales(HojaConsulta hcActual, HojaConsulta hcNueva,
 			String usuario);
+	
+	public Map<String, Object> getControlCambios(int numHojaConsulta, int codExpediente);
 }

@@ -2,14 +2,16 @@ package com.sts_ni.estudiocohortecssfv.datos.inicio;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
 
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 
+import com.sts_ni.estudiocohortecssfv.datos.controlcambios.ControlCambiosDA;
 import com.sts_ni.estudiocohortecssfv.dto.HojaConsultaReporte;
-
+import com.sts_ni.estudiocohortecssfv.servicios.ControlCambiosService;
 import com.sts_ni.estudiocohortecssfv.servicios.HojaConsultaReporteService;
 import com.sts_ni.estudiocohortecssfv.util.HibernateResource;
 import com.sts_ni.estudiocohortecssfv.util.UtilitarioReporte;
@@ -22,7 +24,7 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 	
 	
 	private static final HibernateResource HIBERNATE_RESOURCE = new HibernateResource();
-	
+	private ControlCambiosService controlCambiosService = new ControlCambiosDA();
 	/***
 	 * Metodo Para imprimir en la impresora por defecto la Hoja de consulta.
 	 */
@@ -300,12 +302,14 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 
 		HojaConsulta hcon = (HojaConsulta) query.uniqueResult();		
 		boolean datosAdicionales = false;
+		 Map<String, Object> parametros = null;
+		if(hcon != null) parametros = controlCambiosService.getControlCambios(hcon.getNumHojaConsulta(), hcon.getCodExpediente());
 		
 		if(hcon != null && ((hcon.getHistoriaExamenFisico() != null && hcon.getHistoriaExamenFisico().trim().length() > 2300) 
 			|| (hcon.getPlanes() != null && hcon.getPlanes().trim().length() > 830)	)){
-			return  UtilitarioReporte.mostrarReporte(nombreReporte, null, result,true, hcon);
+			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, hcon);
 		} else {	    
-			return  UtilitarioReporte.mostrarReporte(nombreReporte, null, result,true, null);
+			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, null);
 		}
 	
 	} catch (Exception e) {
