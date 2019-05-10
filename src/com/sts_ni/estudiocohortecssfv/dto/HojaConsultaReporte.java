@@ -326,6 +326,11 @@ public class HojaConsultaReporte {
 	private String expedienteFisico;
 	private int numHojaConsulta;
 	
+	//ESTUDIOS PARTICIPANTES
+	/*---*/
+	private String estudiosParticipantes;
+	/*---*/
+	
 	public int getNumHojaConsulta() {
 		return numHojaConsulta;
 	}
@@ -1618,8 +1623,10 @@ public class HojaConsultaReporte {
 	public void setAmPmUltDiaFiebre(String amPmUltDiaFiebre) {
 		this.amPmUltDiaFiebre = amPmUltDiaFiebre;
 	}
-	
-	
-	
-
+	public String getEstudiosParticipantes() {
+		return estudiosParticipantes;
+	}
+	public void setEstudiosParticipantes(String estudiosParticipantes) {
+		this.estudiosParticipantes = estudiosParticipantes;
+	}
 }

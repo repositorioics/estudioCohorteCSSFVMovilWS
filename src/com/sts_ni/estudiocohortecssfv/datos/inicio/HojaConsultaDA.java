@@ -2910,11 +2910,37 @@ public class HojaConsultaDA implements HojaConsultaService {
 				ControlCambiosDA ctrlCambiosDA = new ControlCambiosDA();
 				ctrlCambiosDA.guardarControlCambios(hojaConsulta, ecc);
 			}
-			
-
-			if (hojaConsulta.getNumOrdenLaboratorio() != null) {
+			// verifica si existe orden de laboratorio
+			if (hojaConsulta.getNumOrdenLaboratorio() != null) {			
 				HIBERNATE_RESOURCE.begin();
-		
+				
+				int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+				
+				// verificar si serolgia dengue viene con estado falso
+				if (serologiaDengue.toString().compareTo("0") != 0) {
+					
+					/* Consulta para verificar si existe una orden de examen para serologia dengue */
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'Serologia Dengue' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
+					}
+				}
 				if (hojaConsulta.getSerologiaDengue() == null
 						|| hojaConsulta.getSerologiaDengue().toString()
 								.compareTo("0") != 0) {
@@ -2927,6 +2953,32 @@ public class HojaConsultaDA implements HojaConsultaService {
 						ordenLab.setEstado('0');
 						ordenLab.setTomaMx('0');
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLab);
+					}
+				}
+				// verificar si Serolgia CHICK viene con estado falso
+				if (serologiaChik.toString().compareTo("0") != 0) {
+					/* Consulta para verificar si existe una orden de examen para
+					Serolgia CHICK */
+					//int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'Serologia CHICK' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
 					}
 				}
 				if (hojaConsulta.getSerologiaChik() == null
@@ -2943,6 +2995,32 @@ public class HojaConsultaDA implements HojaConsultaService {
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLab);
 					}
 				}
+				// verificar si Gota Gruesa viene con estado falso
+				if (gotaGruesa.toString().compareTo("0") != 0) {
+					/* Consulta para verificar si existe una orden de examen para
+					Gota Gruesa */
+					//int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'Gota Gruesa' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
+					}
+				}
 				if (hojaConsulta.getGotaGruesa() == null
 						|| hojaConsulta.getGotaGruesa().toString()
 								.compareTo("0") != 0) {
@@ -2955,6 +3033,32 @@ public class HojaConsultaDA implements HojaConsultaService {
 						ordenLab.setEstado('0');
 						ordenLab.setTomaMx('0');
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLab);
+					}
+				}
+				// verificar si Extendido Periferico viene con estado falso
+				if (extendidoPeriferico.toString().compareTo("0") != 0) {
+					/* Consulta para verificar si existe una orden de examen para
+					Extendido Periferico */
+					//int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'Extendido Periferico' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
 					}
 				}
 				if (hojaConsulta.getExtendidoPeriferico() == null
@@ -2971,6 +3075,31 @@ public class HojaConsultaDA implements HojaConsultaService {
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLab);
 					}
 				}
+				// verificar si EGO viene con estado falso
+				if (ego.toString().compareTo("0") != 0) {
+					/* Consulta para verificar si existe una orden de examen para EGO */
+					//int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'EGO' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
+					}
+				}
 				if (hojaConsulta.getEgo() == null
 						|| hojaConsulta.getEgo().toString().compareTo("0") != 0) {
 					if (ego.toString().compareTo("0") == 0) {
@@ -2982,6 +3111,31 @@ public class HojaConsultaDA implements HojaConsultaService {
 						ordenLab.setEstado('0');
 						ordenLab.setTomaMx('0');
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLab);
+					}
+				}
+				// verificar si EGH viene con estado falso
+				if (egh.toString().compareTo("0") != 0) {
+					/* Consulta para verificar si existe una orden de examen para EGH */
+					//int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'EGH' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
 					}
 				}
 				if (hojaConsulta.getEgh() == null
@@ -2998,6 +3152,31 @@ public class HojaConsultaDA implements HojaConsultaService {
 					}
 				}		
 				
+				// verificar si Citologia Fecal viene con estado falso
+				if (citologiaFecal.toString().compareTo("0") != 0) {
+					/* Consulta para verificar si existe una orden de examen para Citologia Fecal */
+					//int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'Citologia Fecal' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
+					}
+				}
 				if (hojaConsulta.getCitologiaFecal() == null
 						|| hojaConsulta.getCitologiaFecal().toString().compareTo("0") != 0) {
 					if (citologiaFecal.toString().compareTo("0") == 0) {
@@ -3010,8 +3189,33 @@ public class HojaConsultaDA implements HojaConsultaService {
 						ordenLab.setTomaMx('0');
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLab);
 					}
-				}	
+				}
 				
+				// verificar si Influenza viene con estado falso
+				if (influenza.toString().compareTo("0") != 0) {
+					/* Consulta para verificar si existe una orden de examen para Influenza */
+					//int numOrdenLab = hojaConsulta.getNumOrdenLaboratorio();
+					sql=" select o from OrdenLaboratorio o "
+							+ " where o.numOrdenLaboratorio = :numOrdenLaboratorio "
+							+ " and o.examen = 'Influenza' "
+							+ " and o.estado = '0' ";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("numOrdenLaboratorio", numOrdenLab);
+					
+					OrdenLaboratorio ordenLaboratorio = (OrdenLaboratorio) query
+							.uniqueResult();
+					
+					if (ordenLaboratorio != null
+							&& ordenLaboratorio.getSecOrdenLaboratorio() > 0) {
+						ordenLaboratorio.setEstado('2');
+						ordenLaboratorio.setRazonCancela(Mensajes.RAZON_CANCELA_EXAMEN);
+						ordenLaboratorio.setUsuarioCancela(usuarioMedico);
+						ordenLaboratorio.setFechaHoraCancela(
+								UtilHojaConsulta.DateToString(new Date(), "dd/MM/yyyy HH:mm:ss"));
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(ordenLaboratorio);
+					}
+				}
 				if (hojaConsulta.getInfluenza() == null
 						|| hojaConsulta.getInfluenza().toString()
 								.compareTo("0") != 0) {

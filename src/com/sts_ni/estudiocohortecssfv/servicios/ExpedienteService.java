@@ -36,4 +36,14 @@ public interface ExpedienteService {
 	public byte[] getSeguimientoZikaPdf(int paramSecHojaZika);
 	
 	public void imprimirSeguimientoZikaPdf(int paramSecHojaZika);
+	
+	public String buscarFichaVigilanciaIntegrada(int codExpediente, int numHojaConsulta);
+	
+	public String guardarFichaVigilanciaIntegrada(String paramVigilanciaIntegrada);
+	
+	public String getDepartamentos();
+	
+	public String getMunicipios(int divisionpoliticaId);
+	
+	public byte[] getFichaPdf(Integer secVigilanciaIntegrada);
 }

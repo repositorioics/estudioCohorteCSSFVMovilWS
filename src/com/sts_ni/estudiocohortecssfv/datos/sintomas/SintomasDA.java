@@ -3,6 +3,7 @@ package com.sts_ni.estudiocohortecssfv.datos.sintomas;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,6 +12,8 @@ import java.util.Map;
 
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HorarioAtencion;
+import ni.com.sts.estudioCohorteCSSFV.modelo.OrdenLaboratorio;
+import ni.com.sts.estudioCohorteCSSFV.modelo.VigilanciaIntegradaIragEti;
 
 import org.hibernate.Query;
 import org.json.simple.JSONObject;
@@ -1015,7 +1018,7 @@ public class SintomasDA implements SintomasService {
 		StringBuffer result = new StringBuffer();
 		try {
 			Integer secHojaConsulta;
-
+			
 			JSONParser parser = new JSONParser();
 			Object obj = (Object) parser.parse(paramHojaConsulta);
 			JSONObject hojaConsultaJSON = (JSONObject) obj;
@@ -1081,7 +1084,68 @@ public class SintomasDA implements SintomasService {
 								"\n");
 					}
 				}
-
+				// Verificamos si ETI en la hoja de consulta es verdadero
+/*				if (hojaConsulta.getEti() !=  null &&
+						hojaConsulta.getEti().compareTo('0') == 0) {
+					//Crear la Ficha para ETI
+					String sql = "Select vi "
+							+ " from VigilanciaIntegradaIragEti vi "
+							+ " where vi.secHojaConsulta = :secHojaConsulta";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("secHojaConsulta", secHojaConsulta);
+											
+					VigilanciaIntegradaIragEti vigilanciaIntegrada = ((VigilanciaIntegradaIragEti) query.uniqueResult());
+					
+					if (vigilanciaIntegrada == null) {
+						VigilanciaIntegradaIragEti vigilanciaIntegradaResult = new VigilanciaIntegradaIragEti();
+						vigilanciaIntegradaResult.setSecHojaConsulta(secHojaConsulta);
+						vigilanciaIntegradaResult.setCodExpediente(hojaConsulta.getCodExpediente());
+						vigilanciaIntegradaResult.setNumHojaConsulta(hojaConsulta.getNumHojaConsulta());
+						vigilanciaIntegradaResult.setEti('0'); //TRUE
+						vigilanciaIntegradaResult.setIrag('1'); //FALSE
+						vigilanciaIntegradaResult.setIragInusitada('1'); //FALSE
+						vigilanciaIntegradaResult.setFechaCreacion(new Date());
+						HIBERNATE_RESOURCE.begin();
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(vigilanciaIntegradaResult);
+						HIBERNATE_RESOURCE.commit();
+						
+						result.append(Mensajes.FICHA_CASO_ETI).append(
+								"\n");
+					}
+				}*/
+				
+				// Verificamos si IRAG en la hoja de consulta es verdadero
+/*				if (hojaConsulta.getIrag() != null && 
+						hojaConsulta.getIrag().compareTo('0') == 0) {
+					//Crear la Ficha para ETI
+					String sql = "Select vi "
+							+ " from VigilanciaIntegradaIragEti vi "
+							+ " where vi.secHojaConsulta = :secHojaConsulta";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("secHojaConsulta", secHojaConsulta);
+					
+					VigilanciaIntegradaIragEti vigilanciaIntegrada = ((VigilanciaIntegradaIragEti) query.uniqueResult());
+					
+					if (vigilanciaIntegrada == null) {
+						VigilanciaIntegradaIragEti vigilanciaIntegradaResult = new VigilanciaIntegradaIragEti();
+						vigilanciaIntegradaResult.setSecHojaConsulta(secHojaConsulta);
+						vigilanciaIntegradaResult.setCodExpediente(hojaConsulta.getCodExpediente());
+						vigilanciaIntegradaResult.setNumHojaConsulta(hojaConsulta.getNumHojaConsulta());
+						vigilanciaIntegradaResult.setEti('1'); //FALSE
+						vigilanciaIntegradaResult.setIrag('0'); //TRUE
+						vigilanciaIntegradaResult.setIragInusitada('1'); //FALSE
+						vigilanciaIntegradaResult.setFechaCreacion(new Date());
+						HIBERNATE_RESOURCE.begin();
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(vigilanciaIntegradaResult);
+						HIBERNATE_RESOURCE.commit();
+						
+						result.append(Mensajes.FICHA_CASO_IRAG).append(
+								"\n");
+					}
+				}
+*/
 			} else {
 
 				if (UtilHojaConsulta.validarCasoNeumonia(hojaConsulta)) {
@@ -1092,7 +1156,68 @@ public class SintomasDA implements SintomasService {
 					result.append(Mensajes.MATRIZ_CASO_IRAG_SIN_FIEBRE).append(
 							"\n");
 				}
-
+				
+				// Verificamos si ETI en la hoja de consulta es verdadero
+				/*if (hojaConsulta.getEti() !=  null &&
+						hojaConsulta.getEti().compareTo('0') == 0) {
+					//Crear la Ficha para ETI
+					String sql = "Select vi "
+							+ " from VigilanciaIntegradaIragEti vi "
+							+ " where vi.secHojaConsulta = :secHojaConsulta";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("secHojaConsulta", secHojaConsulta);
+											
+					VigilanciaIntegradaIragEti vigilanciaIntegrada = ((VigilanciaIntegradaIragEti) query.uniqueResult());
+					
+					if (vigilanciaIntegrada == null) {
+						VigilanciaIntegradaIragEti vigilanciaIntegradaResult = new VigilanciaIntegradaIragEti();
+						vigilanciaIntegradaResult.setSecHojaConsulta(secHojaConsulta);
+						vigilanciaIntegradaResult.setCodExpediente(hojaConsulta.getCodExpediente());
+						vigilanciaIntegradaResult.setNumHojaConsulta(hojaConsulta.getNumHojaConsulta());
+						vigilanciaIntegradaResult.setEti('0'); //TRUE
+						vigilanciaIntegradaResult.setIrag('1'); //FALSE
+						vigilanciaIntegradaResult.setIragInusitada('1'); //FALSE
+						vigilanciaIntegradaResult.setFechaCreacion(new Date());
+						HIBERNATE_RESOURCE.begin();
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(vigilanciaIntegradaResult);
+						HIBERNATE_RESOURCE.commit();
+						
+						result.append(Mensajes.FICHA_CASO_ETI).append(
+								"\n");
+					}
+				}*/
+				
+				// Verificamos si IRAG en la hoja de consulta es verdadero
+		/*		if (hojaConsulta.getIrag() != null && 
+						hojaConsulta.getIrag().compareTo('0') == 0) {
+					//Crear la Ficha para ETI
+					String sql = "Select vi "
+							+ " from VigilanciaIntegradaIragEti vi "
+							+ " where vi.secHojaConsulta = :secHojaConsulta";
+					
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("secHojaConsulta", secHojaConsulta);
+					
+					VigilanciaIntegradaIragEti vigilanciaIntegrada = ((VigilanciaIntegradaIragEti) query.uniqueResult());
+					
+					if (vigilanciaIntegrada == null) {
+						VigilanciaIntegradaIragEti vigilanciaIntegradaResult = new VigilanciaIntegradaIragEti();
+						vigilanciaIntegradaResult.setSecHojaConsulta(secHojaConsulta);
+						vigilanciaIntegradaResult.setCodExpediente(hojaConsulta.getCodExpediente());
+						vigilanciaIntegradaResult.setNumHojaConsulta(hojaConsulta.getNumHojaConsulta());
+						vigilanciaIntegradaResult.setEti('1'); //FALSE
+						vigilanciaIntegradaResult.setIrag('0'); //TRUE
+						vigilanciaIntegradaResult.setIragInusitada('1'); //FALSE
+						vigilanciaIntegradaResult.setFechaCreacion(new Date());
+						HIBERNATE_RESOURCE.begin();
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(vigilanciaIntegradaResult);
+						HIBERNATE_RESOURCE.commit();
+						
+						result.append(Mensajes.FICHA_CASO_IRAG).append(
+								"\n");
+					}
+				}*/
 			}
 
 		} catch (Exception e) {

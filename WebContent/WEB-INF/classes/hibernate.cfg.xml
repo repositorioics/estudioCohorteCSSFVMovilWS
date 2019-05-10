@@ -35,6 +35,9 @@
         <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.MotivoCancelacion" />
         <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.TipoConsulta" />        
         <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoZika" />   
-        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.HojaZika" />  
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.HojaZika" /> 
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.VigilanciaIntegradaIragEti" /> 
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.Departamentos" />  
+        <mapping class="ni.com.sts.estudioCohorteCSSFV.modelo.Municipios" />  
     </session-factory>
 </hibernate-configuration>

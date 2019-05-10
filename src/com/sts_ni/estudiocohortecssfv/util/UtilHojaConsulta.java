@@ -1,5 +1,10 @@
 package com.sts_ni.estudiocohortecssfv.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
 
 public class UtilHojaConsulta {
@@ -631,7 +636,24 @@ public class UtilHojaConsulta {
 				respiratorioCompletada(hojaConsulta) && referenciaCompletada(hojaConsulta) &&
 				vacunaCompletada(hojaConsulta) && historialExamenCompletada(hojaConsulta) &&
 				tratamientoPlanesCompletada(hojaConsulta) && diagnosticoCompletada(hojaConsulta) &&
-				proximaCitaCompletada(hojaConsulta);
+				proximaCitaCompletada(hojaConsulta)
+				//Nueva Linea de codigo agregada
+				&& categoriaCompletada(hojaConsulta);
 	}
+	
+	public static String DateToString(Date fecha, String formato){
+		SimpleDateFormat sdf = new SimpleDateFormat(formato);
+		return sdf.format(fecha);
+	}
+
+	/*public static Date StringToDate(String fecha, String formato) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat(formato);
+		return sdf.parse(fecha);
+	}
+	
+	public static Date StringToDate(String fecha, String formato, Locale locale) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat(formato, locale);
+		return sdf.parse(fecha);
+	}*/
 }
 
