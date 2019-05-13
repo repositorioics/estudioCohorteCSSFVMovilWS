@@ -327,8 +327,8 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 		 Map<String, Object> parametros = null;
 		if(hcon != null) parametros = controlCambiosService.getControlCambios(hcon.getNumHojaConsulta(), hcon.getCodExpediente());
 		
-		if(hcon != null && ((hcon.getHistoriaExamenFisico() != null && hcon.getHistoriaExamenFisico().trim().length() > 2300) 
-			|| (hcon.getPlanes() != null && hcon.getPlanes().trim().length() > 830)	)){
+		if(hcon != null && ((hcon.getHistoriaExamenFisico() != null && hcon.getHistoriaExamenFisico().trim().length() > 2000) 
+			|| (hcon.getPlanes() != null && hcon.getPlanes().trim().length() > 460)	)){
 			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, hcon);
 		} else {	    
 			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, null);

@@ -330,6 +330,7 @@ public class HojaCierreDA implements HojaCierreService {
 	        HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
 	        
 	        hojaConsulta.setEstado('5');
+	        hojaConsulta.setMedicoCambioTurno(null);
 	        hojaConsulta.setFechaCambioTurno(new SimpleDateFormat("yyyyMMdd HH:mm:ss").parse(hojaConsultaJSON.get("fechaCambioTurno").toString()));
 	        HIBERNATE_RESOURCE.begin();
             HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
