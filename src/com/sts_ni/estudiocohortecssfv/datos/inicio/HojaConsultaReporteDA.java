@@ -276,9 +276,31 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 				" h.bilirrubinuria, " +
 				" h.horasv, " +
 				" h.hora, " +
-				" mtc.motivo \"motivoCancelacion\" " +
+				" mtc.motivo \"motivoCancelacion\", " +
+				//------------------------------------------
+				" (SELECT array_to_string( " + 
+				"  ARRAY(select DISTINCT " +
+				" CASE "+ 
+				"		  when ec.desc_estudio = 'Dengue' then 'DEN' " + 
+				"		  when ec.desc_estudio = 'Influenza' then 'FLU' " + 
+				"		  when ec.desc_estudio = 'Cohorte BB' then 'BB' " + 
+				"		  when ec.desc_estudio = 'Transmision' then 'TR' " + 
+				"		  when ec.desc_estudio = 'Chikungunya' then 'CHIK' " + 
+				"		  when ec.desc_estudio = 'Seroprevalencia Chik' then 'S-CHIK' " + 
+				"		  when ec.desc_estudio = 'Transmision Chik' then 'TR-CHIK' " + 
+				"		  when ec.desc_estudio = 'Indice Cluster Dengue' then 'IC-DEN' " + 
+				"		  when ec.desc_estudio = 'Transmision Zika' then 'TR-ZIKA' " + 
+				"		  when ec.desc_estudio = 'CH Familia' then 'CH-F' " + 
+				"		  when ec.desc_estudio = 'Arbovirus Seroprev.' then 'A-SERO' " + 
+				" END " +
+				" from cons_estudios c " + 
+				" inner join hoja_consulta as hc on c.codigo_expediente = hc.cod_expediente " + 
+				" inner join estudio_catalogo ec on c.codigo_consentimiento = ec.cod_estudio " + 
+				" where hc.sec_hoja_consulta = :secHojaConsulta and c.retirado != '1' " +
+				" group by ec.desc_estudio), ', ')) \"estudiosParticipantes\" " +
+				//------------------------------------------
 				" from hoja_consulta h " +
-				" inner join paciente p on h.cod_expediente=p.cod_expediente  "+
+				" inner join paciente p on h.cod_expediente=p.cod_expediente  "+ 
 				" left join escuela_catalogo ec on cast(h.colegio as integer)=ec.cod_escuela  "+
 				" left join usuarios_view uvmed on h.usuario_medico=uvmed.id "+
 				" left join usuarios_view uvenf on h.usuario_enfermeria=uvenf.id "+
@@ -305,8 +327,8 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 		 Map<String, Object> parametros = null;
 		if(hcon != null) parametros = controlCambiosService.getControlCambios(hcon.getNumHojaConsulta(), hcon.getCodExpediente());
 		
-		if(hcon != null && ((hcon.getHistoriaExamenFisico() != null && hcon.getHistoriaExamenFisico().trim().length() > 2300) 
-			|| (hcon.getPlanes() != null && hcon.getPlanes().trim().length() > 830)	)){
+		if(hcon != null && ((hcon.getHistoriaExamenFisico() != null && hcon.getHistoriaExamenFisico().trim().length() > 2000) 
+			|| (hcon.getPlanes() != null && hcon.getPlanes().trim().length() > 460)	)){
 			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, hcon);
 		} else {	    
 			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, null);

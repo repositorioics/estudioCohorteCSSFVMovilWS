@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import ni.com.sts.estudioCohorteCSSFV.modelo.Departamentos;
 import ni.com.sts.estudioCohorteCSSFV.modelo.EstudioCatalogo;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaInfluenza;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaZika;
+import ni.com.sts.estudioCohorteCSSFV.modelo.Municipios;
+import ni.com.sts.estudioCohorteCSSFV.modelo.OrdenLaboratorio;
 import ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoInfluenza;
 import ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoZika;
+import ni.com.sts.estudioCohorteCSSFV.modelo.VigilanciaIntegradaIragEti;
 
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
@@ -23,8 +27,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.sts_ni.estudiocohortecssfv.dto.HojaConsultaReporte;
 import com.sts_ni.estudiocohortecssfv.dto.SeguimientoInfluenzaReporte;
 import com.sts_ni.estudiocohortecssfv.dto.SeguimientoZikaReporte;
+import com.sts_ni.estudiocohortecssfv.dto.VigilanciaIntegradaIragEtiReporte;
 import com.sts_ni.estudiocohortecssfv.servicios.ExpedienteService;
 import com.sts_ni.estudiocohortecssfv.servicios.HojaConsultaReporteService;
 import com.sts_ni.estudiocohortecssfv.util.HibernateResource;
@@ -335,7 +341,7 @@ public class ExpedienteDA implements ExpedienteService {
 				// paciente[1].toString()+ " " + paciente[2].toString()+ " "
 				// + paciente[3].toString());
 
-				fila.put("nomPaciente", paciente[0].toString() + 
+				fila.put("nomPaciente", paciente[0].toString() +
 						" " + 
 						((paciente[1] != null) ? paciente[1].toString() : "") + 
 						" " + paciente[2].toString() + " " + 
@@ -2510,8 +2516,8 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " to_char(s10.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento10\", "
 					+ " to_char(s11.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento11\", "
 					+ " to_char(s12.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento12\", "
-					+ " to_char(s12.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento13\", "
-					+ " to_char(s12.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento14\" "
+					+ " to_char(s13.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento13\", "
+					+ " to_char(s14.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento14\" "
 					
 					+ " from paciente p  "
 					+ " inner join hoja_zika h on p.cod_expediente = h.cod_expediente "
@@ -2569,7 +2575,659 @@ public class ExpedienteDA implements ExpedienteService {
 				getSeguimientoZikaPdf(numHojaSeguimiento));
 
 	}
+	/***
+	 * Funcion para buscar la ficha de vigilancia integrada por codigo expediente.
+	 * @param codExpediente, @param numHojaConsulta Codigo Expediente.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public String buscarFichaVigilanciaIntegrada(int codExpediente, int numHojaConsulta) {
+		String result = null;
+		try {
+			List oLista = new LinkedList();
+			Map fila = null;
+			
+			String sql = "select vi.secVigilanciaIntegrada, vi.secHojaConsulta, vi.codExpediente, "
+					+ " vi.irag, vi.eti, vi.iragInusitada, "
+					+ " p.nombre1, p.nombre2, p.apellido1, p.apellido2, "
+					+ " p.tutorNombre1, p.tutorNombre2, p.tutorApellido1, p.tutorApellido2, "
+					+ " vi.departamento, vi.municipio, vi.barrio, vi.direccion, vi.telefono, "
+					+ " vi.urbano, vi.rural, vi.emergAmbulatorio, vi.sala, vi.uci, vi.diagnostico, "
+					+ " vi.presentTarjVacuna, vi.antiHib, vi.antiMeningococica, vi.antiNeumococica, "
+					+ " vi.antiInfluenza, vi.pentavalente, vi.conjugada, vi.polisacarida, vi.heptavalente, vi.polisacarida23, "
+					+ " vi.valente13, vi.estacional, vi.h1n1p, vi.otraVacuna, vi.noDosisAntiHib, vi.noDosisAntiMening, "
+					+ " vi.noDosisAntiNeumo, vi.noDosisAntiInflu, vi.fechaUltDosisAntiHib, vi.fechaUltDosisAntiMening, "
+					+ " vi.fechaUltDosisAntiNeumo, vi.fechaUltDosisAntiInflu, vi.cancer, vi.diabetes, vi.vih, "
+					+ " vi.otraInmunodeficiencia, vi.enfNeurologicaCronica, vi.enfCardiaca, vi.asma, vi.epoc, "
+					+ " vi.otraEnfPulmonar, vi.insufRenalCronica, vi.desnutricion, vi.obesidad, vi.embarazo, "
+					+ " vi.embarazoSemanas, vi.txCorticosteroide, vi.otraCondicion, vi.usoAntibioticoUltimaSemana, "
+					+ " vi.cuantosAntibioticosLeDio, vi.cualesAntibioticosLeDio, vi.cuantosDiasLeDioElUltimoAntibiotico, "
+					+ " vi.viaOral, vi.viaParenteral, vi.viaAmbas, vi.antecedentesUsoAntivirales, vi.nombreAntiviral, "
+					+ " vi.fecha1raDosis, vi.fechaUltimaDosis, vi.noDosisAdministrada, vi.emergencia, "
+					+ " vi.otraCondPreexistente, vi.fechaCreacion, vi.numHojaConsulta, vi.estornudos, "
+					+ " vi.otraManifestacionClinica, vi.cualManifestacionClinica "
+					+ " from VigilanciaIntegradaIragEti vi, Paciente p ";
+					//+ " inner join Paciente p on vi.codExpediente = p.codExpediente "
+					//+ " where vi.codExpediente = :codExpediente "
+					//+ " and vi.codExpediente = p.codExpediente order by vi.secVigilanciaIntegrada desc";
+			
+			
+			if (codExpediente > 0) {
+				sql += " where vi.codExpediente = :codExpediente ";
+				sql += " and vi.codExpediente = p.codExpediente order by vi.secVigilanciaIntegrada desc ";
+			}
+			if (numHojaConsulta > 0) {
+				sql += " where vi.numHojaConsulta = :numHojaConsulta ";
+				sql += " and vi.codExpediente = p.codExpediente order by vi.secVigilanciaIntegrada desc ";
+			}
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			if (codExpediente > 0) {
+				query.setParameter("codExpediente", codExpediente);
+			}
+			if (numHojaConsulta > 0) {
+				query.setParameter("numHojaConsulta", numHojaConsulta);
+			}
+			query.setMaxResults(1);
+			Object[] fichaVigilancia = (Object[]) query.uniqueResult();
+			
+			if (fichaVigilancia != null && fichaVigilancia.length > 0) {
+				fila = new HashMap();
+				
+				fila.put("secVigilanciaIntegrada", ((Integer)fichaVigilancia[0]).intValue());
+				fila.put("secHojaConsulta", ((Integer)fichaVigilancia[1]).intValue());
+				fila.put("codExpediente", ((Integer)fichaVigilancia[2]).intValue());
+				fila.put("irag", fichaVigilancia[3].toString().charAt(0));
+				fila.put("eti", fichaVigilancia[4].toString().charAt(0));
+				fila.put("iragInusitada", fichaVigilancia[5].toString().charAt(0));
+				fila.put("nombrePaciente", fichaVigilancia[6].toString() + 
+						" " + 
+						((fichaVigilancia[7] != null) ? fichaVigilancia[7].toString() : "") + 
+						" " + fichaVigilancia[8].toString() + " " + 
+						((fichaVigilancia[9] != null) ? fichaVigilancia[9].toString() : ""));
+				fila.put("tutor", fichaVigilancia[10].toString() + 
+						" " + 
+						((fichaVigilancia[11] != null) ? fichaVigilancia[11].toString() : "") + 
+						" " + fichaVigilancia[12].toString() + " " + 
+						((fichaVigilancia[13] != null) ? fichaVigilancia[13].toString() : ""));
+				
+				// Si el departamento y municipio son distintos a null se obtienen los demas datos
+				if (fichaVigilancia[14] != null && fichaVigilancia[15] != null) {
+					fila.put("departamento", fichaVigilancia[14].toString());
+					fila.put("municipio", fichaVigilancia[15].toString());
+					fila.put("barrio", fichaVigilancia[16].toString());
+					fila.put("direccion", fichaVigilancia[17].toString());
+					fila.put("telefono", fichaVigilancia[18].toString());
+					fila.put("urbano", fichaVigilancia[19].toString().charAt(0));
+					fila.put("rural", fichaVigilancia[20].toString().charAt(0));
+					fila.put("emergAmbulatorio", fichaVigilancia[21].toString().charAt(0));
+					fila.put("sala", fichaVigilancia[22].toString().charAt(0));
+					fila.put("uci", fichaVigilancia[23].toString().charAt(0));
+					fila.put("diagnostico", fichaVigilancia[24].toString());
+					fila.put("presentTarjVacuna", fichaVigilancia[25].toString().charAt(0));
+					fila.put("antiHib", fichaVigilancia[26].toString().charAt(0));
+					fila.put("antiMeningococica", fichaVigilancia[27].toString().charAt(0));
+					fila.put("antiNeumococica", fichaVigilancia[28].toString().charAt(0));
+					fila.put("antiInfluenza", fichaVigilancia[29].toString().charAt(0));
+					fila.put("pentavalente", fichaVigilancia[30].toString().charAt(0));
+					fila.put("conjugada", fichaVigilancia[31].toString().charAt(0));
+					fila.put("polisacarida", fichaVigilancia[32].toString().charAt(0));
+					fila.put("heptavalente", fichaVigilancia[33].toString().charAt(0));
+					fila.put("polisacarida23", fichaVigilancia[34].toString().charAt(0));
+					fila.put("valente13", fichaVigilancia[35].toString().charAt(0));
+					fila.put("estacional", fichaVigilancia[36].toString().charAt(0));
+					fila.put("h1n1p", fichaVigilancia[37].toString().charAt(0));
+					fila.put("otraVacuna", fichaVigilancia[38].toString().charAt(0));
+					fila.put("noDosisAntiHib", fichaVigilancia[39] != null ? fichaVigilancia[39].toString() : null);
+					fila.put("noDosisAntiMening", fichaVigilancia[40] != null ? fichaVigilancia[40].toString() : null);
+					fila.put("noDosisAntiNeumo", fichaVigilancia[41] != null ? fichaVigilancia[41].toString() : null) ;
+					fila.put("noDosisAntiInflu", fichaVigilancia[42] != null ? fichaVigilancia[42].toString() : null);
+					fila.put("fechaUltDosisAntiHib", fichaVigilancia[43] != null ? fichaVigilancia[43].toString() : null);
+					fila.put("fechaUltDosisAntiMening", fichaVigilancia[44] != null ? fichaVigilancia[44].toString() : null);
+					fila.put("fechaUltDosisAntiNeumo", fichaVigilancia[45] != null ? fichaVigilancia[45].toString() : null);
+					fila.put("fechaUltDosisAntiInflu", fichaVigilancia[46] != null ? fichaVigilancia[46].toString() : null);
+					fila.put("cancer", fichaVigilancia[47].toString().charAt(0));
+					fila.put("diabetes", fichaVigilancia[48].toString().charAt(0));
+					fila.put("vih", fichaVigilancia[49].toString().charAt(0));
+					fila.put("otraInmunodeficiencia", fichaVigilancia[50].toString().charAt(0));
+					fila.put("enfNeurologicaCronica", fichaVigilancia[51].toString().charAt(0));
+					fila.put("enfCardiaca", fichaVigilancia[52].toString().charAt(0));
+					fila.put("asma", fichaVigilancia[53].toString().charAt(0));
+					fila.put("epoc", fichaVigilancia[54].toString().charAt(0));
+					fila.put("otraEnfPulmonar", fichaVigilancia[55].toString().charAt(0));
+					fila.put("insufRenalCronica", fichaVigilancia[56].toString().charAt(0));
+					fila.put("desnutricion", fichaVigilancia[57].toString().charAt(0));
+					fila.put("obesidad", fichaVigilancia[58].toString().charAt(0));
+					fila.put("embarazo", fichaVigilancia[59].toString().charAt(0));
+					fila.put("embarazoSemanas", fichaVigilancia[60] != null ? fichaVigilancia[60].toString() : null);
+					fila.put("txCorticosteroide", fichaVigilancia[61].toString().charAt(0));
+					fila.put("otraCondicion", fichaVigilancia[62].toString().charAt(0));
+					fila.put("usoAntibioticoUltimaSemana", fichaVigilancia[63].toString().charAt(0));
+					fila.put("cuantosAntibioticosLeDio", fichaVigilancia[64] != null ? fichaVigilancia[64].toString() : null);
+					fila.put("cualesAntibioticosLeDio", fichaVigilancia[65] != null ? fichaVigilancia[65].toString() : null);
+					fila.put("cuantosDiasLeDioElUltimoAntibiotico", fichaVigilancia[66] != null ? fichaVigilancia[66].toString() : null);
+					fila.put("viaOral", fichaVigilancia[67].toString().charAt(0));
+					fila.put("viaParenteral", fichaVigilancia[68].toString().charAt(0));
+					fila.put("viaAmbas", fichaVigilancia[69].toString().charAt(0));
+					fila.put("antecedentesUsoAntivirales", fichaVigilancia[70].toString().charAt(0));
+					fila.put("nombreAntiviral", fichaVigilancia[71] != null ? fichaVigilancia[71].toString() : null);
+					fila.put("fecha1raDosis", fichaVigilancia[72] != null ? fichaVigilancia[72].toString() : null);
+					fila.put("fechaUltimaDosis", fichaVigilancia[73] != null ? fichaVigilancia[73].toString() : null);
+					fila.put("noDosisAdministrada", fichaVigilancia[74] != null ? fichaVigilancia[74].toString() : null);
+					fila.put("emergencia", fichaVigilancia[75].toString().charAt(0));
+					fila.put("otraCondPreexistente", fichaVigilancia[76] != null ? fichaVigilancia[76].toString() : null);
+					fila.put("estornudos", fichaVigilancia[79].toString().charAt(0));
+					fila.put("otraManifestacionClinica", fichaVigilancia[80].toString().charAt(0));
+					fila.put("cualManifestacionClinica", fichaVigilancia[81] != null ? fichaVigilancia[81].toString() : null);
+				}
+				fila.put("fechaCreacion", fichaVigilancia[77].toString());
+				fila.put("numHojaConsulta", ((Integer)fichaVigilancia[78]).intValue());
+				
+				
+				oLista.add(fila);
+				// Construir la lista a una estructura JSON
+				result = UtilResultado.parserResultado(oLista, "",
+						UtilResultado.OK);
+			} else {
+				result = UtilResultado.parserResultado(null,
+						Mensajes.REGISTRO_NO_ENCONTRADO, UtilResultado.INFO);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null,
+					Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
 	
+	/***
+	 * Metodo para actualizar y guardar los datos de vigilancia integrada .
+	 * @param, JSON vigilancia integrada.
+	 */
+	@Override
+	public String guardarFichaVigilanciaIntegrada(String paramVigilanciaIntegrada) {
+		String result = null;
+		try {
+			int codExpediente;
+			int secVigilanciaIntegrada;
+			int departamentoId;
+			int municipioId;
+			String sql;
+			Query query;
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			
+			JSONParser parser = new JSONParser();
+			Object obj = (Object) parser.parse(paramVigilanciaIntegrada);
+			JSONObject vigilanciaIntegradaJSON = (JSONObject) obj;
+			
+			codExpediente = (((Number) vigilanciaIntegradaJSON.get("codExpediente"))
+					.intValue());
+			secVigilanciaIntegrada = ((Number) vigilanciaIntegradaJSON
+					.get("secVigilanciaIntegrada")).intValue();	
+			
+			sql = "select vi from VigilanciaIntegradaIragEti vi " +
+					" where vi.codExpediente = :codExpediente " +
+					" and vi.secVigilanciaIntegrada = :secVigilanciaIntegrada";
+			
+			query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			query.setParameter("codExpediente", codExpediente);
+			query.setParameter("secVigilanciaIntegrada", secVigilanciaIntegrada);
+			
+			VigilanciaIntegradaIragEti vigilanciaIntegradaIragEti = ((VigilanciaIntegradaIragEti) query.uniqueResult());
+			
+			vigilanciaIntegradaIragEti.setDepartamento(vigilanciaIntegradaJSON.get("departamento").toString());
+			vigilanciaIntegradaIragEti.setMunicipio(vigilanciaIntegradaJSON.get("municipio").toString());
+			vigilanciaIntegradaIragEti.setBarrio(vigilanciaIntegradaJSON.get("barrio").toString());
+			vigilanciaIntegradaIragEti.setDireccion(vigilanciaIntegradaJSON.get("direccion").toString());
+			vigilanciaIntegradaIragEti.setTelefono(vigilanciaIntegradaJSON.get("telefono").toString());
+			vigilanciaIntegradaIragEti.setUrbano(vigilanciaIntegradaJSON.get("urbano").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setRural(vigilanciaIntegradaJSON.get("rural").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEmergencia(vigilanciaIntegradaJSON.get("emergencia").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEmergAmbulatorio(vigilanciaIntegradaJSON.get("emergAmbulatorio").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setSala(vigilanciaIntegradaJSON.get("sala").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setUci(vigilanciaIntegradaJSON.get("uci").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setDiagnostico(vigilanciaIntegradaJSON.get("diagnostico").toString());
+			vigilanciaIntegradaIragEti.setPresentTarjVacuna(vigilanciaIntegradaJSON.get("presentTarjVacuna").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setAntiHib(vigilanciaIntegradaJSON.get("antiHib").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setAntiMeningococica(vigilanciaIntegradaJSON.get("antiMeningococica").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setAntiNeumococica(vigilanciaIntegradaJSON.get("antiNeumococica").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setAntiInfluenza(vigilanciaIntegradaJSON.get("antiInfluenza").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setPentavalente(vigilanciaIntegradaJSON.get("pentavalente").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setConjugada(vigilanciaIntegradaJSON.get("conjugada").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setPolisacarida(vigilanciaIntegradaJSON.get("polisacarida").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setHeptavalente(vigilanciaIntegradaJSON.get("heptavalente").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setPolisacarida23(vigilanciaIntegradaJSON.get("polisacarida23").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setValente13(vigilanciaIntegradaJSON.get("valente13").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEstacional(vigilanciaIntegradaJSON.get("estacional").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setH1n1p(vigilanciaIntegradaJSON.get("h1n1p").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setOtraVacuna(vigilanciaIntegradaJSON.get("otraVacuna").toString().charAt(0));
+			
+			if (vigilanciaIntegradaJSON.get("noDosisAntiHib") != null) {
+				vigilanciaIntegradaIragEti.setNoDosisAntiHib(((Number) vigilanciaIntegradaJSON.get("noDosisAntiHib")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setNoDosisAntiHib(null);
+			}
+			
+			if (vigilanciaIntegradaJSON.get("noDosisAntiMening") != null) {
+				vigilanciaIntegradaIragEti.setNoDosisAntiMening(((Number) vigilanciaIntegradaJSON.get("noDosisAntiMening")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setNoDosisAntiMening(null);
+			}
+			
+			if (vigilanciaIntegradaJSON.get("noDosisAntiNeumo") != null) {
+				vigilanciaIntegradaIragEti.setNoDosisAntiNeumo(((Number) vigilanciaIntegradaJSON.get("noDosisAntiNeumo")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setNoDosisAntiNeumo(null);
+			}
+			
+			if (vigilanciaIntegradaJSON.get("noDosisAntiInflu") != null) {
+				vigilanciaIntegradaIragEti.setNoDosisAntiInflu(((Number) vigilanciaIntegradaJSON.get("noDosisAntiInflu")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setNoDosisAntiInflu(null);
+			}
+			
+			//String fUltDosisAntiHib = vigilanciaIntegradaJSON.get("fechaUltDosisAntiHib").toString();
+			if (vigilanciaIntegradaJSON.get("fechaUltDosisAntiHib") != null) {
+				Date fechaUltDosisAntiHib = df.parse(vigilanciaIntegradaJSON.get("fechaUltDosisAntiHib").toString());
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiHib(fechaUltDosisAntiHib);
+			} else {
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiHib(null);
+			}
+			
+			//String fUltDosisAntiMening = vigilanciaIntegradaJSON.get("fechaUltDosisAntiMening").toString();
+			if (vigilanciaIntegradaJSON.get("fechaUltDosisAntiMening") != null) {
+				Date fechaUltDosisAntiMening = df.parse(vigilanciaIntegradaJSON.get("fechaUltDosisAntiMening").toString());
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiMening(fechaUltDosisAntiMening);
+			} else {
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiMening(null);
+			}
+			
+			//String fUltDosisAntiNeumo = vigilanciaIntegradaJSON.get("fechaUltDosisAntiNeumo").toString();
+			if (vigilanciaIntegradaJSON.get("fechaUltDosisAntiNeumo") != null) {
+				Date fechaUltDosisAntiNeumo = df.parse(vigilanciaIntegradaJSON.get("fechaUltDosisAntiNeumo").toString());
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiNeumo(fechaUltDosisAntiNeumo);
+			} else {
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiNeumo(null);
+			}
+			
+			//String fUltDosisAntiInflu = vigilanciaIntegradaJSON.get("fechaUltDosisAntiInflu").toString();
+			if (vigilanciaIntegradaJSON.get("fechaUltDosisAntiInflu") != null) {
+				Date fechaUltDosisAntiInflu = df.parse(vigilanciaIntegradaJSON.get("fechaUltDosisAntiInflu").toString());
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiInflu(fechaUltDosisAntiInflu);
+			} else {
+				vigilanciaIntegradaIragEti.setFechaUltDosisAntiInflu(null);
+			}
+			
+			vigilanciaIntegradaIragEti.setCancer(vigilanciaIntegradaJSON.get("cancer").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setDiabetes(vigilanciaIntegradaJSON.get("diabetes").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setVih(vigilanciaIntegradaJSON.get("vih").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setOtraInmunodeficiencia(vigilanciaIntegradaJSON.get("otraInmunodeficiencia").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEnfNeurologicaCronica(vigilanciaIntegradaJSON.get("enfNeurologicaCronica").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEnfCardiaca(vigilanciaIntegradaJSON.get("enfCardiaca").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setAsma(vigilanciaIntegradaJSON.get("asma").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEpoc(vigilanciaIntegradaJSON.get("epoc").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setOtraEnfPulmonar(vigilanciaIntegradaJSON.get("otraEnfPulmonar").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setInsufRenalCronica(vigilanciaIntegradaJSON.get("insufRenalCronica").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setDesnutricion(vigilanciaIntegradaJSON.get("desnutricion").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setObesidad(vigilanciaIntegradaJSON.get("obesidad").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEmbarazo(vigilanciaIntegradaJSON.get("embarazo").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setEstornudos(vigilanciaIntegradaJSON.get("estornudos").toString().charAt(0));
+			
+			if (vigilanciaIntegradaJSON.get("embarazoSemanas") != null) {
+				vigilanciaIntegradaIragEti.setEmbarazoSemanas(((Number) vigilanciaIntegradaJSON.get("embarazoSemanas")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setEmbarazoSemanas(null);
+			}
+			
+			vigilanciaIntegradaIragEti.setTxCorticosteroide(vigilanciaIntegradaJSON.get("txCorticosteroide").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setOtraCondicion(vigilanciaIntegradaJSON.get("otraCondicion").toString().charAt(0));
+			
+			if (vigilanciaIntegradaJSON.get("otraCondPreexistente") != null) {
+				vigilanciaIntegradaIragEti.setOtraCondPreexistente(vigilanciaIntegradaJSON.get("otraCondPreexistente").toString());
+			} else {
+				vigilanciaIntegradaIragEti.setOtraCondPreexistente(null);
+			}
+			
+			//vigilanciaIntegradaIragEti.setSintomaInicial(vigilanciaIntegradaJSON.get("sintomaInicial").toString());
+			vigilanciaIntegradaIragEti.setUsoAntibioticoUltimaSemana(vigilanciaIntegradaJSON.get("usoAntibioticoUltimaSemana").toString().charAt(0));
+			if (vigilanciaIntegradaJSON.get("cuantosAntibioticosLeDio") != null) {
+				vigilanciaIntegradaIragEti.setCuantosAntibioticosLeDio(((Number) vigilanciaIntegradaJSON.get("cuantosAntibioticosLeDio")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setCuantosAntibioticosLeDio(null);
+			}
+			if (vigilanciaIntegradaJSON.get("cualesAntibioticosLeDio") != null) {
+				vigilanciaIntegradaIragEti.setCualesAntibioticosLeDio(vigilanciaIntegradaJSON.get("cualesAntibioticosLeDio").toString());
+			} else {
+				vigilanciaIntegradaIragEti.setCualesAntibioticosLeDio(null);
+			} 
+			
+			if (vigilanciaIntegradaJSON.get("cuantosDiasLeDioElUltimoAntibiotico") != null) {
+				vigilanciaIntegradaIragEti.setCuantosDiasLeDioElUltimoAntibiotico(((Number) vigilanciaIntegradaJSON.get("cuantosDiasLeDioElUltimoAntibiotico")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setCuantosDiasLeDioElUltimoAntibiotico(null);
+			}
+			
+			vigilanciaIntegradaIragEti.setViaOral(vigilanciaIntegradaJSON.get("viaOral").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setViaParenteral(vigilanciaIntegradaJSON.get("viaParenteral").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setViaAmbas(vigilanciaIntegradaJSON.get("viaAmbas").toString().charAt(0));
+			vigilanciaIntegradaIragEti.setAntecedentesUsoAntivirales(vigilanciaIntegradaJSON.get("antecedentesUsoAntivirales").toString().charAt(0));
+			if (vigilanciaIntegradaJSON.get("nombreAntiviral") != null) {
+				vigilanciaIntegradaIragEti.setNombreAntiviral(vigilanciaIntegradaJSON.get("nombreAntiviral").toString());
+			} else {
+				vigilanciaIntegradaIragEti.setNombreAntiviral(null);
+			}
+			
+			//String f1raDosis = vigilanciaIntegradaJSON.get("fecha1raDosis").toString();
+			if (vigilanciaIntegradaJSON.get("fecha1raDosis") != null) {
+				Date fecha1raDosis = df.parse(vigilanciaIntegradaJSON.get("fecha1raDosis").toString());
+				vigilanciaIntegradaIragEti.setFecha1raDosis(fecha1raDosis);
+			} else {
+				vigilanciaIntegradaIragEti.setFecha1raDosis(null);
+			}
+			
+			//String fUltimaDosis = vigilanciaIntegradaJSON.get("fechaUltimaDosis").toString();
+			if (vigilanciaIntegradaJSON.get("fechaUltimaDosis") != null) {
+				Date fechaUltimaDosis = df.parse(vigilanciaIntegradaJSON.get("fechaUltimaDosis").toString());
+				vigilanciaIntegradaIragEti.setFechaUltimaDosis(fechaUltimaDosis);
+			} else {
+				vigilanciaIntegradaIragEti.setFechaUltimaDosis(null);
+			}
+			if (vigilanciaIntegradaJSON.get("noDosisAdministrada") != null) {
+				vigilanciaIntegradaIragEti.setNoDosisAdministrada(((Number) vigilanciaIntegradaJSON.get("noDosisAdministrada")).shortValue());
+			} else {
+				vigilanciaIntegradaIragEti.setNoDosisAdministrada(null);
+			}
+			vigilanciaIntegradaIragEti.setOtraManifestacionClinica(vigilanciaIntegradaJSON.get("otraManifestacionClinica").toString().charAt(0));
+			if (vigilanciaIntegradaJSON.get("cualManifestacionClinica") != null) {
+				vigilanciaIntegradaIragEti.setCualManifestacionClinica(vigilanciaIntegradaJSON.get("cualManifestacionClinica").toString());
+			} else {
+				vigilanciaIntegradaIragEti.setCualManifestacionClinica(null);
+			}
+			
+			HIBERNATE_RESOURCE.begin();
+			HIBERNATE_RESOURCE.getSession().saveOrUpdate(vigilanciaIntegradaIragEti);
+			HIBERNATE_RESOURCE.commit();
+			
+			List oLista = new LinkedList();
+			Map fila = null;
+			fila = new HashMap();
+			fila.put("secVigilanciaIntegrada",
+					vigilanciaIntegradaIragEti.getSecVigilanciaIntegrada());
+			oLista.add(fila);
+			result = UtilResultado.parserResultado(oLista, "", UtilResultado.OK);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO + e.getMessage(),
+					UtilResultado.ERROR);
+			HIBERNATE_RESOURCE.rollback();
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
 	
+	/***
+	 * Metodo para obtener todos los departamentos
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public String getDepartamentos() {
+		String result = null;
+		try {
+			List oLista = new LinkedList(); // Listado final para el resultado
+			Map fila = null; // Objeto para cada registro recuperado
+
+			String sql = "select d from Departamentos d ";
+
+			//sql += "order by d.nombre asc";
+
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+			List<Departamentos> objLista = query.list();
+
+			if (objLista != null && objLista.size() > 0) {
+
+				for (Departamentos departamento : objLista) {
+
+					// Construir la fila del registro actual
+					fila = new HashMap();
+					fila.put("divisionpoliticaId", departamento.getDivisionpoliticaId());
+					fila.put("nombre", departamento.getNombre());
+					fila.put("codigoNacional", departamento.getCodigoNacional());
+					fila.put("codigoIso", departamento.getCodigoIso());
+
+					oLista.add(fila);
+				}
+
+				// Construir la lista a una estructura JSON
+				result = UtilResultado.parserResultado(oLista, "", UtilResultado.OK);
+			} else {
+				result = UtilResultado.parserResultado(null, Mensajes.NO_DATOS, UtilResultado.INFO);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
 	
+	/***
+	 * Metodo para obtener todos los municipios que pertenecen al departamento seleccionado
+	 * * @param divisionpoliticaId, Division Politica.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public String getMunicipios(int divisionpoliticaId) {
+		String result = null;
+		try {
+			List oLista = new LinkedList(); // Listado final para el resultado
+			Map fila = null; // Objeto para cada registro recuperado
+
+			String sql = "select m from Municipios m "
+					+ " where m.dependencia =:divisionpoliticaId ";
+
+			//sql += "order by m.nombre asc";
+
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			query.setParameter("divisionpoliticaId", divisionpoliticaId);
+
+			List<Municipios> objLista = query.list();
+
+			if (objLista != null && objLista.size() > 0) {
+
+				for (Municipios municipios : objLista) {
+
+					// Construir la fila del registro actual
+					fila = new HashMap();
+					fila.put("divisionpoliticaId", municipios.getDivisionpoliticaId());
+					fila.put("nombre", municipios.getNombre());
+					fila.put("codigoNacional", municipios.getCodigoNacional());
+					fila.put("dependencia", municipios.getDependencia());
+
+					oLista.add(fila);
+				}
+
+				// Construir la lista a una estructura JSON
+				result = UtilResultado.parserResultado(oLista, "", UtilResultado.OK);
+			} else {
+				result = UtilResultado.parserResultado(null, Mensajes.NO_DATOS, UtilResultado.INFO);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
+	
+	/***
+	 * Metodo que carga toda la informacion de la ficha por su Id.
+	 * @param secVigilanciaIntegrada, Id ficha vigilancia integrada.
+	 */
+	public byte[] getFichaPdf(Integer secVigilanciaIntegrada) {
+		String nombreReporte="VigilanciaInfeccionesRespiratorias";
+		try {
+			//List  oLista = new LinkedList(); //Listado final para el resultado
+			
+			String sql = "select "
+					+ " vi.sec_vigilancia_integrada \"secVigilanciaIntegrada\", "
+					+ " vi.sec_hoja_consulta \"secHojaConsulta\", "
+					+ " vi.cod_expediente \"codExpediente\", "
+					+ " vi.irag, "
+					+ " vi.eti, "
+					+ " vi.irag_inusitada \"iragInusitada\", "
+					+ " p.nombre1 ||' '||COALESCE(p.nombre2,'')||' '||p.apellido1||' '||COALESCE(p.apellido2,'') \"nombreApellido\", "
+					+ " p.tutor_nombre1 ||' '||COALESCE(p.tutor_nombre2,'')||' '||p.tutor_apellido1||' '||COALESCE(p.tutor_apellido2,'') \"tutor\", "
+					+ " p.edad, "
+					+ " p.sexo, "
+					+ " p.fecha_nac \"fechaNac\", "
+					+ "obtenerEdad(p.fecha_nac) \"edadCalculada\", "
+					+ " vi.barrio ||', '||COALESCE(vi.direccion,'')||', '||COALESCE(vi.telefono,'') \"barrio\", "
+					//+ " vi.departamento, "
+					//+ " vi.municipio, "
+					//+ " vi.barrio, "
+					//+ " vi.direccion, "
+					//+ " vi.telefono, "
+					+ " vi.urbano, "
+					+ " vi.rural, "
+					+ " vi.emerg_ambulatorio \"emergAmbulatorio\", "
+					+ " vi.sala, "
+					+ " vi.uci, "
+					+ " vi.diagnostico, "
+					+ " vi.present_tarj_vacuna \"presentTarjVacuna\", "
+					+ " vi.anti_hib \"antiHib\", "
+					+ " vi.anti_meningococica \"antiMeningococica\", "
+					+ " vi.anti_neumococica \"antiNeumococica\", "
+					+ " vi.anti_influenza \"antiInfluenza\", "
+					+ " vi.pentavalente, "
+					+ " vi.conjugada, "
+					+ " vi.polisacarida, "
+					+ " vi.heptavalente, "
+					+ " vi.polisacarida_23 \"polisacarida23\", "
+					+ " vi.valente_13 \"valente13\", "
+					+ " vi.estacional, "
+					+ " vi.h1n1p, "
+					+ " vi.otra_vacuna \"otraVacuna\", "
+					+ " vi.no_dosis_anti_hib \"noDosisAntiHib\", "
+					+ " vi.no_dosis_anti_mening \"noDosisAntiMening\", "
+					+ " vi.no_dosis_anti_neumo \"noDosisAntiNeumo\", "
+					+ " vi.no_dosis_anti_influ \"noDosisAntiInflu\", "
+					+ " vi.fecha_ult_dosis_anti_hib \"fechaUltDosisAntiHib\", "
+					+ " vi.fecha_ult_dosis_anti_mening \"fechaUltDosisAntiMening\", "
+					+ " vi.fecha_ult_dosis_anti_neumo \"fechaUltDosisAntiNeumo\", "
+					+ " vi.fecha_ult_dosis_anti_influ \"fechaUltDosisAntiInflu\", "
+					+ " vi.cancer, "
+					+ " vi.diabetes, "
+					+ " vi.vih, "
+					+ " vi.otra_inmunodeficiencia \"otraInmunodeficiencia\", "
+					+ " vi.enf_neurologica_cronica \"enfNeurologicaCronica\", "
+					+ " vi.enf_cardiaca \"enfCardiaca\", "
+					+ " vi.asma, "
+					+ " vi.epoc, "
+					+ " vi.otra_enf_pulmonar \"otraEnfPulmonar\", "
+					+ " vi.insuf_renal_cronica \"insufRenalCronica\", "
+					+ " vi.desnutricion, "
+					+ " vi.obesidad, "
+					+ " vi.embarazo, "
+					+ " vi.embarazo_semanas \"embarazoSemanas\", "
+					+ " vi.tx_corticosteroide \"txCorticosteroide\", "
+					+ " vi.otra_condicion \"otraCondicion\", "
+					+ " vi.uso_antibiotico_ultima_semana \"usoAntibioticoUltimaSemana\", "
+					+ " vi.cuantos_antibioticos_le_dio \"cuantosAntibioticosLeDio\", "
+					+ " vi.cuales_antibioticos_le_dio \"cualesAntibioticosLeDio\", "
+					+ " vi.cuantos_dias_le_dio_el_ultimo_antibiotico \"cuantosDiasLeDioElUltimoAntibiotico\", "
+					+ " vi.via_oral \"viaOral\", "
+					+ " vi.via_parenteral \"viaParenteral\", "
+					+ " vi.via_ambas \"viaAmbas\", "
+					+ " vi.antecedentes_uso_antivirales \"antecedentesUsoAntivirales\", "
+					+ " vi.nombre_antiviral \"nombreAntiviral\", "
+					+ " vi.fecha_1ra_dosis \"fecha1raDosis\", "
+					+ " vi.fecha_ultima_dosis \"fechaUltimaDosis\", "
+					+ " vi.no_dosis_administrada \"noDosisAdministrada\", "
+					+ " vi.emergencia, "
+					+ " vi.otra_cond_preexistente \"otraCondPreexistente\", "
+					+ " vi.fecha_creacion \"fechaCreacion\", "
+					+ " vi.num_hoja_consulta \"numHojaConsulta\", "
+					+ " d.nombre \"nombreDepartamento\", "
+					+ " m.nombre \"nombreMunicipio\", "
+					+ " vi.estornudos, "
+					+ " h.fecha_consulta \"fechaConsulta\", "
+					+ " h.expediente_fisico \"expedienteFisico\", "
+					+ " h.fiebre, "
+					+ " h.dolor_garganta \"dolorGarganta\", "
+					+ " h.tos, "
+					+ " h.sibilancias, "
+					+ " h.rinorrea \"secrecionNasal\", "
+					+ " h.respiracion_rapida \"taquipnea\", "
+					+ " h.fis, "
+					+ " h.tiraje_subcostal \"tiraje\", "
+					+ " h.estirador_reposo \"estridor\", "
+					+ " h.vomito_12horas \"vomito\", "
+					+ " h.intolerancia_oral \"intoleranciaViaOral\", "
+					+ " h.diarrea, "
+					+ " h.cefalea, "
+					+ " h.conjuntivitis, "
+					+ " h.dolor_ab_intermitente \"dolorAbdominal\", "
+					+ " h.dolor_ab_continuo \"dolorAbdominal2\", "
+					+ " h.mal_estado \"malestarGeneral\", "
+					+ " h.convulsiones, "
+					+ " h.altralgia, "
+					+ " h.mialgia, "
+					+ " h.perdida_consciencia \"perdidaConciencia\", "
+					+ " h.letargia, "
+					+ " h.rahs_localizado \"rashLocalizado\", "
+					+ " h.rahs_generalizado \"rashGeneralizado\", "
+					+ " h.rash_eritematoso \"rashEritematoso\", "
+					+ " h.rahs_macular \"rashMacular\", "
+					+ " h.rash_papular \"rashPapular\", "
+					+ " h.rahs_moteada \"rashMoteada\", "
+					+ " h.aleteo_nasal \"aleteoNasal\", "
+					+ " h.cianosis, "
+					+ " h.apnea, "
+					+ " h.saturaciono2, "
+					+ " h.otra_manifestacion_clinica \"otraManifestacionClinica\", "
+					+ " h.cual_manifestacion_clinica \"cualManifestacionClinica\" "
+					+ " from vigilancia_integrada_irag_eti vi "
+					+ " inner join paciente p on vi.cod_expediente = p.cod_expediente "
+					+ " inner join departamentos d on CAST(vi.departamento as int) = d.codigo_nacional "
+					+ " inner join municipios m on CAST(vi.municipio as int) = m.codigo_nacional "
+					+ " inner join hoja_consulta h on vi.sec_hoja_consulta = h.sec_hoja_consulta "
+					+ " where vi.sec_vigilancia_integrada = :secVigilanciaIntegrada ";
+					//+ " and vi.codExpediente = p.codExpediente";
+			 
+			 Query query = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql)
+					 .setResultTransformer(Transformers.aliasToBean(VigilanciaIntegradaIragEtiReporte.class))
+					 .setParameter("secVigilanciaIntegrada", secVigilanciaIntegrada);
+
+				List result = query.list();
+
+				return UtilitarioReporte.mostrarReporte(nombreReporte, null,
+						result, false, null);		
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return null;
+	}
 }

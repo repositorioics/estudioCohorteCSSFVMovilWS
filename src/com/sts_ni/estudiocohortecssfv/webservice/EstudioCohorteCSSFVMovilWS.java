@@ -716,5 +716,40 @@ public class EstudioCohorteCSSFVMovilWS {
 				.imprimirSeguimientoZikaPdf(paramNumHojaSeguimiento);
 	}
 	
+	@WebMethod(operationName = "buscarFichaVigilanciaIntegrada")
+	@WebResult(name = "resultadoJSON")
+	public String buscarFichaVigilanciaIntegrada(
+			@WebParam(name = "codExpediente", partName = "codExpediente", mode = Mode.IN) int codExpediente,
+			@WebParam(name = "numHojaConsulta", partName = "numHojaConsulta", mode = Mode.IN) int numHojaConsulta){
+		return EXPEDIENTE_SERVICE
+				.buscarFichaVigilanciaIntegrada(codExpediente, numHojaConsulta);
+	}
 	
+	@WebMethod(operationName = "guardarFichaVigilanciaIntegrada")
+	@WebResult(name = "resultadoJSON")
+	public String guardarFichaVigilanciaIntegrada(
+			@WebParam(name = "paramVigilanciaIntegrada", partName = "paramVigilanciaIntegrada", mode = Mode.IN) String paramVigilanciaIntegrada) {
+		return EXPEDIENTE_SERVICE.guardarFichaVigilanciaIntegrada(paramVigilanciaIntegrada);
+	}
+	
+	@WebMethod(operationName = "getDepartamentos")
+	@WebResult(name = "listaDepartamentosJSON")
+	public String getDepartamentos() {
+		return EXPEDIENTE_SERVICE.getDepartamentos();
+	}
+	
+	@WebMethod(operationName = "getMunicipios")
+	@WebResult(name = "resultadoJSON")
+	public String getMunicipios(
+			@WebParam(name = "divisionpoliticaId", partName = "divisionpoliticaId", mode = Mode.IN) int divisionpoliticaId) {
+		return EXPEDIENTE_SERVICE.getMunicipios(divisionpoliticaId);
+	}
+	
+	@WebMethod(operationName = "getFichaPdf")
+	@WebResult(name = "getFichaPdfByte")
+	public byte[] getFichaPdf(
+			@WebParam(name = "secVigilanciaIntegrada", partName = "secVigialnciaIntegrada", mode = Mode.IN) int secVigilanciaIntegrada) {
+		return EXPEDIENTE_SERVICE
+				.getFichaPdf(secVigilanciaIntegrada);
+	}
 }
