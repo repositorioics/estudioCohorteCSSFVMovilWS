@@ -77,6 +77,11 @@ public class Mensajes {
     public static final String NO_EXISTE_HC_CODEXP="No existe hoja de consulta para el código del paciente.";
     public static final String HOJA_INF_NO_CERRADA="El paciente tiene hoja de seguimiento influenza sin cerrar.";
     public static final String HOJA_SIN_FIS_FIF="Primero debe completar la FIS y la FIF de la hoja de consulta.";
+    public static final String NO_PUEDE_CREAR_HOJA_FLU="No se cumplen los requerimientos para crear la hoja de influenza";
+    public static final String NO_PUEDE_CREAR_HOJA_FLU_ETI="Debe presentar FIS o FIF más Eti para crear la hoja de influenza";
+    public static final String NO_PUEDE_CREAR_HOJA_FLU_IRAG="Debe presentar FIS o FIF más Irag para crear la hoja de influenza";
+    public static final String NO_PUEDE_CREAR_HOJA_FLU_NEUMONIA="Debe presentar FIS o FIF más Neumonia para crear la hoja de influenza";
+    public static final String NO_PUEDE_CREAR_HOJA_SOLO_FIS="No se puede crear la hoja de influenza solo con la FIS";
     
     public static final String HOJA_ZIKA_NO_CERRADA="El paciente tiene hoja de seguimiento zika sin cerrar.";
     

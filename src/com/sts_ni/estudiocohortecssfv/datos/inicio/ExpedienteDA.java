@@ -416,31 +416,67 @@ public class ExpedienteDA implements ExpedienteService {
 			
 			HojaConsulta hojaConsulta = (HojaConsulta) query.uniqueResult();
 			
-			if(hojaConsulta == null){
+			if (hojaConsulta == null) {
 				result = UtilResultado.parserResultado(null, Mensajes.NO_EXISTE_HC_CODEXP, UtilResultado.INFO);
-			
-			}else{
+
+			} else {
 				
-				if(hojaConsulta.getFif() == null || hojaConsulta.getFis() == null){
+				/* Validacion anterior
+				 * if(hojaConsulta.getFif() == null || hojaConsulta.getFis() == null){
 					return UtilResultado.parserResultado(null, Mensajes.HOJA_SIN_FIS_FIF, UtilResultado.INFO);
-				}
+				}*/
 				
-				//verificando si tiene hojas abiertas
+				/* Verificando que todos los campos requeridos para crear la hoja de influenza no esten vacios(null) o falso(1).
+				 * Si no se cumple la condición retornamos aviso*/
+				if (hojaConsulta.getFif() == null && hojaConsulta.getFis() == null
+						&& (hojaConsulta.getEti() == null ||hojaConsulta.getEti().toString().compareTo("0") != 0)
+						&& (hojaConsulta.getIrag() == null || hojaConsulta.getIrag().toString().compareTo("0") != 0)
+						&& (hojaConsulta.getNeumonia() == null || hojaConsulta.getNeumonia().toString().compareTo("0") != 0)) {
+					return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_FLU, UtilResultado.INFO);
+				}
+				// Si la FIF y FIS estan sin datos(null) y ETI es 0 entoces retornamos aviso
+				if ((hojaConsulta.getFif() == null && hojaConsulta.getFis() == null)
+						&& hojaConsulta.getEti().toString().compareTo("0") == 0) {
+					return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_FLU_ETI,
+							UtilResultado.INFO);
+				}
+				// Si la FIF y FIS estan sin datos(null) y IRAG es 0 entoces retornamos aviso
+				if ((hojaConsulta.getFif() == null && hojaConsulta.getFis() == null)
+						&& hojaConsulta.getIrag().toString().compareTo("0") == 0) {
+					return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_FLU_IRAG,
+							UtilResultado.INFO);
+				}
+				// Si la FIF y FIS estan sin datos(null) y Neumonia es 0 entoces retornamos aviso
+				if ((hojaConsulta.getFif() == null && hojaConsulta.getFis() == null)
+						&& hojaConsulta.getNeumonia().toString().compareTo("0") == 0) {
+					return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_FLU_NEUMONIA,
+							UtilResultado.INFO);
+				}
+				// Si existe solo la FIS y los valores de eti, irag y neumonia son iguales a 1 entoces retornamos aviso
+				if ((hojaConsulta.getFis() != null
+						 && (hojaConsulta.getEti() == null || hojaConsulta.getEti().toString().compareTo("0") != 0) 
+						 && (hojaConsulta.getIrag() == null || hojaConsulta.getIrag().toString().compareTo("0") != 0)
+						 && (hojaConsulta.getNeumonia() == null || hojaConsulta.getNeumonia().toString().compareTo("0") != 0))) {
+					return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_SOLO_FIS,
+							UtilResultado.INFO);
+				}
+				// verificando si tiene hojas abiertas
 				sql = "select count(*) from hoja_influenza where cerrado = 'N' and cod_expediente = :codExpediente";
 				query = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
 				query.setParameter("codExpediente", codExpediente);
 				
 				BigInteger totalActivos = (BigInteger) query.uniqueResult();
 				
-				//Si tiene uno o mas activos retornamos aviso
-				if(totalActivos.intValue() > 0){
+				// Si tiene uno o mas activos retornamos aviso
+				if (totalActivos.intValue() > 0) {
 					return UtilResultado.parserResultado(null, Mensajes.HOJA_INF_NO_CERRADA, UtilResultado.INFO);
-				}				
+				}			
 				
-				String FIF, FIS;
+				String FIF, FIS, NUEVAFIF;
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				FIF = hojaConsulta.getFif() != null ? sdf.format(hojaConsulta.getFif()) : "";
 				FIS = hojaConsulta.getFis() != null ? sdf.format(hojaConsulta.getFis()) : "";
+				NUEVAFIF = hojaConsulta.getNuevaFif() != null ? sdf.format(hojaConsulta.getNuevaFif()) : "";
 			
 				sql = "select max(h.numHojaSeguimiento) "
 						+ " from HojaInfluenza h ";
@@ -462,8 +498,13 @@ public class ExpedienteDA implements ExpedienteService {
 				hojaInfluenza.setNumHojaSeguimiento(maxNumHojaSeguimiento);
 				hojaInfluenza.setCodExpediente(codExpediente);
 				hojaInfluenza.setFechaInicio(fechaInicio.getTime());
-				hojaInfluenza.setCerrado('N');				
-				hojaInfluenza.setFif(FIF);
+				hojaInfluenza.setCerrado('N');
+				// Si existe nueva fecha inicio de fiebre se guarda la NUEVAFIF
+				if (NUEVAFIF != null && NUEVAFIF != "") {
+					hojaInfluenza.setFif(NUEVAFIF);
+				} else { // Se guarda la FIF
+					hojaInfluenza.setFif(FIF);
+				}
 				hojaInfluenza.setFis(FIS);
 				
 				HIBERNATE_RESOURCE.begin();
@@ -475,7 +516,11 @@ public class ExpedienteDA implements ExpedienteService {
 				fila = new HashMap();
 				fila.put("numHojaSeguimiento", hojaInfluenza.getNumHojaSeguimiento());
 				fila.put("codExpediente", hojaInfluenza.getCodExpediente());
-				fila.put("fif", FIF);
+				if (NUEVAFIF != null && NUEVAFIF != "") {
+					fila.put("fif", NUEVAFIF);
+				} else {
+					fila.put("fif", FIF);
+				}
 				fila.put("fis", FIS);
 				oLista.add(fila);
 				result = UtilResultado.parserResultado(oLista, "", UtilResultado.OK);
