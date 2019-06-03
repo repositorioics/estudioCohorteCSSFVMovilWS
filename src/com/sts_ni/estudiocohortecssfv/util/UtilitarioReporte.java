@@ -1,6 +1,7 @@
 package com.sts_ni.estudiocohortecssfv.util;
 
 import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -108,7 +109,7 @@ public class UtilitarioReporte  {
             JasperPrint report =JasperFillManager.fillReport(path, parametros, new JRBeanCollectionDataSource(collectionDataSource));
             if (multipleReporte){
 	            JasperPrint fileAnexo = JasperFillManager.fillReport(pathPag2, parametros, new JRBeanCollectionDataSource(collectionDataSource));
-	            report.addPage(fileAnexo.removePage( 0 )) ;
+	            report.addPage(fileAnexo.removePage( 0 ));
 	            
 	            if(datosAdicionales != null){
 	            	HashMap params = new HashMap(); 
@@ -120,7 +121,7 @@ public class UtilitarioReporte  {
 	            	
 	            	String pathPag3 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"3").contains(".jasper")?(nombreReporte+"3"):(nombreReporte+"3") + ".jasper");
 	            	JasperPrint fileAnexo2 = JasperFillManager.fillReport(pathPag3, params, new JRBeanCollectionDataSource(collectionDataSource));
-	            	report.addPage(fileAnexo2.removePage( 0 )) ;
+	            	report.addPage(fileAnexo2.removePage( 0 ));
 	            }
             }
           return  JasperExportManager.exportReportToPdf(report);
@@ -157,6 +158,36 @@ public class UtilitarioReporte  {
 	        
 	}
     
+    
+    public  void imprimirDocumentoFicha(String nombres,byte[] archivoByte){
+    	
+    	String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.pdf") + (nombres.contains(".pdf")?nombres:nombres + ".pdf");
+    	
+  	    File file = new File(path);
+  	    int copies = 4;
+    	try
+    	{
+              //convert array of bytes into file
+           FileOutputStream fileOuputStream =
+                      new FileOutputStream(file);
+           fileOuputStream.write(archivoByte);
+           fileOuputStream.close();
+           
+           PrinterJob printJob = PrinterJob.getPrinterJob();
+           printJob.setCopies(copies);
+           
+           PDDocument pdf = PDDocument.load(path);
+		   pdf.silentPrint(printJob);
+    		
+    	} catch(IOException e) {
+    		
+    		e.printStackTrace();
+    	} catch (PrinterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	        
+	}
     
     
 

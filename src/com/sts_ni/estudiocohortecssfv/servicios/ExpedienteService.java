@@ -46,4 +46,6 @@ public interface ExpedienteService {
 	public String getMunicipios(int divisionpoliticaId);
 	
 	public byte[] getFichaPdf(Integer secVigilanciaIntegrada);
+	
+	public void imprimirFichaPdf(int secVigilanciaIntegrada);
 }

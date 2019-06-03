@@ -21,6 +21,7 @@ import ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoInfluenza;
 import ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoZika;
 import ni.com.sts.estudioCohorteCSSFV.modelo.VigilanciaIntegradaIragEti;
 
+import org.apache.commons.configuration.CompositeConfiguration;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.json.simple.JSONArray;
@@ -35,6 +36,7 @@ import com.sts_ni.estudiocohortecssfv.servicios.ExpedienteService;
 import com.sts_ni.estudiocohortecssfv.servicios.HojaConsultaReporteService;
 import com.sts_ni.estudiocohortecssfv.util.HibernateResource;
 import com.sts_ni.estudiocohortecssfv.util.Mensajes;
+import com.sts_ni.estudiocohortecssfv.util.UtilProperty;
 import com.sts_ni.estudiocohortecssfv.util.UtilResultado;
 import com.sts_ni.estudiocohortecssfv.util.UtilitarioReporte;
 
@@ -50,6 +52,8 @@ public class ExpedienteDA implements ExpedienteService {
 	private HojaConsultaReporteService consultaReporteService;
 	
 	private static String QUERY_HOJA_CONSULTA_BY_ID = "select h from HojaConsulta h where h.secHojaConsulta = :id";
+	
+	private static CompositeConfiguration config;
 
 
 	/***
@@ -429,7 +433,7 @@ public class ExpedienteDA implements ExpedienteService {
 				/* Verificando que todos los campos requeridos para crear la hoja de influenza no esten vacios(null) o falso(1).
 				 * Si no se cumple la condición retornamos aviso*/
 				if (hojaConsulta.getFif() == null && hojaConsulta.getFis() == null
-						&& (hojaConsulta.getEti() == null ||hojaConsulta.getEti().toString().compareTo("0") != 0)
+						&& (hojaConsulta.getEti() == null || hojaConsulta.getEti().toString().compareTo("0") != 0)
 						&& (hojaConsulta.getIrag() == null || hojaConsulta.getIrag().toString().compareTo("0") != 0)
 						&& (hojaConsulta.getNeumonia() == null || hojaConsulta.getNeumonia().toString().compareTo("0") != 0)) {
 					return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_FLU, UtilResultado.INFO);
@@ -453,7 +457,7 @@ public class ExpedienteDA implements ExpedienteService {
 							UtilResultado.INFO);
 				}
 				// Si existe solo la FIS y los valores de eti, irag y neumonia son iguales a 1 entoces retornamos aviso
-				if ((hojaConsulta.getFis() != null
+				if ((hojaConsulta.getFis() != null && hojaConsulta.getFif() == null
 						 && (hojaConsulta.getEti() == null || hojaConsulta.getEti().toString().compareTo("0") != 0) 
 						 && (hojaConsulta.getIrag() == null || hojaConsulta.getIrag().toString().compareTo("0") != 0)
 						 && (hojaConsulta.getNeumonia() == null || hojaConsulta.getNeumonia().toString().compareTo("0") != 0))) {
@@ -2701,7 +2705,7 @@ public class ExpedienteDA implements ExpedienteService {
 					fila.put("municipio", fichaVigilancia[15].toString());
 					fila.put("barrio", fichaVigilancia[16].toString());
 					fila.put("direccion", fichaVigilancia[17].toString());
-					fila.put("telefono", fichaVigilancia[18].toString());
+					fila.put("telefono", fichaVigilancia[18] != null ? fichaVigilancia[18].toString() : null);
 					fila.put("urbano", fichaVigilancia[19].toString().charAt(0));
 					fila.put("rural", fichaVigilancia[20].toString().charAt(0));
 					fila.put("emergAmbulatorio", fichaVigilancia[21].toString().charAt(0));
@@ -3128,8 +3132,19 @@ public class ExpedienteDA implements ExpedienteService {
 	 */
 	public byte[] getFichaPdf(Integer secVigilanciaIntegrada) {
 		String nombreReporte="VigilanciaInfeccionesRespiratorias";
+		
+		String ficha = "ficha";
+		config= UtilProperty.getConfiguration("EstudioCohorteCssfvMovilWSExt.properties", "com/sts_ni/estudiocohortecssfv/properties/EstudioCohorteCssfvMovilWSInt.properties");
+		String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (ficha+"1").contains(".jpg")?(ficha+"1"):(ficha+"1") + ".jpg");
+		path = path.replace('/', System.getProperty("file.separator").charAt(0));
+        String pathPag2 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (ficha+"2").contains(".jpg")?(ficha+"2"):(ficha+"2") + ".jpg");
+        pathPag2 = pathPag2.replace('/', System.getProperty("file.separator").charAt(0));
+        
 		try {
 			//List  oLista = new LinkedList(); //Listado final para el resultado
+			HashMap params = new HashMap(); 
+			params.put("ficha1", path);
+			params.put("ficha2", pathPag2);
 			
 			String sql = "select "
 					+ " vi.sec_vigilancia_integrada \"secVigilanciaIntegrada\", "
@@ -3222,6 +3237,8 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " h.rinorrea \"secrecionNasal\", "
 					+ " h.respiracion_rapida \"taquipnea\", "
 					+ " h.fis, "
+					+ " h.fif, "
+					+ " h.nueva_fif \"nuevaFif\", "
 					+ " h.tiraje_subcostal \"tiraje\", "
 					+ " h.estirador_reposo \"estridor\", "
 					+ " h.vomito_12horas \"vomito\", "
@@ -3247,8 +3264,10 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " h.cianosis, "
 					+ " h.apnea, "
 					+ " h.saturaciono2, "
-					+ " h.otra_manifestacion_clinica \"otraManifestacionClinica\", "
-					+ " h.cual_manifestacion_clinica \"cualManifestacionClinica\" "
+					+ " vi.otra_manifestacion_clinica \"otraManifestacionClinica\", "
+					+ " vi.cual_manifestacion_clinica \"cualManifestacionClinica\", "
+					+ " vi.cod_expediente \"codigoExpediente\", "
+					+ " (select uv.nombre from usuarios_view uv where vi.usuario_medico = uv.id) \"nombreMedico\" "
 					+ " from vigilancia_integrada_irag_eti vi "
 					+ " inner join paciente p on vi.cod_expediente = p.cod_expediente "
 					+ " inner join departamentos d on CAST(vi.departamento as int) = d.codigo_nacional "
@@ -3263,8 +3282,8 @@ public class ExpedienteDA implements ExpedienteService {
 
 				List result = query.list();
 
-				return UtilitarioReporte.mostrarReporte(nombreReporte, null,
-						result, false, null);		
+				return UtilitarioReporte.mostrarReporte(nombreReporte, params,
+						result, true, null);		
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -3274,5 +3293,17 @@ public class ExpedienteDA implements ExpedienteService {
 			}
 		}
 		return null;
+	}
+	
+	/***
+	 * Metodo que realiza la impresion de Seguimiento Zika.
+	 * @param secVigilanciaIntegrada.
+	 */
+	public void imprimirFichaPdf(int secVigilanciaIntegrada) {
+
+		UtilitarioReporte ureporte = new UtilitarioReporte();
+		ureporte.imprimirDocumentoFicha("VigilanciaInfeccionesRespiratorias"
+				+ secVigilanciaIntegrada,
+				getFichaPdf(secVigilanciaIntegrada));
 	}
 }

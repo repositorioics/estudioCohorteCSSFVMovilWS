@@ -752,4 +752,12 @@ public class EstudioCohorteCSSFVMovilWS {
 		return EXPEDIENTE_SERVICE
 				.getFichaPdf(secVigilanciaIntegrada);
 	}
+	
+	@WebMethod(operationName = "imprimirFichaPdf")
+	@WebResult(name = "imprimirFichaPdfvoid")
+	public void imprimirFichaPdf(
+			@WebParam(name = "secVigilanciaIntegrada") int secVigilanciaIntegrada) {
+		EXPEDIENTE_SERVICE
+				.imprimirFichaPdf(secVigilanciaIntegrada);
+	}
 }

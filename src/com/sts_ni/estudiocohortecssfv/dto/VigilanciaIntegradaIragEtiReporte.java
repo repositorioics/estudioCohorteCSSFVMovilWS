@@ -5,7 +5,7 @@ import java.util.Date;
 public class VigilanciaIntegradaIragEtiReporte {
 	private int secVigilanciaIntegrada;
 	private int secHojaConsulta;
-	private int codExpediente;
+	private int codExpediente; //Expediente fisico
 	private char irag;
 	private char eti;
 	private char iragInusitada;
@@ -92,6 +92,8 @@ public class VigilanciaIntegradaIragEtiReporte {
 	private Character secrecionNasal;
 	private Character taquipnea;
 	private Date fis;
+	private Date fif;
+	private Date nuevaFif;
 	private Character tiraje;
 	private Character estridor;
 	private Character vomito;
@@ -119,6 +121,8 @@ public class VigilanciaIntegradaIragEtiReporte {
 	private Short saturaciono2;
 	private Character otraManifestacionClinica;
 	private String cualManifestacionClinica;
+	private String nombreMedico;
+	private int codigoExpediente;
 	
 	public int getSecVigilanciaIntegrada() {
 		return secVigilanciaIntegrada;
@@ -815,6 +819,30 @@ public class VigilanciaIntegradaIragEtiReporte {
 	}
 	public void setCualManifestacionClinica(String cualManifestacionClinica) {
 		this.cualManifestacionClinica = cualManifestacionClinica;
+	}
+	public String getNombreMedico() {
+		return nombreMedico;
+	}
+	public void setNombreMedico(String nombreMedico) {
+		this.nombreMedico = nombreMedico;
+	}
+	public Date getFif() {
+		return fif;
+	}
+	public void setFif(Date fif) {
+		this.fif = fif;
+	}
+	public Date getNuevaFif() {
+		return nuevaFif;
+	}
+	public void setNuevaFif(Date nuevaFif) {
+		this.nuevaFif = nuevaFif;
+	}
+	public int getCodigoExpediente() {
+		return codigoExpediente;
+	}
+	public void setCodigoExpediente(int codigoExpediente) {
+		this.codigoExpediente = codigoExpediente;
 	}
 
 }
