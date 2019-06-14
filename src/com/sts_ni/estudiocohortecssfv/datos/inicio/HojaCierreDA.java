@@ -1,6 +1,7 @@
 package com.sts_ni.estudiocohortecssfv.datos.inicio;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -279,7 +280,21 @@ public class HojaCierreDA implements HojaCierreService {
 			            HIBERNATE_RESOURCE.commit();
 			            
 			            try {
-			            	consultaReporteService.imprimirConsultaPdf(hojaConsulta.getSecHojaConsulta());
+			            	// Validacion para verificar que la hoja de consulta se halla cerrado antes de enviar la impresion de la hoja
+			            	
+			            	sql = "select count(*) from HojaConsulta where estado = '7' and secHojaConsulta = :id";
+			            	query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			            	query.setParameter("id", ((Number) hojaConsultaJSON.get("secHojaConsulta")).intValue());
+			            	
+			            	Long resultHojaConsulta = (Long) query.uniqueResult();
+			            	
+			            	/* Si el resultadoHojaConsulta es mayor que 0, indica que la hoja de consulta se cerro correctamente
+			            	entonces se procede a realizar la impresion de la hoja de consulta */
+			            	if (resultHojaConsulta.intValue() > 0) {
+			            		consultaReporteService.imprimirConsultaPdf(hojaConsulta.getSecHojaConsulta());
+			            	} else {
+			            		result = UtilResultado.parserResultado(null, Mensajes.HOJA_CONSULTA_NO_SE_PUDO_CERRAR, UtilResultado.INFO);
+			            	}
 			            } catch(Exception e) {
 			            	e.printStackTrace();
 			            }

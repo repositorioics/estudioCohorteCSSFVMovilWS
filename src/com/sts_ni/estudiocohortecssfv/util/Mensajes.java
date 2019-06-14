@@ -90,5 +90,7 @@ public class Mensajes {
     public static final String RAZON_CANCELA_EXAMEN="Cancelado desde la aplicacion movil";
     
     public static final String FICHA_CASO_ETI="Recuerde llenar la ficha de vigilancia integrada ETI";
-    public static final String FICHA_CASO_IRAG="Recuerde llenar la ficha de vigilancia integrada IRAG";    
+    public static final String FICHA_CASO_IRAG="Recuerde llenar la ficha de vigilancia integrada IRAG";
+    
+    public static final String HOJA_CONSULTA_NO_SE_PUDO_CERRAR = "La hoja de consulta no se pudo cerrar, Favor intente cerrar la nuevamente";
 }

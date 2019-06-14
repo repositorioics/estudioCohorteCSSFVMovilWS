@@ -755,6 +755,50 @@ public class SeguimientoZikaReporte {
     private String pruritoDia13;
     private String pruritoDia14;
     
+    private String fotofobiaDia1;
+    private String fotofobiaDia2;
+    private String fotofobiaDia3;
+    private String fotofobiaDia4;
+    private String fotofobiaDia5;
+    private String fotofobiaDia6;
+    private String fotofobiaDia7;
+    private String fotofobiaDia8;
+    private String fotofobiaDia9;
+    private String fotofobiaDia10;
+    private String fotofobiaDia11;
+    private String fotofobiaDia12;
+    private String fotofobiaDia13;
+    private String fotofobiaDia14;
+    
+	private String mareosDia1;
+	private String mareosDia2;
+	private String mareosDia3;
+	private String mareosDia4;
+	private String mareosDia5;
+	private String mareosDia6;
+	private String mareosDia7;
+	private String mareosDia8;
+	private String mareosDia9;
+	private String mareosDia10;
+	private String mareosDia11;
+	private String mareosDia12;
+	private String mareosDia13;
+	private String mareosDia14;
+	
+	private String sudoracionDia1;
+	private String sudoracionDia2;
+	private String sudoracionDia3;
+	private String sudoracionDia4;
+	private String sudoracionDia5;
+	private String sudoracionDia6;
+	private String sudoracionDia7;
+	private String sudoracionDia8;
+	private String sudoracionDia9;
+	private String sudoracionDia10;
+	private String sudoracionDia11;
+	private String sudoracionDia12;
+	private String sudoracionDia13;
+	private String sudoracionDia14;
     
     
 	public int getCodExpediente() {
@@ -4975,8 +5019,256 @@ public class SeguimientoZikaReporte {
 	public void setPruritoDia14(String pruritoDia14) {
 		this.pruritoDia14 = pruritoDia14;
 	}
-    
-    
-    
- 
+	public String getFotofobiaDia1() {
+		return fotofobiaDia1;
+	}
+	public void setFotofobiaDia1(String fotofobiaDia1) {
+		this.fotofobiaDia1 = fotofobiaDia1;
+	}
+	public String getFotofobiaDia2() {
+		return fotofobiaDia2;
+	}
+	public void setFotofobiaDia2(String fotofobiaDia2) {
+		this.fotofobiaDia2 = fotofobiaDia2;
+	}
+	public String getFotofobiaDia3() {
+		return fotofobiaDia3;
+	}
+	public void setFotofobiaDia3(String fotofobiaDia3) {
+		this.fotofobiaDia3 = fotofobiaDia3;
+	}
+	public String getFotofobiaDia4() {
+		return fotofobiaDia4;
+	}
+	public void setFotofobiaDia4(String fotofobiaDia4) {
+		this.fotofobiaDia4 = fotofobiaDia4;
+	}
+	public String getFotofobiaDia5() {
+		return fotofobiaDia5;
+	}
+	public void setFotofobiaDia5(String fotofobiaDia5) {
+		this.fotofobiaDia5 = fotofobiaDia5;
+	}
+	public String getFotofobiaDia7() {
+		return fotofobiaDia7;
+	}
+	public void setFotofobiaDia7(String fotofobiaDia7) {
+		this.fotofobiaDia7 = fotofobiaDia7;
+	}
+	public String getFotofobiaDia6() {
+		return fotofobiaDia6;
+	}
+	public void setFotofobiaDia6(String fotofobiaDia6) {
+		this.fotofobiaDia6 = fotofobiaDia6;
+	}
+	public String getFotofobiaDia8() {
+		return fotofobiaDia8;
+	}
+	public void setFotofobiaDia8(String fotofobiaDia8) {
+		this.fotofobiaDia8 = fotofobiaDia8;
+	}
+	public String getFotofobiaDia9() {
+		return fotofobiaDia9;
+	}
+	public void setFotofobiaDia9(String fotofobiaDia9) {
+		this.fotofobiaDia9 = fotofobiaDia9;
+	}
+	public String getFotofobiaDia10() {
+		return fotofobiaDia10;
+	}
+	public void setFotofobiaDia10(String fotofobiaDia10) {
+		this.fotofobiaDia10 = fotofobiaDia10;
+	}
+	public String getFotofobiaDia11() {
+		return fotofobiaDia11;
+	}
+	public void setFotofobiaDia11(String fotofobiaDia11) {
+		this.fotofobiaDia11 = fotofobiaDia11;
+	}
+	public String getFotofobiaDia12() {
+		return fotofobiaDia12;
+	}
+	public void setFotofobiaDia12(String fotofobiaDia12) {
+		this.fotofobiaDia12 = fotofobiaDia12;
+	}
+	public String getFotofobiaDia13() {
+		return fotofobiaDia13;
+	}
+	public void setFotofobiaDia13(String fotofobiaDia13) {
+		this.fotofobiaDia13 = fotofobiaDia13;
+	}
+	public String getFotofobiaDia14() {
+		return fotofobiaDia14;
+	}
+	public void setFotofobiaDia14(String fotofobiaDia14) {
+		this.fotofobiaDia14 = fotofobiaDia14;
+	}
+	public String getMareosDia1() {
+		return mareosDia1;
+	}
+	public void setMareosDia1(String mareosDia1) {
+		this.mareosDia1 = mareosDia1;
+	}
+	public String getMareosDia2() {
+		return mareosDia2;
+	}
+	public void setMareosDia2(String mareosDia2) {
+		this.mareosDia2 = mareosDia2;
+	}
+	public String getMareosDia3() {
+		return mareosDia3;
+	}
+	public void setMareosDia3(String mareosDia3) {
+		this.mareosDia3 = mareosDia3;
+	}
+	public String getMareosDia4() {
+		return mareosDia4;
+	}
+	public void setMareosDia4(String mareosDia4) {
+		this.mareosDia4 = mareosDia4;
+	}
+	public String getMareosDia5() {
+		return mareosDia5;
+	}
+	public void setMareosDia5(String mareosDia5) {
+		this.mareosDia5 = mareosDia5;
+	}
+	public String getMareosDia6() {
+		return mareosDia6;
+	}
+	public void setMareosDia6(String mareosDia6) {
+		this.mareosDia6 = mareosDia6;
+	}
+	public String getMareosDia7() {
+		return mareosDia7;
+	}
+	public void setMareosDia7(String mareosDia7) {
+		this.mareosDia7 = mareosDia7;
+	}
+	public String getMareosDia8() {
+		return mareosDia8;
+	}
+	public void setMareosDia8(String mareosDia8) {
+		this.mareosDia8 = mareosDia8;
+	}
+	public String getMareosDia9() {
+		return mareosDia9;
+	}
+	public void setMareosDia9(String mareosDia9) {
+		this.mareosDia9 = mareosDia9;
+	}
+	public String getMareosDia10() {
+		return mareosDia10;
+	}
+	public void setMareosDia10(String mareosDia10) {
+		this.mareosDia10 = mareosDia10;
+	}
+	public String getMareosDia11() {
+		return mareosDia11;
+	}
+	public void setMareosDia11(String mareosDia11) {
+		this.mareosDia11 = mareosDia11;
+	}
+	public String getMareosDia12() {
+		return mareosDia12;
+	}
+	public void setMareosDia12(String mareosDia12) {
+		this.mareosDia12 = mareosDia12;
+	}
+	public String getMareosDia13() {
+		return mareosDia13;
+	}
+	public void setMareosDia13(String mareosDia13) {
+		this.mareosDia13 = mareosDia13;
+	}
+	public String getMareosDia14() {
+		return mareosDia14;
+	}
+	public void setMareosDia14(String mareosDia14) {
+		this.mareosDia14 = mareosDia14;
+	}
+	public String getSudoracionDia1() {
+		return sudoracionDia1;
+	}
+	public void setSudoracionDia1(String sudoracionDia1) {
+		this.sudoracionDia1 = sudoracionDia1;
+	}
+	public String getSudoracionDia2() {
+		return sudoracionDia2;
+	}
+	public void setSudoracionDia2(String sudoracionDia2) {
+		this.sudoracionDia2 = sudoracionDia2;
+	}
+	public String getSudoracionDia3() {
+		return sudoracionDia3;
+	}
+	public void setSudoracionDia3(String sudoracionDia3) {
+		this.sudoracionDia3 = sudoracionDia3;
+	}
+	public String getSudoracionDia4() {
+		return sudoracionDia4;
+	}
+	public void setSudoracionDia4(String sudoracionDia4) {
+		this.sudoracionDia4 = sudoracionDia4;
+	}
+	public String getSudoracionDia5() {
+		return sudoracionDia5;
+	}
+	public void setSudoracionDia5(String sudoracionDia5) {
+		this.sudoracionDia5 = sudoracionDia5;
+	}
+	public String getSudoracionDia6() {
+		return sudoracionDia6;
+	}
+	public void setSudoracionDia6(String sudoracionDia6) {
+		this.sudoracionDia6 = sudoracionDia6;
+	}
+	public String getSudoracionDia7() {
+		return sudoracionDia7;
+	}
+	public void setSudoracionDia7(String sudoracionDia7) {
+		this.sudoracionDia7 = sudoracionDia7;
+	}
+	public String getSudoracionDia8() {
+		return sudoracionDia8;
+	}
+	public void setSudoracionDia8(String sudoracionDia8) {
+		this.sudoracionDia8 = sudoracionDia8;
+	}
+	public String getSudoracionDia9() {
+		return sudoracionDia9;
+	}
+	public void setSudoracionDia9(String sudoracionDia9) {
+		this.sudoracionDia9 = sudoracionDia9;
+	}
+	public String getSudoracionDia10() {
+		return sudoracionDia10;
+	}
+	public void setSudoracionDia10(String sudoracionDia10) {
+		this.sudoracionDia10 = sudoracionDia10;
+	}
+	public String getSudoracionDia11() {
+		return sudoracionDia11;
+	}
+	public void setSudoracionDia11(String sudoracionDia11) {
+		this.sudoracionDia11 = sudoracionDia11;
+	}
+	public String getSudoracionDia12() {
+		return sudoracionDia12;
+	}
+	public void setSudoracionDia12(String sudoracionDia12) {
+		this.sudoracionDia12 = sudoracionDia12;
+	}
+	public String getSudoracionDia13() {
+		return sudoracionDia13;
+	}
+	public void setSudoracionDia13(String sudoracionDia13) {
+		this.sudoracionDia13 = sudoracionDia13;
+	}
+	public String getSudoracionDia14() {
+		return sudoracionDia14;
+	}
+	public void setSudoracionDia14(String sudoracionDia14) {
+		this.sudoracionDia14 = sudoracionDia14;
+	}
 }

@@ -164,7 +164,7 @@ public class UtilitarioReporte  {
     	String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.pdf") + (nombres.contains(".pdf")?nombres:nombres + ".pdf");
     	
   	    File file = new File(path);
-  	    int copies = 4;
+  	    int copies = 3;
     	try
     	{
               //convert array of bytes into file

@@ -1163,7 +1163,10 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " z.parestesiaMS, " + " z.parestesiaMI, " + "z.paralisisMuscMS,"
 					+ " z.paralisisMuscMI, " + " z.tos, " + "z.rinorrea,"
 					+ " z.dolorGarganta, " + " z.prurito, " 
-					+ " z.usuarioMedico, " + "z.supervisor"
+					+ " z.usuarioMedico, " + "z.supervisor, "
+					+ " z.fotofobia, "
+					+ " z.mareos,"
+					+ " z.sudoracion "
 					+ " from SeguimientoZika z, UsuariosView u "
 					+ " where z.usuarioMedico = u.id ";
 
@@ -1235,6 +1238,9 @@ public class ExpedienteDA implements ExpedienteService {
 					fila.put("prurito", object[48].toString());
 					fila.put("usuarioMedico", Integer.parseInt(object[49].toString()));
 					fila.put("supervisor", Integer.parseInt(object[50].toString()));
+					fila.put("fotofobia", object[51] != null ? object[51].toString() : null );
+					fila.put("mareos", object[52] != null ? object[52].toString() : null );
+					fila.put("sudoracion", object[53] != null ? object[53].toString() : null );
 					oLista.add(fila);
 
 				}
@@ -1781,8 +1787,25 @@ public class ExpedienteDA implements ExpedienteService {
 								.get("dolorGarganta")));
 						seguimientoZika.setPrurito(((String) seguimientoZikaJSON
 								.get("prurito")));
+						if (seguimientoZikaJSON.get("fotofobia") != null) {
+							seguimientoZika.setFotofobia(((String) seguimientoZikaJSON
+									.get("fotofobia")));
+						} else {
+							seguimientoZika.setMareos(null);
+						}
+						if (seguimientoZikaJSON.get("mareos") != null) {
+							seguimientoZika.setMareos(((String) seguimientoZikaJSON
+									.get("mareos")));
+						} else {
+							seguimientoZika.setMareos(null);
+						}
+						if (seguimientoZikaJSON.get("sudoracion") != null) {
+							seguimientoZika.setSudoracion(((String) seguimientoZikaJSON
+									.get("sudoracion")));
+						} else {
+							seguimientoZika.setSudoracion(null);
+						}
 						
-					
 						HIBERNATE_RESOURCE.begin();
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(
 								seguimientoZika);
@@ -2521,6 +2544,51 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " s13.prurito \"pruritoDia13\", "
 					+ " s14.prurito \"pruritoDia14\", "
 					
+					+ "s1.fotofobia \"fotofobiaDia1\", "
+					+ "s2.fotofobia \"fotofobiaDia2\", "
+					+ "s3.fotofobia \"fotofobiaDia3\", "
+					+ "s4.fotofobia \"fotofobiaDia4\", "
+					+ "s5.fotofobia \"fotofobiaDia5\", "
+					+ "s6.fotofobia \"fotofobiaDia6\", "
+					+ "s7.fotofobia \"fotofobiaDia7\", "
+					+ "s8.fotofobia \"fotofobiaDia8\", "
+					+ "s9.fotofobia \"fotofobiaDia9\", "
+					+ "s10.fotofobia \"fotofobiaDia10\", "
+					+ "s11.fotofobia \"fotofobiaDia11\", "
+					+ "s12.fotofobia \"fotofobiaDia12\", "
+					+ "s13.fotofobia \"fotofobiaDia13\", "
+					+ "s14.fotofobia \"fotofobiaDia14\", "
+					
+					+ "s1.mareos \"mareosDia1\", "
+					+ "s2.mareos \"mareosDia2\", "
+					+ "s3.mareos \"mareosDia3\", "
+					+ "s4.mareos \"mareosDia4\", "
+					+ "s5.mareos \"mareosDia5\", "
+					+ "s6.mareos \"mareosDia6\", "
+					+ "s7.mareos \"mareosDia7\", "
+					+ "s8.mareos \"mareosDia8\", "
+					+ "s9.mareos \"mareosDia9\", "
+					+ "s10.mareos \"mareosDia10\", "
+					+ "s11.mareos \"mareosDia11\", "
+					+ "s12.mareos \"mareosDia12\", "
+					+ "s13.mareos \"mareosDia13\", "
+					+ "s14.mareos \"mareosDia14\", "
+					
+					+ "s1.sudoracion \"sudoracionDia1\", "
+					+ "s2.sudoracion \"sudoracionDia2\", "
+					+ "s3.sudoracion \"sudoracionDia3\", "
+					+ "s4.sudoracion \"sudoracionDia4\", "
+					+ "s5.sudoracion \"sudoracionDia5\", "
+					+ "s6.sudoracion \"sudoracionDia6\", "
+					+ "s7.sudoracion \"sudoracionDia7\", "
+					+ "s8.sudoracion \"sudoracionDia8\", "
+					+ "s9.sudoracion \"sudoracionDia9\", "
+					+ "s10.sudoracion \"sudoracionDia10\", "
+					+ "s11.sudoracion \"sudoracionDia11\", "
+					+ "s12.sudoracion \"sudoracionDia12\", "
+					+ "s13.sudoracion \"sudoracionDia13\", "
+					+ "s14.sudoracion \"sudoracionDia14\", "
+					
 					
 					+ " (select um.codigopersonal from usuarios_view um where s1.usuario_medico = um.id) \"nombreMedico1\", "
 					+ " (select um.codigopersonal from usuarios_view um where s2.usuario_medico = um.id) \"nombreMedico2\", "
@@ -2599,7 +2667,7 @@ public class ExpedienteDA implements ExpedienteService {
 			List result = query.list();
 
 			return UtilitarioReporte.mostrarReporte(nombreReporte, null,
-					result, false, null);
+					result, true, null);
 
 		} catch (Exception e) {
 			e.printStackTrace();
