@@ -277,6 +277,8 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 				" h.horasv, " +
 				" h.hora, " +
 				" mtc.motivo \"motivoCancelacion\", " +
+				" h.no_atiende_llamado_enfermeria \"noAtiendeLlamadoEnfermeria\", " +
+				" h.no_atiende_llamado_medico \"noAtiendeLlamadoMedico\", " +
 				//------------------------------------------
 				" (SELECT array_to_string( " + 
 				"  ARRAY(select DISTINCT " +

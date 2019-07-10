@@ -1,6 +1,7 @@
 package com.sts_ni.estudiocohortecssfv.datos.inicio;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -430,6 +431,21 @@ public class HojaConsultaDA implements HojaConsultaService {
 			hojaConsulta.setOrdenLlegada(Short.valueOf((maxOrdenLlegada + 1)
 					+ ""));
 			hojaConsulta.setUsuarioEnfermeria(null);
+			
+			 /* Guardamos la hora en la que se llamo al paciente, 
+             * si este no atiende al llamado, si existe una hora guardada, se obtiene el valor de la hora anterior y 
+			 * se envia a guardar la hora anterior mas la nueva hora */
+			Date date = new Date();
+			 
+			String strDateFormat = "hh:mm a";
+			SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+			String noAtiendeLlamadoEnfermeria = sdf.format(date);
+			if (hojaConsulta.getNoAtiendeLlamadoEnfermeria() != null) {
+				String valorAnterior = hojaConsulta.getNoAtiendeLlamadoEnfermeria();
+				hojaConsulta.setNoAtiendeLlamadoEnfermeria(valorAnterior+";"+noAtiendeLlamadoEnfermeria);
+			} else {
+				hojaConsulta.setNoAtiendeLlamadoEnfermeria(noAtiendeLlamadoEnfermeria);
+			}
 
 			HIBERNATE_RESOURCE.begin();
 			HIBERNATE_RESOURCE.getSession().update(hojaConsulta);
@@ -523,7 +539,6 @@ public class HojaConsultaDA implements HojaConsultaService {
 			Short usuarioEnfermeria;
 			String valorParametro;
 			
-			
 			String sql = "select max(h.ordenLlegada) "
 						+ " from HojaConsulta h"
 						+ " where to_char(h.fechaConsulta, 'yyyyMMdd') = to_char(current_date, 'yyyyMMdd')";
@@ -574,12 +589,25 @@ public class HojaConsultaDA implements HojaConsultaService {
 
 					if (!existeExpActivo){
 						
+						// Obteniendo los estudios del participante por el codExpediente
+						sql = "(SELECT array_to_string( " + 
+								"	ARRAY(SELECT DISTINCT ec.desc_estudio " + 
+								"		from cons_estudios c " + 
+								"		inner join estudio_catalogo ec on c.codigo_consentimiento = ec.cod_estudio " + 
+								"		where c.codigo_expediente = :codExpediente and c.retirado != '1' " + 
+								"		order by ec.desc_estudio asc), ', '))";
+						
+						query =  HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
+						query.setParameter("codExpediente", codExpediente);
+						String estudios = (String) query.uniqueResult();
+
 						hojaConsulta.setOrdenLlegada(Short.valueOf((maxOrdenLlegada) + ""));
 						
 						hojaConsulta.setCodExpediente(codExpediente);
 						hojaConsulta.setNumHojaConsulta(numHojaConsulta);
 						hojaConsulta.setFechaConsulta(new Date());
 						hojaConsulta.setUsuarioEnfermeria(usuarioEnfermeria);
+						hojaConsulta.setEstudiosParticipantes(estudios);
 						hojaConsulta.setEstado('1');
 
 						HIBERNATE_RESOURCE.begin();
@@ -593,8 +621,6 @@ public class HojaConsultaDA implements HojaConsultaService {
 						UtilResultado.ERROR);
 			}
 			
-			
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = UtilResultado.parserResultado(null,

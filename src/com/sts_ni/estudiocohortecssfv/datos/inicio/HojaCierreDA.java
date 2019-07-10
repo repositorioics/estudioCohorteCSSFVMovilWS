@@ -487,7 +487,7 @@ public class HojaCierreDA implements HojaCierreService {
 					" and e.codigo != '1' " +
 					" and to_char(h.fechaConsulta, 'yyyyMMdd') = " +
 					" (select to_char(h2.fechaConsulta, 'yyyyMMdd') from HojaConsulta h2 " +
-					"   where h2.secHojaConsulta = :id ) ";
+					" where h2.secHojaConsulta = :id ) ";
 			
 			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
 			query.setParameter("id", ((Number) hojaConsultaJSON.get("secHojaConsulta")).intValue());
@@ -501,6 +501,21 @@ public class HojaCierreDA implements HojaCierreService {
             
             hojaConsulta.setOrdenLlegada(Short.valueOf((maxOrdenLlegada+1)+""));
             hojaConsulta.setEstado('2');
+            
+            /* Guardamos la hora en la que se llamo al paciente, 
+             * si este no atiende al llamado, si existe una hora guardada, se obtiene el valor de la hora anterior y 
+			 * se envia a guardar la hora anterior mas la nueva hora */
+            Date date = new Date();
+			 
+			String strDateFormat = "hh:mm a";
+			SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+			String noAtiendeLlamadoMedico = sdf.format(date);
+			if (hojaConsulta.getNoAtiendeLlamadoMedico() != null) {
+				String valorAnterior = hojaConsulta.getNoAtiendeLlamadoMedico();
+				hojaConsulta.setNoAtiendeLlamadoMedico(valorAnterior+";"+noAtiendeLlamadoMedico);
+			} else {
+				hojaConsulta.setNoAtiendeLlamadoMedico(noAtiendeLlamadoMedico);
+			}
             
             HIBERNATE_RESOURCE.begin();
             HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
@@ -639,6 +654,11 @@ public class HojaCierreDA implements HojaCierreService {
 				numHoja = Integer.valueOf(valorParametro);
 			}
 
+			Date date = new Date();
+			String strDateFormat = "hh:mm a";
+			SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+			String horaEnfermeria = sdf.format(date);
+			
 			nuevaHoja.setCodExpediente(anteriorHoja.getCodExpediente());
 			nuevaHoja.setNumHojaConsulta(numHoja);
 			nuevaHoja.setOrdenLlegada(maxOrdenLlegada.shortValue());
@@ -648,7 +668,12 @@ public class HojaCierreDA implements HojaCierreService {
 			nuevaHoja.setPesoKg(anteriorHoja.getPesoKg());
 			nuevaHoja.setTallaCm(anteriorHoja.getTallaCm());
 			nuevaHoja.setTemperaturac(anteriorHoja.getTemperaturac());
-			nuevaHoja.setUsuarioMedico(anteriorHoja.getUsuarioMedico());
+			
+			//Se guarda la hora enfermeria cuando se crea la observacion
+			nuevaHoja.setHorasv(horaEnfermeria);
+			//Se estaba setienando el anteriorHoja.getUsuarioMedico() se cambio a null
+			nuevaHoja.setUsuarioMedico(null);
+			
 			//estos campos deben quedar en blanco Dr. Ojeda 29112018
 			//nuevaHoja.setPas(anteriorHoja.getPas());
 			//nuevaHoja.setPad(anteriorHoja.getPad());

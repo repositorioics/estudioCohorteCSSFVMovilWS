@@ -326,10 +326,15 @@ public class HojaConsultaReporte {
 	private String expedienteFisico;
 	private int numHojaConsulta;
 	
+	
 	//ESTUDIOS PARTICIPANTES
 	/*---*/
 	private String estudiosParticipantes;
 	/*---*/
+	
+	//NO ATIENDE LLAMADO ENFERMERIA Y MEDICO
+	private String noAtiendeLlamadoEnfermeria;
+	private String noAtiendeLlamadoMedico;
 	
 	public int getNumHojaConsulta() {
 		return numHojaConsulta;
@@ -1628,5 +1633,17 @@ public class HojaConsultaReporte {
 	}
 	public void setEstudiosParticipantes(String estudiosParticipantes) {
 		this.estudiosParticipantes = estudiosParticipantes;
+	}
+	public String getNoAtiendeLlamadoEnfermeria() {
+		return noAtiendeLlamadoEnfermeria;
+	}
+	public void setNoAtiendeLlamadoEnfermeria(String noAtiendeLlamadoEnfermeria) {
+		this.noAtiendeLlamadoEnfermeria = noAtiendeLlamadoEnfermeria;
+	}
+	public String getNoAtiendeLlamadoMedico() {
+		return noAtiendeLlamadoMedico;
+	}
+	public void setNoAtiendeLlamadoMedico(String noAtiendeLlamadoMedico) {
+		this.noAtiendeLlamadoMedico = noAtiendeLlamadoMedico;
 	}
 }
