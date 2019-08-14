@@ -81,7 +81,10 @@ public class ExpedienteDA implements ExpedienteService {
 			
 			sql += "order by h.numHojaConsulta desc";
 
+			
 			//sql += "order by h.ordenLlegada asc";
+			
+			
 
 			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
 
