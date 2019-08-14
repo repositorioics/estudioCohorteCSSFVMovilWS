@@ -78,8 +78,10 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " where h.estado = e.codigo ";
 
 			sql += " and h.codExpediente=:codExpediente ";
+			
+			sql += "order by h.numHojaConsulta desc";
 
-			sql += "order by h.ordenLlegada asc";
+			//sql += "order by h.ordenLlegada asc";
 
 			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
 
