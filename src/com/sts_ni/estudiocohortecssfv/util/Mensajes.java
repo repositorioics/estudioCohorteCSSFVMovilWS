@@ -83,6 +83,9 @@ public class Mensajes {
     public static final String NO_PUEDE_CREAR_HOJA_FLU_NEUMONIA="El paciente debe presentar FIS más Neumonia para crear la hoja de influenza";
     public static final String NO_PUEDE_CREAR_HOJA_SOLO_FIS="No se puede crear la hoja de influenza solo con FIS";
     
+    public static final String NO_PUEDE_CREAR_HOJA_FLU_ESTUDIO_DENGUE="No se puede crear la hoja de influenza, el participante solo pertenece al estudio Dengue";
+    public static final String NO_PUEDE_CREAR_HOJA_ZIKA_ESTUDIO_DENGUE="No se puede crear la hoja de zika, el participante no pertenece al estudio Dengue";
+    
     public static final String ERROR_MARCO_FIEBRE_SIN_FIF="ERROR: Marco Fiebre y no ingreso la FIF favor revisar";
     
     public static final String HOJA_ZIKA_NO_CERRADA="El paciente tiene hoja de seguimiento zika sin cerrar.";
@@ -93,4 +96,13 @@ public class Mensajes {
     public static final String FICHA_CASO_IRAG="Recuerde llenar la ficha de vigilancia integrada IRAG";
     
     public static final String HOJA_CONSULTA_NO_SE_PUDO_CERRAR = "La hoja de consulta no se pudo cerrar, Favor intente cerrar la nuevamente";
+    
+    public static final String PACIENTE_NO_PUEDE_SER_CATEGORIA_NA="Este paciente no puede ser categoria NA";
+    public static final String PACIENTE_NO_PUEDE_SER_CATEGORIA_ABCD="Este paciente no puede ser categoria A, B, C, D";
+    
+    public static final String HOJA_SIN_FIS_CON_CAT_D="Para crear una hoja de zika con categoria D, solo se necesita la FIS";
+    public static final String HOJA_ZIKA_SIN_CAT="No se puede crear una hoja de zika sin haber marcado la categoria en la hoja de consulta";
+    public static final String HOJA_ZIKA_CON_CAT_C="No puede crear una hoja de zika con categoria C";
+
+    
 }

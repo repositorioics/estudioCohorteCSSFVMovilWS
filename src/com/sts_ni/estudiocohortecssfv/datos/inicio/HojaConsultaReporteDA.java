@@ -293,7 +293,9 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 				"		  when ec.desc_estudio = 'Indice Cluster Dengue' then 'IC-DEN' " + 
 				"		  when ec.desc_estudio = 'Transmision Zika' then 'TR-ZIKA' " + 
 				"		  when ec.desc_estudio = 'CH Familia' then 'CH-F' " + 
-				"		  when ec.desc_estudio = 'Arbovirus Seroprev.' then 'A-SERO' " + 
+				"		  when ec.desc_estudio = 'Arbovirus Seroprev.' then 'A-SERO' " +
+				"		  when ec.desc_estudio = 'Influenza UO1' then 'UO1' " +
+				"		  when ec.desc_estudio = 'UO1' then 'UO1' " +
 				" END " +
 				" from cons_estudios c " + 
 				" inner join hoja_consulta as hc on c.codigo_expediente = hc.cod_expediente " + 

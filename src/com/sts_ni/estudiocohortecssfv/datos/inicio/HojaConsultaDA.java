@@ -586,36 +586,36 @@ public class HojaConsultaDA implements HojaConsultaService {
 			 query.setParameter("codExpediente", codExpediente);
 	
 			Boolean existeExpActivo = query.list().size() > 0;
+			
+			// Obteniendo los estudios del participante por el codExpediente
+			sql = "(SELECT array_to_string( " + 
+					"	ARRAY(SELECT DISTINCT ec.desc_estudio " + 
+					"		from cons_estudios c " + 
+					"		inner join estudio_catalogo ec on c.codigo_consentimiento = ec.cod_estudio " + 
+					"		where c.codigo_expediente = :codExpediente and c.retirado != '1' " + 
+					"		order by ec.desc_estudio asc), ', '))";
+			
+			query =  HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
+			query.setParameter("codExpediente", codExpediente);
+			String estudios = (String) query.uniqueResult();
 
-					if (!existeExpActivo){
-						
-						// Obteniendo los estudios del participante por el codExpediente
-						sql = "(SELECT array_to_string( " + 
-								"	ARRAY(SELECT DISTINCT ec.desc_estudio " + 
-								"		from cons_estudios c " + 
-								"		inner join estudio_catalogo ec on c.codigo_consentimiento = ec.cod_estudio " + 
-								"		where c.codigo_expediente = :codExpediente and c.retirado != '1' " + 
-								"		order by ec.desc_estudio asc), ', '))";
-						
-						query =  HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
-						query.setParameter("codExpediente", codExpediente);
-						String estudios = (String) query.uniqueResult();
+			if (!existeExpActivo) {
 
-						hojaConsulta.setOrdenLlegada(Short.valueOf((maxOrdenLlegada) + ""));
-						
-						hojaConsulta.setCodExpediente(codExpediente);
-						hojaConsulta.setNumHojaConsulta(numHojaConsulta);
-						hojaConsulta.setFechaConsulta(new Date());
-						hojaConsulta.setUsuarioEnfermeria(usuarioEnfermeria);
-						hojaConsulta.setEstudiosParticipantes(estudios);
-						hojaConsulta.setEstado('1');
+				hojaConsulta.setOrdenLlegada(Short.valueOf((maxOrdenLlegada) + ""));
 
-						HIBERNATE_RESOURCE.begin();
-						HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
-						HIBERNATE_RESOURCE.commit();
-						result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
-					
-			}else {
+				hojaConsulta.setCodExpediente(codExpediente);
+				hojaConsulta.setNumHojaConsulta(numHojaConsulta);
+				hojaConsulta.setFechaConsulta(new Date());
+				hojaConsulta.setUsuarioEnfermeria(usuarioEnfermeria);
+				hojaConsulta.setEstudiosParticipantes(estudios);
+				hojaConsulta.setEstado('1');
+
+				HIBERNATE_RESOURCE.begin();
+				HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
+				HIBERNATE_RESOURCE.commit();
+				result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
+
+			} else {
 				result = UtilResultado.parserResultado(null,
 						Mensajes.CODIGO_PACIENTE_YA_INGRESADO,
 						UtilResultado.ERROR);
@@ -2493,6 +2493,33 @@ public class HojaConsultaDA implements HojaConsultaService {
 			query.setParameter("id", secHojaConsulta);
 
 			HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+			
+			String estudiosParticipantes = null;
+			String[] estPart;
+			Boolean perteneceEstDengue = false;
+			if (hojaConsulta.getEstudiosParticipantes() != null) {
+				estudiosParticipantes = hojaConsulta.getEstudiosParticipantes();
+				estPart = estudiosParticipantes.split(",");
+				for (int i = 0; i < estPart.length; i++) {
+					if (estPart[i].trim().equals("Dengue")) {
+						perteneceEstDengue = true;
+					}
+				}
+			}
+			
+			if (categoria != null) {
+				if (perteneceEstDengue && categoria.trim().equals("NA")) {
+					result = UtilResultado.parserResultado(null, Mensajes.PACIENTE_NO_PUEDE_SER_CATEGORIA_NA, UtilResultado.ERROR);
+					return result;
+				}
+				if ((!perteneceEstDengue && categoria.trim().equals("A")) || 
+						(!perteneceEstDengue && categoria.trim().equals("B")) ||
+						(!perteneceEstDengue && categoria.trim().equals("C")) ||
+						(!perteneceEstDengue && categoria.trim().equals("D"))) {
+					result = UtilResultado.parserResultado(null, Mensajes.PACIENTE_NO_PUEDE_SER_CATEGORIA_ABCD, UtilResultado.ERROR);
+					return result;
+				}
+			}
 			
 			if(UtilHojaConsulta.categoriaCompletada(hojaConsulta)) {
 				HojaConsulta hcNueva = new HojaConsulta();

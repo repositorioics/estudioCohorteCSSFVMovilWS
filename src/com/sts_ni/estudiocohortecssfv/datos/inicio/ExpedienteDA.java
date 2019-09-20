@@ -81,10 +81,7 @@ public class ExpedienteDA implements ExpedienteService {
 			
 			sql += "order by h.numHojaConsulta desc";
 
-			
 			//sql += "order by h.ordenLlegada asc";
-			
-			
 
 			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
 
@@ -407,7 +404,8 @@ public class ExpedienteDA implements ExpedienteService {
 			Query query;
 			HojaInfluenza hojaInfluenza;
 			SeguimientoInfluenza seguimientoInfluenza;
-
+			Boolean tieneEstDengue = false;
+			
 			JSONParser parser = new JSONParser();
 			Object obj = (Object) parser.parse(paramCrearHoja);
 			JSONObject crearHojaJson = (JSONObject) obj;
@@ -429,6 +427,43 @@ public class ExpedienteDA implements ExpedienteService {
 				result = UtilResultado.parserResultado(null, Mensajes.NO_EXISTE_HC_CODEXP, UtilResultado.INFO);
 
 			} else {
+				
+				//Retornamos mensaje si el particpante solo pertenece al estudio de dengue
+				sql = "select ec from ConsEstudios c, EstudioCatalogo ec " + 
+						" where c.codigoConsentimiento = ec.codEstudio"  + 
+						" and c.codigoExpediente = :codExpediente " + 
+						" and c.retirado != '1' " +
+						" group by ec.codEstudio, ec.descEstudio";
+				
+				query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+				query.setParameter("codExpediente", codExpediente);
+
+				List<EstudioCatalogo> lstConsEstudios = (List<EstudioCatalogo>) query.list();
+				
+				// Si lstConsEstudios solo tiene un estudio y este es dengue retornamos mensaje
+				if (lstConsEstudios != null && lstConsEstudios.size() <= 1) {
+					for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
+						if (estudioCatalogo.getDescEstudio().trim().equals("Dengue")) {
+							return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_FLU_ESTUDIO_DENGUE,
+									UtilResultado.INFO);
+						}
+					}
+				} /*else {
+					// recorremos toda la lista y verifcamos si el participante tiene estudio de dengue
+					for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
+						if (estudioCatalogo.getDescEstudio().trim().equals("Dengue")) {
+							tieneEstDengue = true;
+						}
+					}
+				}
+				// si exite la categoria y el participante no tiene estudio de dengue retornamos error
+				if (hojaConsulta.getCategoria() != null && !tieneEstDengue) {
+					if (hojaConsulta.getCategoria().trim().equals("A") || hojaConsulta.getCategoria().equals("B") 
+							|| hojaConsulta.getCategoria().trim().equals("C") || hojaConsulta.getCategoria().trim().equals("D")) {
+						return UtilResultado.parserResultado(null, Mensajes.PACIENTE_NO_PUEDE_SER_CATEGORIA_ABCD, UtilResultado.INFO);
+					}
+				}*/
 				
 				/* Validacion anterior
 				 * if(hojaConsulta.getFif() == null || hojaConsulta.getFis() == null){
@@ -1477,6 +1512,7 @@ public class ExpedienteDA implements ExpedienteService {
 			Query query;
 			HojaZika hojaZika;
 			SeguimientoZika seguimientoZika;
+			Boolean validarEstudioParticipante = false;
 
 			JSONParser parser = new JSONParser();
 			Object obj = (Object) parser.parse(paramCrearHoja);
@@ -1500,8 +1536,50 @@ public class ExpedienteDA implements ExpedienteService {
 			
 			}else{
 				
-				if(hojaConsulta.getFif() == null || hojaConsulta.getFis() == null){
-					return UtilResultado.parserResultado(null, Mensajes.HOJA_SIN_FIS_FIF, UtilResultado.INFO);
+				//Retornamos mensaje si el particpante no pertenece al estudio de dengue
+				sql = "select ec from ConsEstudios c, EstudioCatalogo ec " + 
+						" where c.codigoConsentimiento = ec.codEstudio"  + 
+						" and c.codigoExpediente = :codExpediente " + 
+						" and c.retirado != '1' " +
+						" group by ec.codEstudio, ec.descEstudio";
+				
+				query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+				query.setParameter("codExpediente", codExpediente);
+				
+				List<EstudioCatalogo> lstConsEstudios = (List<EstudioCatalogo>) query.list();
+				
+				// verificamos que el participante tenga el estudio de dengue
+				if (lstConsEstudios != null && lstConsEstudios.size() > 0) {
+					for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
+						if (estudioCatalogo.getDescEstudio().trim().equals("Dengue")) {
+							validarEstudioParticipante = true;
+						}
+					}
+				}
+				
+				// si el particpante no tiene el estudio de dengue retornamos mensaje
+				if (!validarEstudioParticipante) {
+					return UtilResultado.parserResultado(null, Mensajes.NO_PUEDE_CREAR_HOJA_ZIKA_ESTUDIO_DENGUE, UtilResultado.INFO);
+				}
+				
+				// si la categoria es null retornamos mensaje
+				if (hojaConsulta.getCategoria() == null) {
+					return UtilResultado.parserResultado(null, Mensajes.HOJA_ZIKA_SIN_CAT, UtilResultado.INFO);
+				}
+				
+				// si la categoria es D y no tiene FIS retornamos mensaje
+				if (hojaConsulta.getCategoria().trim().equals("D")) {
+					if (hojaConsulta.getFis() == null) {
+						return UtilResultado.parserResultado(null, Mensajes.HOJA_SIN_FIS_CON_CAT_D, UtilResultado.INFO);
+					}
+				} else if (hojaConsulta.getCategoria().trim().equals("C")
+						|| hojaConsulta.getCategoria().trim().equals("NA")) { // si la categoria es C ó NA retornamos mensaje
+					return UtilResultado.parserResultado(null, Mensajes.HOJA_ZIKA_CON_CAT_C, UtilResultado.INFO);
+				} else { // verificamos que la categoria sea A ó B y tengan Fis y Fif
+					if (hojaConsulta.getFif() == null || hojaConsulta.getFis() == null) {
+						return UtilResultado.parserResultado(null, Mensajes.HOJA_SIN_FIS_FIF, UtilResultado.INFO);
+					}
 				}
 				
 				//verificando si tiene hojas abiertas

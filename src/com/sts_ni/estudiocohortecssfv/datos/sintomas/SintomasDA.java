@@ -1120,7 +1120,9 @@ public class SintomasDA implements SintomasService {
 						
 						for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
 							if (estudioCatalogo.getDescEstudio().equals("Influenza") 
-									|| estudioCatalogo.getDescEstudio().equals("CH Familia")) {
+									|| estudioCatalogo.getDescEstudio().equals("CH Familia") 
+									|| estudioCatalogo.getDescEstudio().equals("Influenza UO1")
+									|| estudioCatalogo.getDescEstudio().equals("UO1")) {
 								crearFicha = true;
 							}
 						}
@@ -1177,7 +1179,9 @@ public class SintomasDA implements SintomasService {
 						
 						for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
 							if (estudioCatalogo.getDescEstudio().equals("Influenza") 
-									|| estudioCatalogo.getDescEstudio().equals("CH Familia")) {
+									|| estudioCatalogo.getDescEstudio().equals("CH Familia")
+									|| estudioCatalogo.getDescEstudio().equals("Influenza UO1")
+									|| estudioCatalogo.getDescEstudio().equals("UO1")) {
 								crearFicha = true;
 							}
 						}
@@ -1250,7 +1254,9 @@ public class SintomasDA implements SintomasService {
 					
 					for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
 						if (estudioCatalogo.getDescEstudio().equals("Influenza") 
-								|| estudioCatalogo.getDescEstudio().equals("CH Familia")) {
+								|| estudioCatalogo.getDescEstudio().equals("CH Familia")
+								|| estudioCatalogo.getDescEstudio().equals("Influenza UO1")
+								|| estudioCatalogo.getDescEstudio().equals("UO1")) {
 							crearFicha = true;
 						}
 					}
@@ -1307,7 +1313,9 @@ public class SintomasDA implements SintomasService {
 					
 					for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
 						if (estudioCatalogo.getDescEstudio().equals("Influenza") 
-								|| estudioCatalogo.getDescEstudio().equals("CH Familia")) {
+								|| estudioCatalogo.getDescEstudio().equals("CH Familia")
+								|| estudioCatalogo.getDescEstudio().equals("Influenza UO1")
+								|| estudioCatalogo.getDescEstudio().equals("UO1")) {
 							crearFicha = true;
 						}
 					}

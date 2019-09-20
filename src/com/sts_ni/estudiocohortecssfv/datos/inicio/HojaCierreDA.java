@@ -653,6 +653,17 @@ public class HojaCierreDA implements HojaCierreService {
 			if (Integer.valueOf(valorParametro) > numHoja) {
 				numHoja = Integer.valueOf(valorParametro);
 			}
+			
+			// Obteniendo los estudios del participante por el codExpediente
+			sql = "(SELECT array_to_string( " + " ARRAY(SELECT DISTINCT ec.desc_estudio "
+					+ "		from cons_estudios c "
+					+ "		inner join estudio_catalogo ec on c.codigo_consentimiento = ec.cod_estudio "
+					+ "		where c.codigo_expediente = :codExpediente and c.retirado != '1' "
+					+ "		order by ec.desc_estudio asc), ', '))";
+
+			query = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
+			query.setParameter("codExpediente", anteriorHoja.getCodExpediente());
+			String estudios = (String) query.uniqueResult();
 
 			Date date = new Date();
 			String strDateFormat = "hh:mm a";
@@ -668,6 +679,7 @@ public class HojaCierreDA implements HojaCierreService {
 			nuevaHoja.setPesoKg(anteriorHoja.getPesoKg());
 			nuevaHoja.setTallaCm(anteriorHoja.getTallaCm());
 			nuevaHoja.setTemperaturac(anteriorHoja.getTemperaturac());
+			nuevaHoja.setEstudiosParticipantes(estudios);
 			
 			//Se guarda la hora enfermeria cuando se crea la observacion
 			nuevaHoja.setHorasv(horaEnfermeria);
