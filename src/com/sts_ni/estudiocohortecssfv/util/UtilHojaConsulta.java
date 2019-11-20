@@ -641,6 +641,21 @@ public class UtilHojaConsulta {
 				&& categoriaCompletada(hojaConsulta);
 	}
 	
+	/*Nueva Validacion agregada el 07/11/2019 para activar los diagnosticos - SC*/
+	public static boolean validarSeccionesParaActivarDiagnostico(HojaConsulta hojaConsulta) {
+		return generalesCompletada(hojaConsulta) && estadoGeneralCompletada(hojaConsulta) && 
+				gastrointestinalCompletada(hojaConsulta) && osteomuscularCompletada(hojaConsulta) &&
+				cabezaCompletada(hojaConsulta) && deshidratacionCompletada(hojaConsulta) &&
+				cutaneoCompletada(hojaConsulta) && gargantaCompletada(hojaConsulta) &&
+				renalCompletada(hojaConsulta) && estadoNutricionalCompletada(hojaConsulta) && 
+				respiratorioCompletada(hojaConsulta) && referenciaCompletada(hojaConsulta) &&
+				vacunaCompletada(hojaConsulta) && historialExamenCompletada(hojaConsulta) &&
+				tratamientoPlanesCompletada(hojaConsulta) && proximaCitaCompletada(hojaConsulta)
+				//Nueva Linea de codigo agregada
+				&& categoriaCompletada(hojaConsulta);
+			  /*&& diagnosticoCompletada(hojaConsulta)*/
+	}
+	
 	public static String DateToString(Date fecha, String formato){
 		SimpleDateFormat sdf = new SimpleDateFormat(formato);
 		return sdf.format(fecha);

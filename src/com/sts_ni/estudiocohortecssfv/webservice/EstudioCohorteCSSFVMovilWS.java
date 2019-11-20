@@ -564,10 +564,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	}
 
 	@WebMethod(operationName = "imprimirSeguimientoInfluenciaPdf")
-	@WebResult(name = "imprimirSeguimientoInfluenciapdfvoid")
-	public void imprimirSeguimientoInfluenciaPdf(
+	@WebResult(name = "resultadoJSON")
+	public String imprimirSeguimientoInfluenciaPdf(
 			@WebParam(name = "paramNumHojaSeguimiento") int paramNumHojaSeguimiento) {
-		EXPEDIENTE_SERVICE
+		return EXPEDIENTE_SERVICE
 				.imprimirSeguimientoInfluenciaPdf(paramNumHojaSeguimiento);
 	}
 	
@@ -709,10 +709,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	}
 	
 	@WebMethod(operationName = "imprimirSeguimientoZikaPdf")
-	@WebResult(name = "imprimirSeguimientoZikapdfvoid")
-	public void imprimirSeguimientoZikaPdf(
+	@WebResult(name = "resultadoJSON")
+	public String imprimirSeguimientoZikaPdf(
 			@WebParam(name = "paramNumHojaSeguimiento") int paramNumHojaSeguimiento) {
-		EXPEDIENTE_SERVICE
+		return EXPEDIENTE_SERVICE
 				.imprimirSeguimientoZikaPdf(paramNumHojaSeguimiento);
 	}
 	
@@ -759,5 +759,12 @@ public class EstudioCohorteCSSFVMovilWS {
 			@WebParam(name = "secVigilanciaIntegrada") int secVigilanciaIntegrada) {
 		EXPEDIENTE_SERVICE
 				.imprimirFichaPdf(secVigilanciaIntegrada);
+	}
+	
+	@WebMethod(operationName = "procesoActivarDiagnostico")
+	@WebResult(name = "resultadoJSON")
+	public String procesoActivarDiagnostico(
+			@WebParam(name = "secHojaConsulta", partName = "secHojaConsulta", mode = Mode.IN) int secHojaConsulta) {
+		return DIAGNOSTICO_SERVICE.activarDiagnosticos(secHojaConsulta);
 	}
 }

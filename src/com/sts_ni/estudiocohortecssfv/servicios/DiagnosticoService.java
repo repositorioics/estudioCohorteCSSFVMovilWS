@@ -19,5 +19,7 @@ public interface DiagnosticoService {
 	public String getTodasEscuela();
 
 	public String getSeccionesDiagnosticoCompletadas(String paramHojaConsulta);
+	
+	public String activarDiagnosticos(int secHojaConsulta);
 
 }

@@ -236,7 +236,279 @@ public class SeguimientoInfluenzaReporte {
     private String dolorCabezaDia11;
     private String dolorCabezaDia12;
     
-	
+    private String fiebreLeveDia1;
+    private String fiebreLeveDia2;
+    private String fiebreLeveDia3;
+    private String fiebreLeveDia4;
+    private String fiebreLeveDia5;
+    private String fiebreLeveDia6;
+    private String fiebreLeveDia7;
+    private String fiebreLeveDia8;
+    private String fiebreLeveDia9;
+    private String fiebreLeveDia10;
+    private String fiebreLeveDia11;
+    private String fiebreLeveDia12;
+    
+    private String fiebreModeradaDia1;
+    private String fiebreModeradaDia2;
+    private String fiebreModeradaDia3;
+    private String fiebreModeradaDia4;
+    private String fiebreModeradaDia5;
+    private String fiebreModeradaDia6;
+    private String fiebreModeradaDia7;
+    private String fiebreModeradaDia8;
+    private String fiebreModeradaDia9;
+    private String fiebreModeradaDia10;
+    private String fiebreModeradaDia11;
+    private String fiebreModeradaDia12;
+    
+    private String fiebreSeveraDia1;
+    private String fiebreSeveraDia2;
+    private String fiebreSeveraDia3;
+    private String fiebreSeveraDia4;
+    private String fiebreSeveraDia5;
+    private String fiebreSeveraDia6;
+    private String fiebreSeveraDia7;
+    private String fiebreSeveraDia8;
+    private String fiebreSeveraDia9;
+    private String fiebreSeveraDia10;
+    private String fiebreSeveraDia11;
+    private String fiebreSeveraDia12;
+    
+    private String tosLeveDia1;
+    private String tosLeveDia2;
+    private String tosLeveDia3;
+    private String tosLeveDia4;
+    private String tosLeveDia5;
+    private String tosLeveDia6;
+    private String tosLeveDia7;
+    private String tosLeveDia8;
+    private String tosLeveDia9;
+    private String tosLeveDia10;
+    private String tosLeveDia11;
+    private String tosLeveDia12;
+    
+    private String tosModeradaDia1;
+    private String tosModeradaDia2;
+    private String tosModeradaDia3;
+    private String tosModeradaDia4;
+    private String tosModeradaDia5;
+    private String tosModeradaDia6;
+    private String tosModeradaDia7;
+    private String tosModeradaDia8;
+    private String tosModeradaDia9;
+    private String tosModeradaDia10;
+    private String tosModeradaDia11;
+    private String tosModeradaDia12;
+    
+    private String tosSeveraDia1;
+    private String tosSeveraDia2;
+    private String tosSeveraDia3;
+    private String tosSeveraDia4;
+    private String tosSeveraDia5;
+    private String tosSeveraDia6;
+    private String tosSeveraDia7;
+    private String tosSeveraDia8;
+    private String tosSeveraDia9;
+    private String tosSeveraDia10;
+    private String tosSeveraDia11;
+    private String tosSeveraDia12;
+    
+    private String secrecionNasalLeveDia1;
+    private String secrecionNasalLeveDia2;
+    private String secrecionNasalLeveDia3;
+    private String secrecionNasalLeveDia4;
+    private String secrecionNasalLeveDia5;
+    private String secrecionNasalLeveDia6;
+    private String secrecionNasalLeveDia7;
+    private String secrecionNasalLeveDia8;
+    private String secrecionNasalLeveDia9;
+    private String secrecionNasalLeveDia10;
+    private String secrecionNasalLeveDia11;
+    private String secrecionNasalLeveDia12;
+    
+    private String secrecionNasalModeradaDia1;
+    private String secrecionNasalModeradaDia2;
+    private String secrecionNasalModeradaDia3;
+    private String secrecionNasalModeradaDia4;
+    private String secrecionNasalModeradaDia5;
+    private String secrecionNasalModeradaDia6;
+    private String secrecionNasalModeradaDia7;
+    private String secrecionNasalModeradaDia8;
+    private String secrecionNasalModeradaDia9;
+    private String secrecionNasalModeradaDia10;
+    private String secrecionNasalModeradaDia11;
+    private String secrecionNasalModeradaDia12;
+    
+    private String secrecionNasalSeveraDia1;
+    private String secrecionNasalSeveraDia2;
+    private String secrecionNasalSeveraDia3;
+    private String secrecionNasalSeveraDia4;
+    private String secrecionNasalSeveraDia5;
+    private String secrecionNasalSeveraDia6;
+    private String secrecionNasalSeveraDia7;
+    private String secrecionNasalSeveraDia8;
+    private String secrecionNasalSeveraDia9;
+    private String secrecionNasalSeveraDia10;
+    private String secrecionNasalSeveraDia11;
+    private String secrecionNasalSeveraDia12;
+    
+    private String dolorGargantaLeveDia1;
+    private String dolorGargantaLeveDia2;
+    private String dolorGargantaLeveDia3;
+    private String dolorGargantaLeveDia4;
+    private String dolorGargantaLeveDia5;
+    private String dolorGargantaLeveDia6;
+    private String dolorGargantaLeveDia7;
+    private String dolorGargantaLeveDia8;
+    private String dolorGargantaLeveDia9;
+    private String dolorGargantaLeveDia10;
+    private String dolorGargantaLeveDia11;
+    private String dolorGargantaLeveDia12;
+    
+    private String dolorGargantaModeradaDia1;
+    private String dolorGargantaModeradaDia2;
+    private String dolorGargantaModeradaDia3;
+    private String dolorGargantaModeradaDia4;
+    private String dolorGargantaModeradaDia5;
+    private String dolorGargantaModeradaDia6;
+    private String dolorGargantaModeradaDia7;
+    private String dolorGargantaModeradaDia8;
+    private String dolorGargantaModeradaDia9;
+    private String dolorGargantaModeradaDia10;
+    private String dolorGargantaModeradaDia11;
+    private String dolorGargantaModeradaDia12;
+    
+    private String dolorGargantaSeveraDia1;
+    private String dolorGargantaSeveraDia2;
+    private String dolorGargantaSeveraDia3;
+    private String dolorGargantaSeveraDia4;
+    private String dolorGargantaSeveraDia5;
+    private String dolorGargantaSeveraDia6;
+    private String dolorGargantaSeveraDia7;
+    private String dolorGargantaSeveraDia8;
+    private String dolorGargantaSeveraDia9;
+    private String dolorGargantaSeveraDia10;
+    private String dolorGargantaSeveraDia11;
+    private String dolorGargantaSeveraDia12;
+    
+    private String dolorCabezaLeveDia1;
+    private String dolorCabezaLeveDia2;
+    private String dolorCabezaLeveDia3;
+    private String dolorCabezaLeveDia4;
+    private String dolorCabezaLeveDia5;
+    private String dolorCabezaLeveDia6;
+    private String dolorCabezaLeveDia7;
+    private String dolorCabezaLeveDia8;
+    private String dolorCabezaLeveDia9;
+    private String dolorCabezaLeveDia10;
+    private String dolorCabezaLeveDia11;
+    private String dolorCabezaLeveDia12;
+    
+    private String dolorCabezaModeradaDia1;
+    private String dolorCabezaModeradaDia2;
+    private String dolorCabezaModeradaDia3;
+    private String dolorCabezaModeradaDia4;
+    private String dolorCabezaModeradaDia5;
+    private String dolorCabezaModeradaDia6;
+    private String dolorCabezaModeradaDia7;
+    private String dolorCabezaModeradaDia8;
+    private String dolorCabezaModeradaDia9;
+    private String dolorCabezaModeradaDia10;
+    private String dolorCabezaModeradaDia11;
+    private String dolorCabezaModeradaDia12;
+    
+    private String dolorCabezaSeveraDia1;
+    private String dolorCabezaSeveraDia2;
+    private String dolorCabezaSeveraDia3;
+    private String dolorCabezaSeveraDia4;
+    private String dolorCabezaSeveraDia5;
+    private String dolorCabezaSeveraDia6;
+    private String dolorCabezaSeveraDia7;
+    private String dolorCabezaSeveraDia8;
+    private String dolorCabezaSeveraDia9;
+    private String dolorCabezaSeveraDia10;
+    private String dolorCabezaSeveraDia11;
+    private String dolorCabezaSeveraDia12;
+    
+    private String dolorMuscularLeveDia1;
+    private String dolorMuscularLeveDia2;
+    private String dolorMuscularLeveDia3;
+    private String dolorMuscularLeveDia4;
+    private String dolorMuscularLeveDia5;
+    private String dolorMuscularLeveDia6;
+    private String dolorMuscularLeveDia7;
+    private String dolorMuscularLeveDia8;
+    private String dolorMuscularLeveDia9;
+    private String dolorMuscularLeveDia10;
+    private String dolorMuscularLeveDia11;
+    private String dolorMuscularLeveDia12;
+    
+    private String dolorMuscularModeradaDia1;
+    private String dolorMuscularModeradaDia2;
+    private String dolorMuscularModeradaDia3;
+    private String dolorMuscularModeradaDia4;
+    private String dolorMuscularModeradaDia5;
+    private String dolorMuscularModeradaDia6;
+    private String dolorMuscularModeradaDia7;
+    private String dolorMuscularModeradaDia8;
+    private String dolorMuscularModeradaDia9;
+    private String dolorMuscularModeradaDia10;
+    private String dolorMuscularModeradaDia11;
+    private String dolorMuscularModeradaDia12;
+    
+    private String dolorMuscularSeveraDia1;
+    private String dolorMuscularSeveraDia2;
+    private String dolorMuscularSeveraDia3;
+    private String dolorMuscularSeveraDia4;
+    private String dolorMuscularSeveraDia5;
+    private String dolorMuscularSeveraDia6;
+    private String dolorMuscularSeveraDia7;
+    private String dolorMuscularSeveraDia8;
+    private String dolorMuscularSeveraDia9;
+    private String dolorMuscularSeveraDia10;
+    private String dolorMuscularSeveraDia11;
+    private String dolorMuscularSeveraDia12;
+    
+    private String dolorArticularLeveDia1;
+    private String dolorArticularLeveDia2;
+    private String dolorArticularLeveDia3;
+    private String dolorArticularLeveDia4;
+    private String dolorArticularLeveDia5;
+    private String dolorArticularLeveDia6;
+    private String dolorArticularLeveDia7;
+    private String dolorArticularLeveDia8;
+    private String dolorArticularLeveDia9;
+    private String dolorArticularLeveDia10;
+    private String dolorArticularLeveDia11;
+    private String dolorArticularLeveDia12;
+    
+    private String dolorArticularModeradaDia1;
+    private String dolorArticularModeradaDia2;
+    private String dolorArticularModeradaDia3;
+    private String dolorArticularModeradaDia4;
+    private String dolorArticularModeradaDia5;
+    private String dolorArticularModeradaDia6;
+    private String dolorArticularModeradaDia7;
+    private String dolorArticularModeradaDia8;
+    private String dolorArticularModeradaDia9;
+    private String dolorArticularModeradaDia10;
+    private String dolorArticularModeradaDia11;
+    private String dolorArticularModeradaDia12;
+    
+    private String dolorArticularSeveraDia1;
+    private String dolorArticularSeveraDia2;
+    private String dolorArticularSeveraDia3;
+    private String dolorArticularSeveraDia4;
+    private String dolorArticularSeveraDia5;
+    private String dolorArticularSeveraDia6;
+    private String dolorArticularSeveraDia7;
+    private String dolorArticularSeveraDia8;
+    private String dolorArticularSeveraDia9;
+    private String dolorArticularSeveraDia10;
+    private String dolorArticularSeveraDia11;
+    private String dolorArticularSeveraDia12;
+    	
 	public String getDolorCabezaDia1() {
 		return dolorCabezaDia1;
 	}
@@ -1523,12 +1795,1517 @@ public class SeguimientoInfluenzaReporte {
 	public void setDolorCabezaDia12(String dolorCabezaDia12) {
 		this.dolorCabezaDia12 = dolorCabezaDia12;
 	}
+	public String getFiebreLeveDia1() {
+		return fiebreLeveDia1;
+	}
+	public void setFiebreLeveDia1(String fiebreLeveDia1) {
+		this.fiebreLeveDia1 = fiebreLeveDia1;
+	}
+	public String getFiebreLeveDia2() {
+		return fiebreLeveDia2;
+	}
+	public void setFiebreLeveDia2(String fiebreLeveDia2) {
+		this.fiebreLeveDia2 = fiebreLeveDia2;
+	}
+	public String getFiebreLeveDia3() {
+		return fiebreLeveDia3;
+	}
+	public void setFiebreLeveDia3(String fiebreLeveDia3) {
+		this.fiebreLeveDia3 = fiebreLeveDia3;
+	}
+	public String getFiebreLeveDia4() {
+		return fiebreLeveDia4;
+	}
+	public void setFiebreLeveDia4(String fiebreLeveDia4) {
+		this.fiebreLeveDia4 = fiebreLeveDia4;
+	}
+	public String getFiebreLeveDia5() {
+		return fiebreLeveDia5;
+	}
+	public void setFiebreLeveDia5(String fiebreLeveDia5) {
+		this.fiebreLeveDia5 = fiebreLeveDia5;
+	}
+	public String getFiebreLeveDia6() {
+		return fiebreLeveDia6;
+	}
+	public void setFiebreLeveDia6(String fiebreLeveDia6) {
+		this.fiebreLeveDia6 = fiebreLeveDia6;
+	}
+	public String getFiebreLeveDia7() {
+		return fiebreLeveDia7;
+	}
+	public void setFiebreLeveDia7(String fiebreLeveDia7) {
+		this.fiebreLeveDia7 = fiebreLeveDia7;
+	}
+	public String getFiebreLeveDia8() {
+		return fiebreLeveDia8;
+	}
+	public void setFiebreLeveDia8(String fiebreLeveDia8) {
+		this.fiebreLeveDia8 = fiebreLeveDia8;
+	}
+	public String getFiebreLeveDia9() {
+		return fiebreLeveDia9;
+	}
+	public void setFiebreLeveDia9(String fiebreLeveDia9) {
+		this.fiebreLeveDia9 = fiebreLeveDia9;
+	}
+	public String getFiebreLeveDia10() {
+		return fiebreLeveDia10;
+	}
+	public void setFiebreLeveDia10(String fiebreLeveDia10) {
+		this.fiebreLeveDia10 = fiebreLeveDia10;
+	}
+	public String getFiebreLeveDia11() {
+		return fiebreLeveDia11;
+	}
+	public void setFiebreLeveDia11(String fiebreLeveDia11) {
+		this.fiebreLeveDia11 = fiebreLeveDia11;
+	}
+	public String getFiebreLeveDia12() {
+		return fiebreLeveDia12;
+	}
+	public void setFiebreLeveDia12(String fiebreLeveDia12) {
+		this.fiebreLeveDia12 = fiebreLeveDia12;
+	}
+	public String getFiebreModeradaDia1() {
+		return fiebreModeradaDia1;
+	}
+	public void setFiebreModeradaDia1(String fiebreModeradaDia1) {
+		this.fiebreModeradaDia1 = fiebreModeradaDia1;
+	}
+	public String getFiebreModeradaDia2() {
+		return fiebreModeradaDia2;
+	}
+	public void setFiebreModeradaDia2(String fiebreModeradaDia2) {
+		this.fiebreModeradaDia2 = fiebreModeradaDia2;
+	}
+	public String getFiebreModeradaDia3() {
+		return fiebreModeradaDia3;
+	}
+	public void setFiebreModeradaDia3(String fiebreModeradaDia3) {
+		this.fiebreModeradaDia3 = fiebreModeradaDia3;
+	}
+	public String getFiebreModeradaDia4() {
+		return fiebreModeradaDia4;
+	}
+	public void setFiebreModeradaDia4(String fiebreModeradaDia4) {
+		this.fiebreModeradaDia4 = fiebreModeradaDia4;
+	}
+	public String getFiebreModeradaDia5() {
+		return fiebreModeradaDia5;
+	}
+	public void setFiebreModeradaDia5(String fiebreModeradaDia5) {
+		this.fiebreModeradaDia5 = fiebreModeradaDia5;
+	}
+	public String getFiebreModeradaDia6() {
+		return fiebreModeradaDia6;
+	}
+	public void setFiebreModeradaDia6(String fiebreModeradaDia6) {
+		this.fiebreModeradaDia6 = fiebreModeradaDia6;
+	}
+	public String getFiebreModeradaDia7() {
+		return fiebreModeradaDia7;
+	}
+	public void setFiebreModeradaDia7(String fiebreModeradaDia7) {
+		this.fiebreModeradaDia7 = fiebreModeradaDia7;
+	}
+	public String getFiebreModeradaDia8() {
+		return fiebreModeradaDia8;
+	}
+	public void setFiebreModeradaDia8(String fiebreModeradaDia8) {
+		this.fiebreModeradaDia8 = fiebreModeradaDia8;
+	}
+	public String getFiebreModeradaDia9() {
+		return fiebreModeradaDia9;
+	}
+	public void setFiebreModeradaDia9(String fiebreModeradaDia9) {
+		this.fiebreModeradaDia9 = fiebreModeradaDia9;
+	}
+	public String getFiebreModeradaDia10() {
+		return fiebreModeradaDia10;
+	}
+	public void setFiebreModeradaDia10(String fiebreModeradaDia10) {
+		this.fiebreModeradaDia10 = fiebreModeradaDia10;
+	}
+	public String getFiebreModeradaDia11() {
+		return fiebreModeradaDia11;
+	}
+	public void setFiebreModeradaDia11(String fiebreModeradaDia11) {
+		this.fiebreModeradaDia11 = fiebreModeradaDia11;
+	}
+	public String getFiebreModeradaDia12() {
+		return fiebreModeradaDia12;
+	}
+	public void setFiebreModeradaDia12(String fiebreModeradaDia12) {
+		this.fiebreModeradaDia12 = fiebreModeradaDia12;
+	}
+	public String getFiebreSeveraDia1() {
+		return fiebreSeveraDia1;
+	}
+	public void setFiebreSeveraDia1(String fiebreSeveraDia1) {
+		this.fiebreSeveraDia1 = fiebreSeveraDia1;
+	}
+	public String getFiebreSeveraDia2() {
+		return fiebreSeveraDia2;
+	}
+	public void setFiebreSeveraDia2(String fiebreSeveraDia2) {
+		this.fiebreSeveraDia2 = fiebreSeveraDia2;
+	}
+	public String getFiebreSeveraDia3() {
+		return fiebreSeveraDia3;
+	}
+	public void setFiebreSeveraDia3(String fiebreSeveraDia3) {
+		this.fiebreSeveraDia3 = fiebreSeveraDia3;
+	}
+	public String getFiebreSeveraDia4() {
+		return fiebreSeveraDia4;
+	}
+	public void setFiebreSeveraDia4(String fiebreSeveraDia4) {
+		this.fiebreSeveraDia4 = fiebreSeveraDia4;
+	}
+	public String getFiebreSeveraDia5() {
+		return fiebreSeveraDia5;
+	}
+	public void setFiebreSeveraDia5(String fiebreSeveraDia5) {
+		this.fiebreSeveraDia5 = fiebreSeveraDia5;
+	}
+	public String getFiebreSeveraDia6() {
+		return fiebreSeveraDia6;
+	}
+	public void setFiebreSeveraDia6(String fiebreSeveraDia6) {
+		this.fiebreSeveraDia6 = fiebreSeveraDia6;
+	}
+	public String getFiebreSeveraDia7() {
+		return fiebreSeveraDia7;
+	}
+	public void setFiebreSeveraDia7(String fiebreSeveraDia7) {
+		this.fiebreSeveraDia7 = fiebreSeveraDia7;
+	}
+	public String getFiebreSeveraDia8() {
+		return fiebreSeveraDia8;
+	}
+	public void setFiebreSeveraDia8(String fiebreSeveraDia8) {
+		this.fiebreSeveraDia8 = fiebreSeveraDia8;
+	}
+	public String getFiebreSeveraDia9() {
+		return fiebreSeveraDia9;
+	}
+	public void setFiebreSeveraDia9(String fiebreSeveraDia9) {
+		this.fiebreSeveraDia9 = fiebreSeveraDia9;
+	}
+	public String getFiebreSeveraDia10() {
+		return fiebreSeveraDia10;
+	}
+	public void setFiebreSeveraDia10(String fiebreSeveraDia10) {
+		this.fiebreSeveraDia10 = fiebreSeveraDia10;
+	}
+	public String getFiebreSeveraDia11() {
+		return fiebreSeveraDia11;
+	}
+	public void setFiebreSeveraDia11(String fiebreSeveraDia11) {
+		this.fiebreSeveraDia11 = fiebreSeveraDia11;
+	}
+	public String getFiebreSeveraDia12() {
+		return fiebreSeveraDia12;
+	}
+	public void setFiebreSeveraDia12(String fiebreSeveraDia12) {
+		this.fiebreSeveraDia12 = fiebreSeveraDia12;
+	}
+	public String getTosLeveDia1() {
+		return tosLeveDia1;
+	}
+	public void setTosLeveDia1(String tosLeveDia1) {
+		this.tosLeveDia1 = tosLeveDia1;
+	}
+	public String getTosLeveDia2() {
+		return tosLeveDia2;
+	}
+	public void setTosLeveDia2(String tosLeveDia2) {
+		this.tosLeveDia2 = tosLeveDia2;
+	}
+	public String getTosLeveDia3() {
+		return tosLeveDia3;
+	}
+	public void setTosLeveDia3(String tosLeveDia3) {
+		this.tosLeveDia3 = tosLeveDia3;
+	}
+	public String getTosLeveDia4() {
+		return tosLeveDia4;
+	}
+	public void setTosLeveDia4(String tosLeveDia4) {
+		this.tosLeveDia4 = tosLeveDia4;
+	}
+	public String getTosLeveDia5() {
+		return tosLeveDia5;
+	}
+	public void setTosLeveDia5(String tosLeveDia5) {
+		this.tosLeveDia5 = tosLeveDia5;
+	}
+	public String getTosLeveDia6() {
+		return tosLeveDia6;
+	}
+	public void setTosLeveDia6(String tosLeveDia6) {
+		this.tosLeveDia6 = tosLeveDia6;
+	}
+	public String getTosLeveDia7() {
+		return tosLeveDia7;
+	}
+	public void setTosLeveDia7(String tosLeveDia7) {
+		this.tosLeveDia7 = tosLeveDia7;
+	}
+	public String getTosLeveDia8() {
+		return tosLeveDia8;
+	}
+	public void setTosLeveDia8(String tosLeveDia8) {
+		this.tosLeveDia8 = tosLeveDia8;
+	}
+	public String getTosLeveDia9() {
+		return tosLeveDia9;
+	}
+	public void setTosLeveDia9(String tosLeveDia9) {
+		this.tosLeveDia9 = tosLeveDia9;
+	}
+	public String getTosLeveDia10() {
+		return tosLeveDia10;
+	}
+	public void setTosLeveDia10(String tosLeveDia10) {
+		this.tosLeveDia10 = tosLeveDia10;
+	}
+	public String getTosLeveDia11() {
+		return tosLeveDia11;
+	}
+	public void setTosLeveDia11(String tosLeveDia11) {
+		this.tosLeveDia11 = tosLeveDia11;
+	}
+	public String getTosLeveDia12() {
+		return tosLeveDia12;
+	}
+	public void setTosLeveDia12(String tosLeveDia12) {
+		this.tosLeveDia12 = tosLeveDia12;
+	}
+	public String getTosModeradaDia1() {
+		return tosModeradaDia1;
+	}
+	public void setTosModeradaDia1(String tosModeradaDia1) {
+		this.tosModeradaDia1 = tosModeradaDia1;
+	}
+	public String getTosModeradaDia2() {
+		return tosModeradaDia2;
+	}
+	public void setTosModeradaDia2(String tosModeradaDia2) {
+		this.tosModeradaDia2 = tosModeradaDia2;
+	}
+	public String getTosModeradaDia3() {
+		return tosModeradaDia3;
+	}
+	public void setTosModeradaDia3(String tosModeradaDia3) {
+		this.tosModeradaDia3 = tosModeradaDia3;
+	}
+	public String getTosModeradaDia4() {
+		return tosModeradaDia4;
+	}
+	public void setTosModeradaDia4(String tosModeradaDia4) {
+		this.tosModeradaDia4 = tosModeradaDia4;
+	}
+	public String getTosModeradaDia5() {
+		return tosModeradaDia5;
+	}
+	public void setTosModeradaDia5(String tosModeradaDia5) {
+		this.tosModeradaDia5 = tosModeradaDia5;
+	}
+	public String getTosModeradaDia6() {
+		return tosModeradaDia6;
+	}
+	public void setTosModeradaDia6(String tosModeradaDia6) {
+		this.tosModeradaDia6 = tosModeradaDia6;
+	}
+	public String getTosModeradaDia7() {
+		return tosModeradaDia7;
+	}
+	public void setTosModeradaDia7(String tosModeradaDia7) {
+		this.tosModeradaDia7 = tosModeradaDia7;
+	}
+	public String getTosModeradaDia8() {
+		return tosModeradaDia8;
+	}
+	public void setTosModeradaDia8(String tosModeradaDia8) {
+		this.tosModeradaDia8 = tosModeradaDia8;
+	}
+	public String getTosModeradaDia9() {
+		return tosModeradaDia9;
+	}
+	public void setTosModeradaDia9(String tosModeradaDia9) {
+		this.tosModeradaDia9 = tosModeradaDia9;
+	}
+	public String getTosModeradaDia10() {
+		return tosModeradaDia10;
+	}
+	public void setTosModeradaDia10(String tosModeradaDia10) {
+		this.tosModeradaDia10 = tosModeradaDia10;
+	}
+	public String getTosModeradaDia11() {
+		return tosModeradaDia11;
+	}
+	public void setTosModeradaDia11(String tosModeradaDia11) {
+		this.tosModeradaDia11 = tosModeradaDia11;
+	}
+	public String getTosModeradaDia12() {
+		return tosModeradaDia12;
+	}
+	public void setTosModeradaDia12(String tosModeradaDia12) {
+		this.tosModeradaDia12 = tosModeradaDia12;
+	}
+	public String getTosSeveraDia1() {
+		return tosSeveraDia1;
+	}
+	public void setTosSeveraDia1(String tosSeveraDia1) {
+		this.tosSeveraDia1 = tosSeveraDia1;
+	}
+	public String getTosSeveraDia2() {
+		return tosSeveraDia2;
+	}
+	public void setTosSeveraDia2(String tosSeveraDia2) {
+		this.tosSeveraDia2 = tosSeveraDia2;
+	}
+	public String getTosSeveraDia3() {
+		return tosSeveraDia3;
+	}
+	public void setTosSeveraDia3(String tosSeveraDia3) {
+		this.tosSeveraDia3 = tosSeveraDia3;
+	}
+	public String getTosSeveraDia4() {
+		return tosSeveraDia4;
+	}
+	public void setTosSeveraDia4(String tosSeveraDia4) {
+		this.tosSeveraDia4 = tosSeveraDia4;
+	}
+	public String getTosSeveraDia5() {
+		return tosSeveraDia5;
+	}
+	public void setTosSeveraDia5(String tosSeveraDia5) {
+		this.tosSeveraDia5 = tosSeveraDia5;
+	}
+	public String getTosSeveraDia6() {
+		return tosSeveraDia6;
+	}
+	public void setTosSeveraDia6(String tosSeveraDia6) {
+		this.tosSeveraDia6 = tosSeveraDia6;
+	}
+	public String getTosSeveraDia7() {
+		return tosSeveraDia7;
+	}
+	public void setTosSeveraDia7(String tosSeveraDia7) {
+		this.tosSeveraDia7 = tosSeveraDia7;
+	}
+	public String getTosSeveraDia8() {
+		return tosSeveraDia8;
+	}
+	public void setTosSeveraDia8(String tosSeveraDia8) {
+		this.tosSeveraDia8 = tosSeveraDia8;
+	}
+	public String getTosSeveraDia9() {
+		return tosSeveraDia9;
+	}
+	public void setTosSeveraDia9(String tosSeveraDia9) {
+		this.tosSeveraDia9 = tosSeveraDia9;
+	}
+	public String getTosSeveraDia10() {
+		return tosSeveraDia10;
+	}
+	public void setTosSeveraDia10(String tosSeveraDia10) {
+		this.tosSeveraDia10 = tosSeveraDia10;
+	}
+	public String getTosSeveraDia11() {
+		return tosSeveraDia11;
+	}
+	public void setTosSeveraDia11(String tosSeveraDia11) {
+		this.tosSeveraDia11 = tosSeveraDia11;
+	}
+	public String getTosSeveraDia12() {
+		return tosSeveraDia12;
+	}
+	public void setTosSeveraDia12(String tosSeveraDia12) {
+		this.tosSeveraDia12 = tosSeveraDia12;
+	}
+	public String getSecrecionNasalLeveDia1() {
+		return secrecionNasalLeveDia1;
+	}
+	public void setSecrecionNasalLeveDia1(String secrecionNasalLeveDia1) {
+		this.secrecionNasalLeveDia1 = secrecionNasalLeveDia1;
+	}
+	public String getSecrecionNasalLeveDia2() {
+		return secrecionNasalLeveDia2;
+	}
+	public void setSecrecionNasalLeveDia2(String secrecionNasalLeveDia2) {
+		this.secrecionNasalLeveDia2 = secrecionNasalLeveDia2;
+	}
+	public String getSecrecionNasalLeveDia3() {
+		return secrecionNasalLeveDia3;
+	}
+	public void setSecrecionNasalLeveDia3(String secrecionNasalLeveDia3) {
+		this.secrecionNasalLeveDia3 = secrecionNasalLeveDia3;
+	}
+	public String getSecrecionNasalLeveDia4() {
+		return secrecionNasalLeveDia4;
+	}
+	public void setSecrecionNasalLeveDia4(String secrecionNasalLeveDia4) {
+		this.secrecionNasalLeveDia4 = secrecionNasalLeveDia4;
+	}
+	public String getSecrecionNasalLeveDia5() {
+		return secrecionNasalLeveDia5;
+	}
+	public void setSecrecionNasalLeveDia5(String secrecionNasalLeveDia5) {
+		this.secrecionNasalLeveDia5 = secrecionNasalLeveDia5;
+	}
+	public String getSecrecionNasalLeveDia6() {
+		return secrecionNasalLeveDia6;
+	}
+	public void setSecrecionNasalLeveDia6(String secrecionNasalLeveDia6) {
+		this.secrecionNasalLeveDia6 = secrecionNasalLeveDia6;
+	}
+	public String getSecrecionNasalLeveDia7() {
+		return secrecionNasalLeveDia7;
+	}
+	public void setSecrecionNasalLeveDia7(String secrecionNasalLeveDia7) {
+		this.secrecionNasalLeveDia7 = secrecionNasalLeveDia7;
+	}
+	public String getSecrecionNasalLeveDia8() {
+		return secrecionNasalLeveDia8;
+	}
+	public void setSecrecionNasalLeveDia8(String secrecionNasalLeveDia8) {
+		this.secrecionNasalLeveDia8 = secrecionNasalLeveDia8;
+	}
+	public String getSecrecionNasalLeveDia9() {
+		return secrecionNasalLeveDia9;
+	}
+	public void setSecrecionNasalLeveDia9(String secrecionNasalLeveDia9) {
+		this.secrecionNasalLeveDia9 = secrecionNasalLeveDia9;
+	}
+	public String getSecrecionNasalLeveDia10() {
+		return secrecionNasalLeveDia10;
+	}
+	public void setSecrecionNasalLeveDia10(String secrecionNasalLeveDia10) {
+		this.secrecionNasalLeveDia10 = secrecionNasalLeveDia10;
+	}
+	public String getSecrecionNasalLeveDia11() {
+		return secrecionNasalLeveDia11;
+	}
+	public void setSecrecionNasalLeveDia11(String secrecionNasalLeveDia11) {
+		this.secrecionNasalLeveDia11 = secrecionNasalLeveDia11;
+	}
+	public String getSecrecionNasalLeveDia12() {
+		return secrecionNasalLeveDia12;
+	}
+	public void setSecrecionNasalLeveDia12(String secrecionNasalLeveDia12) {
+		this.secrecionNasalLeveDia12 = secrecionNasalLeveDia12;
+	}
+	public String getSecrecionNasalModeradaDia1() {
+		return secrecionNasalModeradaDia1;
+	}
+	public void setSecrecionNasalModeradaDia1(String secrecionNasalModeradaDia1) {
+		this.secrecionNasalModeradaDia1 = secrecionNasalModeradaDia1;
+	}
+	public String getSecrecionNasalModeradaDia2() {
+		return secrecionNasalModeradaDia2;
+	}
+	public void setSecrecionNasalModeradaDia2(String secrecionNasalModeradaDia2) {
+		this.secrecionNasalModeradaDia2 = secrecionNasalModeradaDia2;
+	}
+	public String getSecrecionNasalModeradaDia3() {
+		return secrecionNasalModeradaDia3;
+	}
+	public void setSecrecionNasalModeradaDia3(String secrecionNasalModeradaDia3) {
+		this.secrecionNasalModeradaDia3 = secrecionNasalModeradaDia3;
+	}
+	public String getSecrecionNasalModeradaDia4() {
+		return secrecionNasalModeradaDia4;
+	}
+	public void setSecrecionNasalModeradaDia4(String secrecionNasalModeradaDia4) {
+		this.secrecionNasalModeradaDia4 = secrecionNasalModeradaDia4;
+	}
+	public String getSecrecionNasalModeradaDia5() {
+		return secrecionNasalModeradaDia5;
+	}
+	public void setSecrecionNasalModeradaDia5(String secrecionNasalModeradaDia5) {
+		this.secrecionNasalModeradaDia5 = secrecionNasalModeradaDia5;
+	}
+	public String getSecrecionNasalModeradaDia6() {
+		return secrecionNasalModeradaDia6;
+	}
+	public void setSecrecionNasalModeradaDia6(String secrecionNasalModeradaDia6) {
+		this.secrecionNasalModeradaDia6 = secrecionNasalModeradaDia6;
+	}
+	public String getSecrecionNasalModeradaDia7() {
+		return secrecionNasalModeradaDia7;
+	}
+	public void setSecrecionNasalModeradaDia7(String secrecionNasalModeradaDia7) {
+		this.secrecionNasalModeradaDia7 = secrecionNasalModeradaDia7;
+	}
+	public String getSecrecionNasalModeradaDia8() {
+		return secrecionNasalModeradaDia8;
+	}
+	public void setSecrecionNasalModeradaDia8(String secrecionNasalModeradaDia8) {
+		this.secrecionNasalModeradaDia8 = secrecionNasalModeradaDia8;
+	}
+	public String getSecrecionNasalModeradaDia9() {
+		return secrecionNasalModeradaDia9;
+	}
+	public void setSecrecionNasalModeradaDia9(String secrecionNasalModeradaDia9) {
+		this.secrecionNasalModeradaDia9 = secrecionNasalModeradaDia9;
+	}
+	public String getSecrecionNasalModeradaDia10() {
+		return secrecionNasalModeradaDia10;
+	}
+	public void setSecrecionNasalModeradaDia10(String secrecionNasalModeradaDia10) {
+		this.secrecionNasalModeradaDia10 = secrecionNasalModeradaDia10;
+	}
+	public String getSecrecionNasalModeradaDia11() {
+		return secrecionNasalModeradaDia11;
+	}
+	public void setSecrecionNasalModeradaDia11(String secrecionNasalModeradaDia11) {
+		this.secrecionNasalModeradaDia11 = secrecionNasalModeradaDia11;
+	}
+	public String getSecrecionNasalModeradaDia12() {
+		return secrecionNasalModeradaDia12;
+	}
+	public void setSecrecionNasalModeradaDia12(String secrecionNasalModeradaDia12) {
+		this.secrecionNasalModeradaDia12 = secrecionNasalModeradaDia12;
+	}
+	public String getSecrecionNasalSeveraDia1() {
+		return secrecionNasalSeveraDia1;
+	}
+	public void setSecrecionNasalSeveraDia1(String secrecionNasalSeveraDia1) {
+		this.secrecionNasalSeveraDia1 = secrecionNasalSeveraDia1;
+	}
+	public String getSecrecionNasalSeveraDia2() {
+		return secrecionNasalSeveraDia2;
+	}
+	public void setSecrecionNasalSeveraDia2(String secrecionNasalSeveraDia2) {
+		this.secrecionNasalSeveraDia2 = secrecionNasalSeveraDia2;
+	}
+	public String getSecrecionNasalSeveraDia3() {
+		return secrecionNasalSeveraDia3;
+	}
+	public void setSecrecionNasalSeveraDia3(String secrecionNasalSeveraDia3) {
+		this.secrecionNasalSeveraDia3 = secrecionNasalSeveraDia3;
+	}
+	public String getSecrecionNasalSeveraDia4() {
+		return secrecionNasalSeveraDia4;
+	}
+	public void setSecrecionNasalSeveraDia4(String secrecionNasalSeveraDia4) {
+		this.secrecionNasalSeveraDia4 = secrecionNasalSeveraDia4;
+	}
+	public String getSecrecionNasalSeveraDia5() {
+		return secrecionNasalSeveraDia5;
+	}
+	public void setSecrecionNasalSeveraDia5(String secrecionNasalSeveraDia5) {
+		this.secrecionNasalSeveraDia5 = secrecionNasalSeveraDia5;
+	}
+	public String getSecrecionNasalSeveraDia6() {
+		return secrecionNasalSeveraDia6;
+	}
+	public void setSecrecionNasalSeveraDia6(String secrecionNasalSeveraDia6) {
+		this.secrecionNasalSeveraDia6 = secrecionNasalSeveraDia6;
+	}
+	public String getSecrecionNasalSeveraDia7() {
+		return secrecionNasalSeveraDia7;
+	}
+	public void setSecrecionNasalSeveraDia7(String secrecionNasalSeveraDia7) {
+		this.secrecionNasalSeveraDia7 = secrecionNasalSeveraDia7;
+	}
+	public String getSecrecionNasalSeveraDia8() {
+		return secrecionNasalSeveraDia8;
+	}
+	public void setSecrecionNasalSeveraDia8(String secrecionNasalSeveraDia8) {
+		this.secrecionNasalSeveraDia8 = secrecionNasalSeveraDia8;
+	}
+	public String getSecrecionNasalSeveraDia9() {
+		return secrecionNasalSeveraDia9;
+	}
+	public void setSecrecionNasalSeveraDia9(String secrecionNasalSeveraDia9) {
+		this.secrecionNasalSeveraDia9 = secrecionNasalSeveraDia9;
+	}
+	public String getSecrecionNasalSeveraDia10() {
+		return secrecionNasalSeveraDia10;
+	}
+	public void setSecrecionNasalSeveraDia10(String secrecionNasalSeveraDia10) {
+		this.secrecionNasalSeveraDia10 = secrecionNasalSeveraDia10;
+	}
+	public String getSecrecionNasalSeveraDia11() {
+		return secrecionNasalSeveraDia11;
+	}
+	public void setSecrecionNasalSeveraDia11(String secrecionNasalSeveraDia11) {
+		this.secrecionNasalSeveraDia11 = secrecionNasalSeveraDia11;
+	}
+	public String getSecrecionNasalSeveraDia12() {
+		return secrecionNasalSeveraDia12;
+	}
+	public void setSecrecionNasalSeveraDia12(String secrecionNasalSeveraDia12) {
+		this.secrecionNasalSeveraDia12 = secrecionNasalSeveraDia12;
+	}
+	public String getDolorGargantaLeveDia1() {
+		return dolorGargantaLeveDia1;
+	}
+	public void setDolorGargantaLeveDia1(String dolorGargantaLeveDia1) {
+		this.dolorGargantaLeveDia1 = dolorGargantaLeveDia1;
+	}
+	public String getDolorGargantaLeveDia2() {
+		return dolorGargantaLeveDia2;
+	}
+	public void setDolorGargantaLeveDia2(String dolorGargantaLeveDia2) {
+		this.dolorGargantaLeveDia2 = dolorGargantaLeveDia2;
+	}
+	public String getDolorGargantaLeveDia3() {
+		return dolorGargantaLeveDia3;
+	}
+	public void setDolorGargantaLeveDia3(String dolorGargantaLeveDia3) {
+		this.dolorGargantaLeveDia3 = dolorGargantaLeveDia3;
+	}
+	public String getDolorGargantaLeveDia4() {
+		return dolorGargantaLeveDia4;
+	}
+	public void setDolorGargantaLeveDia4(String dolorGargantaLeveDia4) {
+		this.dolorGargantaLeveDia4 = dolorGargantaLeveDia4;
+	}
+	public String getDolorGargantaLeveDia5() {
+		return dolorGargantaLeveDia5;
+	}
+	public void setDolorGargantaLeveDia5(String dolorGargantaLeveDia5) {
+		this.dolorGargantaLeveDia5 = dolorGargantaLeveDia5;
+	}
+	public String getDolorGargantaLeveDia6() {
+		return dolorGargantaLeveDia6;
+	}
+	public void setDolorGargantaLeveDia6(String dolorGargantaLeveDia6) {
+		this.dolorGargantaLeveDia6 = dolorGargantaLeveDia6;
+	}
+	public String getDolorGargantaLeveDia7() {
+		return dolorGargantaLeveDia7;
+	}
+	public void setDolorGargantaLeveDia7(String dolorGargantaLeveDia7) {
+		this.dolorGargantaLeveDia7 = dolorGargantaLeveDia7;
+	}
+	public String getDolorGargantaLeveDia8() {
+		return dolorGargantaLeveDia8;
+	}
+	public void setDolorGargantaLeveDia8(String dolorGargantaLeveDia8) {
+		this.dolorGargantaLeveDia8 = dolorGargantaLeveDia8;
+	}
+	public String getDolorGargantaLeveDia9() {
+		return dolorGargantaLeveDia9;
+	}
+	public void setDolorGargantaLeveDia9(String dolorGargantaLeveDia9) {
+		this.dolorGargantaLeveDia9 = dolorGargantaLeveDia9;
+	}
+	public String getDolorGargantaLeveDia10() {
+		return dolorGargantaLeveDia10;
+	}
+	public void setDolorGargantaLeveDia10(String dolorGargantaLeveDia10) {
+		this.dolorGargantaLeveDia10 = dolorGargantaLeveDia10;
+	}
+	public String getDolorGargantaLeveDia11() {
+		return dolorGargantaLeveDia11;
+	}
+	public void setDolorGargantaLeveDia11(String dolorGargantaLeveDia11) {
+		this.dolorGargantaLeveDia11 = dolorGargantaLeveDia11;
+	}
+	public String getDolorGargantaLeveDia12() {
+		return dolorGargantaLeveDia12;
+	}
+	public void setDolorGargantaLeveDia12(String dolorGargantaLeveDia12) {
+		this.dolorGargantaLeveDia12 = dolorGargantaLeveDia12;
+	}
+	public String getDolorGargantaModeradaDia1() {
+		return dolorGargantaModeradaDia1;
+	}
+	public void setDolorGargantaModeradaDia1(String dolorGargantaModeradaDia1) {
+		this.dolorGargantaModeradaDia1 = dolorGargantaModeradaDia1;
+	}
+	public String getDolorGargantaModeradaDia2() {
+		return dolorGargantaModeradaDia2;
+	}
+	public void setDolorGargantaModeradaDia2(String dolorGargantaModeradaDia2) {
+		this.dolorGargantaModeradaDia2 = dolorGargantaModeradaDia2;
+	}
+	public String getDolorGargantaModeradaDia3() {
+		return dolorGargantaModeradaDia3;
+	}
+	public void setDolorGargantaModeradaDia3(String dolorGargantaModeradaDia3) {
+		this.dolorGargantaModeradaDia3 = dolorGargantaModeradaDia3;
+	}
+	public String getDolorGargantaModeradaDia4() {
+		return dolorGargantaModeradaDia4;
+	}
+	public void setDolorGargantaModeradaDia4(String dolorGargantaModeradaDia4) {
+		this.dolorGargantaModeradaDia4 = dolorGargantaModeradaDia4;
+	}
+	public String getDolorGargantaModeradaDia5() {
+		return dolorGargantaModeradaDia5;
+	}
+	public void setDolorGargantaModeradaDia5(String dolorGargantaModeradaDia5) {
+		this.dolorGargantaModeradaDia5 = dolorGargantaModeradaDia5;
+	}
+	public String getDolorGargantaModeradaDia6() {
+		return dolorGargantaModeradaDia6;
+	}
+	public void setDolorGargantaModeradaDia6(String dolorGargantaModeradaDia6) {
+		this.dolorGargantaModeradaDia6 = dolorGargantaModeradaDia6;
+	}
+	public String getDolorGargantaModeradaDia7() {
+		return dolorGargantaModeradaDia7;
+	}
+	public void setDolorGargantaModeradaDia7(String dolorGargantaModeradaDia7) {
+		this.dolorGargantaModeradaDia7 = dolorGargantaModeradaDia7;
+	}
+	public String getDolorGargantaModeradaDia8() {
+		return dolorGargantaModeradaDia8;
+	}
+	public void setDolorGargantaModeradaDia8(String dolorGargantaModeradaDia8) {
+		this.dolorGargantaModeradaDia8 = dolorGargantaModeradaDia8;
+	}
+	public String getDolorGargantaModeradaDia9() {
+		return dolorGargantaModeradaDia9;
+	}
+	public void setDolorGargantaModeradaDia9(String dolorGargantaModeradaDia9) {
+		this.dolorGargantaModeradaDia9 = dolorGargantaModeradaDia9;
+	}
+	public String getDolorGargantaModeradaDia10() {
+		return dolorGargantaModeradaDia10;
+	}
+	public void setDolorGargantaModeradaDia10(String dolorGargantaModeradaDia10) {
+		this.dolorGargantaModeradaDia10 = dolorGargantaModeradaDia10;
+	}
+	public String getDolorGargantaModeradaDia11() {
+		return dolorGargantaModeradaDia11;
+	}
+	public void setDolorGargantaModeradaDia11(String dolorGargantaModeradaDia11) {
+		this.dolorGargantaModeradaDia11 = dolorGargantaModeradaDia11;
+	}
+	public String getDolorGargantaModeradaDia12() {
+		return dolorGargantaModeradaDia12;
+	}
+	public void setDolorGargantaModeradaDia12(String dolorGargantaModeradaDia12) {
+		this.dolorGargantaModeradaDia12 = dolorGargantaModeradaDia12;
+	}
+	public String getDolorGargantaSeveraDia1() {
+		return dolorGargantaSeveraDia1;
+	}
+	public void setDolorGargantaSeveraDia1(String dolorGargantaSeveraDia1) {
+		this.dolorGargantaSeveraDia1 = dolorGargantaSeveraDia1;
+	}
+	public String getDolorGargantaSeveraDia2() {
+		return dolorGargantaSeveraDia2;
+	}
+	public void setDolorGargantaSeveraDia2(String dolorGargantaSeveraDia2) {
+		this.dolorGargantaSeveraDia2 = dolorGargantaSeveraDia2;
+	}
+	public String getDolorGargantaSeveraDia3() {
+		return dolorGargantaSeveraDia3;
+	}
+	public void setDolorGargantaSeveraDia3(String dolorGargantaSeveraDia3) {
+		this.dolorGargantaSeveraDia3 = dolorGargantaSeveraDia3;
+	}
+	public String getDolorGargantaSeveraDia4() {
+		return dolorGargantaSeveraDia4;
+	}
+	public void setDolorGargantaSeveraDia4(String dolorGargantaSeveraDia4) {
+		this.dolorGargantaSeveraDia4 = dolorGargantaSeveraDia4;
+	}
+	public String getDolorGargantaSeveraDia5() {
+		return dolorGargantaSeveraDia5;
+	}
+	public void setDolorGargantaSeveraDia5(String dolorGargantaSeveraDia5) {
+		this.dolorGargantaSeveraDia5 = dolorGargantaSeveraDia5;
+	}
+	public String getDolorGargantaSeveraDia6() {
+		return dolorGargantaSeveraDia6;
+	}
+	public void setDolorGargantaSeveraDia6(String dolorGargantaSeveraDia6) {
+		this.dolorGargantaSeveraDia6 = dolorGargantaSeveraDia6;
+	}
+	public String getDolorGargantaSeveraDia7() {
+		return dolorGargantaSeveraDia7;
+	}
+	public void setDolorGargantaSeveraDia7(String dolorGargantaSeveraDia7) {
+		this.dolorGargantaSeveraDia7 = dolorGargantaSeveraDia7;
+	}
+	public String getDolorGargantaSeveraDia8() {
+		return dolorGargantaSeveraDia8;
+	}
+	public void setDolorGargantaSeveraDia8(String dolorGargantaSeveraDia8) {
+		this.dolorGargantaSeveraDia8 = dolorGargantaSeveraDia8;
+	}
+	public String getDolorGargantaSeveraDia9() {
+		return dolorGargantaSeveraDia9;
+	}
+	public void setDolorGargantaSeveraDia9(String dolorGargantaSeveraDia9) {
+		this.dolorGargantaSeveraDia9 = dolorGargantaSeveraDia9;
+	}
+	public String getDolorGargantaSeveraDia10() {
+		return dolorGargantaSeveraDia10;
+	}
+	public void setDolorGargantaSeveraDia10(String dolorGargantaSeveraDia10) {
+		this.dolorGargantaSeveraDia10 = dolorGargantaSeveraDia10;
+	}
+	public String getDolorGargantaSeveraDia11() {
+		return dolorGargantaSeveraDia11;
+	}
+	public void setDolorGargantaSeveraDia11(String dolorGargantaSeveraDia11) {
+		this.dolorGargantaSeveraDia11 = dolorGargantaSeveraDia11;
+	}
+	public String getDolorGargantaSeveraDia12() {
+		return dolorGargantaSeveraDia12;
+	}
+	public void setDolorGargantaSeveraDia12(String dolorGargantaSeveraDia12) {
+		this.dolorGargantaSeveraDia12 = dolorGargantaSeveraDia12;
+	}
+	public String getDolorCabezaLeveDia1() {
+		return dolorCabezaLeveDia1;
+	}
+	public void setDolorCabezaLeveDia1(String dolorCabezaLeveDia1) {
+		this.dolorCabezaLeveDia1 = dolorCabezaLeveDia1;
+	}
+	public String getDolorCabezaLeveDia2() {
+		return dolorCabezaLeveDia2;
+	}
+	public void setDolorCabezaLeveDia2(String dolorCabezaLeveDia2) {
+		this.dolorCabezaLeveDia2 = dolorCabezaLeveDia2;
+	}
+	public String getDolorCabezaLeveDia3() {
+		return dolorCabezaLeveDia3;
+	}
+	public void setDolorCabezaLeveDia3(String dolorCabezaLeveDia3) {
+		this.dolorCabezaLeveDia3 = dolorCabezaLeveDia3;
+	}
+	public String getDolorCabezaLeveDia4() {
+		return dolorCabezaLeveDia4;
+	}
+	public void setDolorCabezaLeveDia4(String dolorCabezaLeveDia4) {
+		this.dolorCabezaLeveDia4 = dolorCabezaLeveDia4;
+	}
+	public String getDolorCabezaLeveDia5() {
+		return dolorCabezaLeveDia5;
+	}
+	public void setDolorCabezaLeveDia5(String dolorCabezaLeveDia5) {
+		this.dolorCabezaLeveDia5 = dolorCabezaLeveDia5;
+	}
+	public String getDolorCabezaLeveDia6() {
+		return dolorCabezaLeveDia6;
+	}
+	public void setDolorCabezaLeveDia6(String dolorCabezaLeveDia6) {
+		this.dolorCabezaLeveDia6 = dolorCabezaLeveDia6;
+	}
+	public String getDolorCabezaLeveDia7() {
+		return dolorCabezaLeveDia7;
+	}
+	public void setDolorCabezaLeveDia7(String dolorCabezaLeveDia7) {
+		this.dolorCabezaLeveDia7 = dolorCabezaLeveDia7;
+	}
+	public String getDolorCabezaLeveDia8() {
+		return dolorCabezaLeveDia8;
+	}
+	public void setDolorCabezaLeveDia8(String dolorCabezaLeveDia8) {
+		this.dolorCabezaLeveDia8 = dolorCabezaLeveDia8;
+	}
+	public String getDolorCabezaLeveDia9() {
+		return dolorCabezaLeveDia9;
+	}
+	public void setDolorCabezaLeveDia9(String dolorCabezaLeveDia9) {
+		this.dolorCabezaLeveDia9 = dolorCabezaLeveDia9;
+	}
+	public String getDolorCabezaLeveDia10() {
+		return dolorCabezaLeveDia10;
+	}
+	public void setDolorCabezaLeveDia10(String dolorCabezaLeveDia10) {
+		this.dolorCabezaLeveDia10 = dolorCabezaLeveDia10;
+	}
+	public String getDolorCabezaLeveDia11() {
+		return dolorCabezaLeveDia11;
+	}
+	public void setDolorCabezaLeveDia11(String dolorCabezaLeveDia11) {
+		this.dolorCabezaLeveDia11 = dolorCabezaLeveDia11;
+	}
+	public String getDolorCabezaLeveDia12() {
+		return dolorCabezaLeveDia12;
+	}
+	public void setDolorCabezaLeveDia12(String dolorCabezaLeveDia12) {
+		this.dolorCabezaLeveDia12 = dolorCabezaLeveDia12;
+	}
+	public String getDolorCabezaModeradaDia1() {
+		return dolorCabezaModeradaDia1;
+	}
+	public void setDolorCabezaModeradaDia1(String dolorCabezaModeradaDia1) {
+		this.dolorCabezaModeradaDia1 = dolorCabezaModeradaDia1;
+	}
+	public String getDolorCabezaModeradaDia2() {
+		return dolorCabezaModeradaDia2;
+	}
+	public void setDolorCabezaModeradaDia2(String dolorCabezaModeradaDia2) {
+		this.dolorCabezaModeradaDia2 = dolorCabezaModeradaDia2;
+	}
+	public String getDolorCabezaModeradaDia3() {
+		return dolorCabezaModeradaDia3;
+	}
+	public void setDolorCabezaModeradaDia3(String dolorCabezaModeradaDia3) {
+		this.dolorCabezaModeradaDia3 = dolorCabezaModeradaDia3;
+	}
+	public String getDolorCabezaModeradaDia4() {
+		return dolorCabezaModeradaDia4;
+	}
+	public void setDolorCabezaModeradaDia4(String dolorCabezaModeradaDia4) {
+		this.dolorCabezaModeradaDia4 = dolorCabezaModeradaDia4;
+	}
+	public String getDolorCabezaModeradaDia5() {
+		return dolorCabezaModeradaDia5;
+	}
+	public void setDolorCabezaModeradaDia5(String dolorCabezaModeradaDia5) {
+		this.dolorCabezaModeradaDia5 = dolorCabezaModeradaDia5;
+	}
+	public String getDolorCabezaModeradaDia6() {
+		return dolorCabezaModeradaDia6;
+	}
+	public void setDolorCabezaModeradaDia6(String dolorCabezaModeradaDia6) {
+		this.dolorCabezaModeradaDia6 = dolorCabezaModeradaDia6;
+	}
+	public String getDolorCabezaModeradaDia7() {
+		return dolorCabezaModeradaDia7;
+	}
+	public void setDolorCabezaModeradaDia7(String dolorCabezaModeradaDia7) {
+		this.dolorCabezaModeradaDia7 = dolorCabezaModeradaDia7;
+	}
+	public String getDolorCabezaModeradaDia8() {
+		return dolorCabezaModeradaDia8;
+	}
+	public void setDolorCabezaModeradaDia8(String dolorCabezaModeradaDia8) {
+		this.dolorCabezaModeradaDia8 = dolorCabezaModeradaDia8;
+	}
+	public String getDolorCabezaModeradaDia9() {
+		return dolorCabezaModeradaDia9;
+	}
+	public void setDolorCabezaModeradaDia9(String dolorCabezaModeradaDia9) {
+		this.dolorCabezaModeradaDia9 = dolorCabezaModeradaDia9;
+	}
+	public String getDolorCabezaModeradaDia10() {
+		return dolorCabezaModeradaDia10;
+	}
+	public void setDolorCabezaModeradaDia10(String dolorCabezaModeradaDia10) {
+		this.dolorCabezaModeradaDia10 = dolorCabezaModeradaDia10;
+	}
+	public String getDolorCabezaModeradaDia11() {
+		return dolorCabezaModeradaDia11;
+	}
+	public void setDolorCabezaModeradaDia11(String dolorCabezaModeradaDia11) {
+		this.dolorCabezaModeradaDia11 = dolorCabezaModeradaDia11;
+	}
+	public String getDolorCabezaModeradaDia12() {
+		return dolorCabezaModeradaDia12;
+	}
+	public void setDolorCabezaModeradaDia12(String dolorCabezaModeradaDia12) {
+		this.dolorCabezaModeradaDia12 = dolorCabezaModeradaDia12;
+	}
+	public String getDolorCabezaSeveraDia1() {
+		return dolorCabezaSeveraDia1;
+	}
+	public void setDolorCabezaSeveraDia1(String dolorCabezaSeveraDia1) {
+		this.dolorCabezaSeveraDia1 = dolorCabezaSeveraDia1;
+	}
+	public String getDolorCabezaSeveraDia2() {
+		return dolorCabezaSeveraDia2;
+	}
+	public void setDolorCabezaSeveraDia2(String dolorCabezaSeveraDia2) {
+		this.dolorCabezaSeveraDia2 = dolorCabezaSeveraDia2;
+	}
+	public String getDolorCabezaSeveraDia3() {
+		return dolorCabezaSeveraDia3;
+	}
+	public void setDolorCabezaSeveraDia3(String dolorCabezaSeveraDia3) {
+		this.dolorCabezaSeveraDia3 = dolorCabezaSeveraDia3;
+	}
+	public String getDolorCabezaSeveraDia4() {
+		return dolorCabezaSeveraDia4;
+	}
+	public void setDolorCabezaSeveraDia4(String dolorCabezaSeveraDia4) {
+		this.dolorCabezaSeveraDia4 = dolorCabezaSeveraDia4;
+	}
+	public String getDolorCabezaSeveraDia5() {
+		return dolorCabezaSeveraDia5;
+	}
+	public void setDolorCabezaSeveraDia5(String dolorCabezaSeveraDia5) {
+		this.dolorCabezaSeveraDia5 = dolorCabezaSeveraDia5;
+	}
+	public String getDolorCabezaSeveraDia6() {
+		return dolorCabezaSeveraDia6;
+	}
+	public void setDolorCabezaSeveraDia6(String dolorCabezaSeveraDia6) {
+		this.dolorCabezaSeveraDia6 = dolorCabezaSeveraDia6;
+	}
+	public String getDolorCabezaSeveraDia7() {
+		return dolorCabezaSeveraDia7;
+	}
+	public void setDolorCabezaSeveraDia7(String dolorCabezaSeveraDia7) {
+		this.dolorCabezaSeveraDia7 = dolorCabezaSeveraDia7;
+	}
+	public String getDolorCabezaSeveraDia8() {
+		return dolorCabezaSeveraDia8;
+	}
+	public void setDolorCabezaSeveraDia8(String dolorCabezaSeveraDia8) {
+		this.dolorCabezaSeveraDia8 = dolorCabezaSeveraDia8;
+	}
+	public String getDolorCabezaSeveraDia9() {
+		return dolorCabezaSeveraDia9;
+	}
+	public void setDolorCabezaSeveraDia9(String dolorCabezaSeveraDia9) {
+		this.dolorCabezaSeveraDia9 = dolorCabezaSeveraDia9;
+	}
+	public String getDolorCabezaSeveraDia10() {
+		return dolorCabezaSeveraDia10;
+	}
+	public void setDolorCabezaSeveraDia10(String dolorCabezaSeveraDia10) {
+		this.dolorCabezaSeveraDia10 = dolorCabezaSeveraDia10;
+	}
+	public String getDolorCabezaSeveraDia11() {
+		return dolorCabezaSeveraDia11;
+	}
+	public void setDolorCabezaSeveraDia11(String dolorCabezaSeveraDia11) {
+		this.dolorCabezaSeveraDia11 = dolorCabezaSeveraDia11;
+	}
+	public String getDolorCabezaSeveraDia12() {
+		return dolorCabezaSeveraDia12;
+	}
+	public void setDolorCabezaSeveraDia12(String dolorCabezaSeveraDia12) {
+		this.dolorCabezaSeveraDia12 = dolorCabezaSeveraDia12;
+	}
+	public String getDolorMuscularLeveDia1() {
+		return dolorMuscularLeveDia1;
+	}
+	public void setDolorMuscularLeveDia1(String dolorMuscularLeveDia1) {
+		this.dolorMuscularLeveDia1 = dolorMuscularLeveDia1;
+	}
+	public String getDolorMuscularLeveDia2() {
+		return dolorMuscularLeveDia2;
+	}
+	public void setDolorMuscularLeveDia2(String dolorMuscularLeveDia2) {
+		this.dolorMuscularLeveDia2 = dolorMuscularLeveDia2;
+	}
+	public String getDolorMuscularLeveDia3() {
+		return dolorMuscularLeveDia3;
+	}
+	public void setDolorMuscularLeveDia3(String dolorMuscularLeveDia3) {
+		this.dolorMuscularLeveDia3 = dolorMuscularLeveDia3;
+	}
+	public String getDolorMuscularLeveDia4() {
+		return dolorMuscularLeveDia4;
+	}
+	public void setDolorMuscularLeveDia4(String dolorMuscularLeveDia4) {
+		this.dolorMuscularLeveDia4 = dolorMuscularLeveDia4;
+	}
+	public String getDolorMuscularLeveDia5() {
+		return dolorMuscularLeveDia5;
+	}
+	public void setDolorMuscularLeveDia5(String dolorMuscularLeveDia5) {
+		this.dolorMuscularLeveDia5 = dolorMuscularLeveDia5;
+	}
+	public String getDolorMuscularLeveDia6() {
+		return dolorMuscularLeveDia6;
+	}
+	public void setDolorMuscularLeveDia6(String dolorMuscularLeveDia6) {
+		this.dolorMuscularLeveDia6 = dolorMuscularLeveDia6;
+	}
+	public String getDolorMuscularLeveDia7() {
+		return dolorMuscularLeveDia7;
+	}
+	public void setDolorMuscularLeveDia7(String dolorMuscularLeveDia7) {
+		this.dolorMuscularLeveDia7 = dolorMuscularLeveDia7;
+	}
+	public String getDolorMuscularLeveDia8() {
+		return dolorMuscularLeveDia8;
+	}
+	public void setDolorMuscularLeveDia8(String dolorMuscularLeveDia8) {
+		this.dolorMuscularLeveDia8 = dolorMuscularLeveDia8;
+	}
+	public String getDolorMuscularLeveDia9() {
+		return dolorMuscularLeveDia9;
+	}
+	public void setDolorMuscularLeveDia9(String dolorMuscularLeveDia9) {
+		this.dolorMuscularLeveDia9 = dolorMuscularLeveDia9;
+	}
+	public String getDolorMuscularLeveDia10() {
+		return dolorMuscularLeveDia10;
+	}
+	public void setDolorMuscularLeveDia10(String dolorMuscularLeveDia10) {
+		this.dolorMuscularLeveDia10 = dolorMuscularLeveDia10;
+	}
+	public String getDolorMuscularLeveDia11() {
+		return dolorMuscularLeveDia11;
+	}
+	public void setDolorMuscularLeveDia11(String dolorMuscularLeveDia11) {
+		this.dolorMuscularLeveDia11 = dolorMuscularLeveDia11;
+	}
+	public String getDolorMuscularLeveDia12() {
+		return dolorMuscularLeveDia12;
+	}
+	public void setDolorMuscularLeveDia12(String dolorMuscularLeveDia12) {
+		this.dolorMuscularLeveDia12 = dolorMuscularLeveDia12;
+	}
+	public String getDolorMuscularModeradaDia1() {
+		return dolorMuscularModeradaDia1;
+	}
+	public void setDolorMuscularModeradaDia1(String dolorMuscularModeradaDia1) {
+		this.dolorMuscularModeradaDia1 = dolorMuscularModeradaDia1;
+	}
+	public String getDolorMuscularModeradaDia2() {
+		return dolorMuscularModeradaDia2;
+	}
+	public void setDolorMuscularModeradaDia2(String dolorMuscularModeradaDia2) {
+		this.dolorMuscularModeradaDia2 = dolorMuscularModeradaDia2;
+	}
+	public String getDolorMuscularModeradaDia3() {
+		return dolorMuscularModeradaDia3;
+	}
+	public void setDolorMuscularModeradaDia3(String dolorMuscularModeradaDia3) {
+		this.dolorMuscularModeradaDia3 = dolorMuscularModeradaDia3;
+	}
+	public String getDolorMuscularModeradaDia4() {
+		return dolorMuscularModeradaDia4;
+	}
+	public void setDolorMuscularModeradaDia4(String dolorMuscularModeradaDia4) {
+		this.dolorMuscularModeradaDia4 = dolorMuscularModeradaDia4;
+	}
+	public String getDolorMuscularModeradaDia5() {
+		return dolorMuscularModeradaDia5;
+	}
+	public void setDolorMuscularModeradaDia5(String dolorMuscularModeradaDia5) {
+		this.dolorMuscularModeradaDia5 = dolorMuscularModeradaDia5;
+	}
+	public String getDolorMuscularModeradaDia6() {
+		return dolorMuscularModeradaDia6;
+	}
+	public void setDolorMuscularModeradaDia6(String dolorMuscularModeradaDia6) {
+		this.dolorMuscularModeradaDia6 = dolorMuscularModeradaDia6;
+	}
+	public String getDolorMuscularModeradaDia7() {
+		return dolorMuscularModeradaDia7;
+	}
+	public void setDolorMuscularModeradaDia7(String dolorMuscularModeradaDia7) {
+		this.dolorMuscularModeradaDia7 = dolorMuscularModeradaDia7;
+	}
+	public String getDolorMuscularModeradaDia8() {
+		return dolorMuscularModeradaDia8;
+	}
+	public void setDolorMuscularModeradaDia8(String dolorMuscularModeradaDia8) {
+		this.dolorMuscularModeradaDia8 = dolorMuscularModeradaDia8;
+	}
+	public String getDolorMuscularModeradaDia9() {
+		return dolorMuscularModeradaDia9;
+	}
+	public void setDolorMuscularModeradaDia9(String dolorMuscularModeradaDia9) {
+		this.dolorMuscularModeradaDia9 = dolorMuscularModeradaDia9;
+	}
+	public String getDolorMuscularModeradaDia10() {
+		return dolorMuscularModeradaDia10;
+	}
+	public void setDolorMuscularModeradaDia10(String dolorMuscularModeradaDia10) {
+		this.dolorMuscularModeradaDia10 = dolorMuscularModeradaDia10;
+	}
+	public String getDolorMuscularModeradaDia11() {
+		return dolorMuscularModeradaDia11;
+	}
+	public void setDolorMuscularModeradaDia11(String dolorMuscularModeradaDia11) {
+		this.dolorMuscularModeradaDia11 = dolorMuscularModeradaDia11;
+	}
+	public String getDolorMuscularModeradaDia12() {
+		return dolorMuscularModeradaDia12;
+	}
+	public void setDolorMuscularModeradaDia12(String dolorMuscularModeradaDia12) {
+		this.dolorMuscularModeradaDia12 = dolorMuscularModeradaDia12;
+	}
+	public String getDolorMuscularSeveraDia1() {
+		return dolorMuscularSeveraDia1;
+	}
+	public void setDolorMuscularSeveraDia1(String dolorMuscularSeveraDia1) {
+		this.dolorMuscularSeveraDia1 = dolorMuscularSeveraDia1;
+	}
+	public String getDolorMuscularSeveraDia2() {
+		return dolorMuscularSeveraDia2;
+	}
+	public void setDolorMuscularSeveraDia2(String dolorMuscularSeveraDia2) {
+		this.dolorMuscularSeveraDia2 = dolorMuscularSeveraDia2;
+	}
+	public String getDolorMuscularSeveraDia3() {
+		return dolorMuscularSeveraDia3;
+	}
+	public void setDolorMuscularSeveraDia3(String dolorMuscularSeveraDia3) {
+		this.dolorMuscularSeveraDia3 = dolorMuscularSeveraDia3;
+	}
+	public String getDolorMuscularSeveraDia4() {
+		return dolorMuscularSeveraDia4;
+	}
+	public void setDolorMuscularSeveraDia4(String dolorMuscularSeveraDia4) {
+		this.dolorMuscularSeveraDia4 = dolorMuscularSeveraDia4;
+	}
+	public String getDolorMuscularSeveraDia5() {
+		return dolorMuscularSeveraDia5;
+	}
+	public void setDolorMuscularSeveraDia5(String dolorMuscularSeveraDia5) {
+		this.dolorMuscularSeveraDia5 = dolorMuscularSeveraDia5;
+	}
+	public String getDolorMuscularSeveraDia6() {
+		return dolorMuscularSeveraDia6;
+	}
+	public void setDolorMuscularSeveraDia6(String dolorMuscularSeveraDia6) {
+		this.dolorMuscularSeveraDia6 = dolorMuscularSeveraDia6;
+	}
+	public String getDolorMuscularSeveraDia7() {
+		return dolorMuscularSeveraDia7;
+	}
+	public void setDolorMuscularSeveraDia7(String dolorMuscularSeveraDia7) {
+		this.dolorMuscularSeveraDia7 = dolorMuscularSeveraDia7;
+	}
+	public String getDolorMuscularSeveraDia8() {
+		return dolorMuscularSeveraDia8;
+	}
+	public void setDolorMuscularSeveraDia8(String dolorMuscularSeveraDia8) {
+		this.dolorMuscularSeveraDia8 = dolorMuscularSeveraDia8;
+	}
+	public String getDolorMuscularSeveraDia9() {
+		return dolorMuscularSeveraDia9;
+	}
+	public void setDolorMuscularSeveraDia9(String dolorMuscularSeveraDia9) {
+		this.dolorMuscularSeveraDia9 = dolorMuscularSeveraDia9;
+	}
+	public String getDolorMuscularSeveraDia10() {
+		return dolorMuscularSeveraDia10;
+	}
+	public void setDolorMuscularSeveraDia10(String dolorMuscularSeveraDia10) {
+		this.dolorMuscularSeveraDia10 = dolorMuscularSeveraDia10;
+	}
+	public String getDolorMuscularSeveraDia11() {
+		return dolorMuscularSeveraDia11;
+	}
+	public void setDolorMuscularSeveraDia11(String dolorMuscularSeveraDia11) {
+		this.dolorMuscularSeveraDia11 = dolorMuscularSeveraDia11;
+	}
+	public String getDolorMuscularSeveraDia12() {
+		return dolorMuscularSeveraDia12;
+	}
+	public void setDolorMuscularSeveraDia12(String dolorMuscularSeveraDia12) {
+		this.dolorMuscularSeveraDia12 = dolorMuscularSeveraDia12;
+	}
+	public String getDolorArticularLeveDia1() {
+		return dolorArticularLeveDia1;
+	}
+	public void setDolorArticularLeveDia1(String dolorArticularLeveDia1) {
+		this.dolorArticularLeveDia1 = dolorArticularLeveDia1;
+	}
+	public String getDolorArticularLeveDia2() {
+		return dolorArticularLeveDia2;
+	}
+	public void setDolorArticularLeveDia2(String dolorArticularLeveDia2) {
+		this.dolorArticularLeveDia2 = dolorArticularLeveDia2;
+	}
+	public String getDolorArticularLeveDia3() {
+		return dolorArticularLeveDia3;
+	}
+	public void setDolorArticularLeveDia3(String dolorArticularLeveDia3) {
+		this.dolorArticularLeveDia3 = dolorArticularLeveDia3;
+	}
+	public String getDolorArticularLeveDia4() {
+		return dolorArticularLeveDia4;
+	}
+	public void setDolorArticularLeveDia4(String dolorArticularLeveDia4) {
+		this.dolorArticularLeveDia4 = dolorArticularLeveDia4;
+	}
+	public String getDolorArticularLeveDia5() {
+		return dolorArticularLeveDia5;
+	}
+	public void setDolorArticularLeveDia5(String dolorArticularLeveDia5) {
+		this.dolorArticularLeveDia5 = dolorArticularLeveDia5;
+	}
+	public String getDolorArticularLeveDia6() {
+		return dolorArticularLeveDia6;
+	}
+	public void setDolorArticularLeveDia6(String dolorArticularLeveDia6) {
+		this.dolorArticularLeveDia6 = dolorArticularLeveDia6;
+	}
+	public String getDolorArticularLeveDia7() {
+		return dolorArticularLeveDia7;
+	}
+	public void setDolorArticularLeveDia7(String dolorArticularLeveDia7) {
+		this.dolorArticularLeveDia7 = dolorArticularLeveDia7;
+	}
+	public String getDolorArticularLeveDia8() {
+		return dolorArticularLeveDia8;
+	}
+	public void setDolorArticularLeveDia8(String dolorArticularLeveDia8) {
+		this.dolorArticularLeveDia8 = dolorArticularLeveDia8;
+	}
+	public String getDolorArticularLeveDia9() {
+		return dolorArticularLeveDia9;
+	}
+	public void setDolorArticularLeveDia9(String dolorArticularLeveDia9) {
+		this.dolorArticularLeveDia9 = dolorArticularLeveDia9;
+	}
+	public String getDolorArticularLeveDia10() {
+		return dolorArticularLeveDia10;
+	}
+	public void setDolorArticularLeveDia10(String dolorArticularLeveDia10) {
+		this.dolorArticularLeveDia10 = dolorArticularLeveDia10;
+	}
+	public String getDolorArticularLeveDia11() {
+		return dolorArticularLeveDia11;
+	}
+	public void setDolorArticularLeveDia11(String dolorArticularLeveDia11) {
+		this.dolorArticularLeveDia11 = dolorArticularLeveDia11;
+	}
+	public String getDolorArticularLeveDia12() {
+		return dolorArticularLeveDia12;
+	}
+	public void setDolorArticularLeveDia12(String dolorArticularLeveDia12) {
+		this.dolorArticularLeveDia12 = dolorArticularLeveDia12;
+	}
+	public String getDolorArticularModeradaDia1() {
+		return dolorArticularModeradaDia1;
+	}
+	public void setDolorArticularModeradaDia1(String dolorArticularModeradaDia1) {
+		this.dolorArticularModeradaDia1 = dolorArticularModeradaDia1;
+	}
+	public String getDolorArticularModeradaDia2() {
+		return dolorArticularModeradaDia2;
+	}
+	public void setDolorArticularModeradaDia2(String dolorArticularModeradaDia2) {
+		this.dolorArticularModeradaDia2 = dolorArticularModeradaDia2;
+	}
+	public String getDolorArticularModeradaDia3() {
+		return dolorArticularModeradaDia3;
+	}
+	public void setDolorArticularModeradaDia3(String dolorArticularModeradaDia3) {
+		this.dolorArticularModeradaDia3 = dolorArticularModeradaDia3;
+	}
+	public String getDolorArticularModeradaDia4() {
+		return dolorArticularModeradaDia4;
+	}
+	public void setDolorArticularModeradaDia4(String dolorArticularModeradaDia4) {
+		this.dolorArticularModeradaDia4 = dolorArticularModeradaDia4;
+	}
+	public String getDolorArticularModeradaDia5() {
+		return dolorArticularModeradaDia5;
+	}
+	public void setDolorArticularModeradaDia5(String dolorArticularModeradaDia5) {
+		this.dolorArticularModeradaDia5 = dolorArticularModeradaDia5;
+	}
+	public String getDolorArticularModeradaDia6() {
+		return dolorArticularModeradaDia6;
+	}
+	public void setDolorArticularModeradaDia6(String dolorArticularModeradaDia6) {
+		this.dolorArticularModeradaDia6 = dolorArticularModeradaDia6;
+	}
+	public String getDolorArticularModeradaDia7() {
+		return dolorArticularModeradaDia7;
+	}
+	public void setDolorArticularModeradaDia7(String dolorArticularModeradaDia7) {
+		this.dolorArticularModeradaDia7 = dolorArticularModeradaDia7;
+	}
+	public String getDolorArticularModeradaDia8() {
+		return dolorArticularModeradaDia8;
+	}
+	public void setDolorArticularModeradaDia8(String dolorArticularModeradaDia8) {
+		this.dolorArticularModeradaDia8 = dolorArticularModeradaDia8;
+	}
+	public String getDolorArticularModeradaDia9() {
+		return dolorArticularModeradaDia9;
+	}
+	public void setDolorArticularModeradaDia9(String dolorArticularModeradaDia9) {
+		this.dolorArticularModeradaDia9 = dolorArticularModeradaDia9;
+	}
+	public String getDolorArticularModeradaDia10() {
+		return dolorArticularModeradaDia10;
+	}
+	public void setDolorArticularModeradaDia10(String dolorArticularModeradaDia10) {
+		this.dolorArticularModeradaDia10 = dolorArticularModeradaDia10;
+	}
+	public String getDolorArticularModeradaDia11() {
+		return dolorArticularModeradaDia11;
+	}
+	public void setDolorArticularModeradaDia11(String dolorArticularModeradaDia11) {
+		this.dolorArticularModeradaDia11 = dolorArticularModeradaDia11;
+	}
+	public String getDolorArticularModeradaDia12() {
+		return dolorArticularModeradaDia12;
+	}
+	public void setDolorArticularModeradaDia12(String dolorArticularModeradaDia12) {
+		this.dolorArticularModeradaDia12 = dolorArticularModeradaDia12;
+	}
+	public String getDolorArticularSeveraDia1() {
+		return dolorArticularSeveraDia1;
+	}
+	public void setDolorArticularSeveraDia1(String dolorArticularSeveraDia1) {
+		this.dolorArticularSeveraDia1 = dolorArticularSeveraDia1;
+	}
+	public String getDolorArticularSeveraDia2() {
+		return dolorArticularSeveraDia2;
+	}
+	public void setDolorArticularSeveraDia2(String dolorArticularSeveraDia2) {
+		this.dolorArticularSeveraDia2 = dolorArticularSeveraDia2;
+	}
+	public String getDolorArticularSeveraDia3() {
+		return dolorArticularSeveraDia3;
+	}
+	public void setDolorArticularSeveraDia3(String dolorArticularSeveraDia3) {
+		this.dolorArticularSeveraDia3 = dolorArticularSeveraDia3;
+	}
+	public String getDolorArticularSeveraDia4() {
+		return dolorArticularSeveraDia4;
+	}
+	public void setDolorArticularSeveraDia4(String dolorArticularSeveraDia4) {
+		this.dolorArticularSeveraDia4 = dolorArticularSeveraDia4;
+	}
+	public String getDolorArticularSeveraDia5() {
+		return dolorArticularSeveraDia5;
+	}
+	public void setDolorArticularSeveraDia5(String dolorArticularSeveraDia5) {
+		this.dolorArticularSeveraDia5 = dolorArticularSeveraDia5;
+	}
+	public String getDolorArticularSeveraDia6() {
+		return dolorArticularSeveraDia6;
+	}
+	public void setDolorArticularSeveraDia6(String dolorArticularSeveraDia6) {
+		this.dolorArticularSeveraDia6 = dolorArticularSeveraDia6;
+	}
+	public String getDolorArticularSeveraDia7() {
+		return dolorArticularSeveraDia7;
+	}
+	public void setDolorArticularSeveraDia7(String dolorArticularSeveraDia7) {
+		this.dolorArticularSeveraDia7 = dolorArticularSeveraDia7;
+	}
+	public String getDolorArticularSeveraDia8() {
+		return dolorArticularSeveraDia8;
+	}
+	public void setDolorArticularSeveraDia8(String dolorArticularSeveraDia8) {
+		this.dolorArticularSeveraDia8 = dolorArticularSeveraDia8;
+	}
+	public String getDolorArticularSeveraDia9() {
+		return dolorArticularSeveraDia9;
+	}
+	public void setDolorArticularSeveraDia9(String dolorArticularSeveraDia9) {
+		this.dolorArticularSeveraDia9 = dolorArticularSeveraDia9;
+	}
+	public String getDolorArticularSeveraDia10() {
+		return dolorArticularSeveraDia10;
+	}
+	public void setDolorArticularSeveraDia10(String dolorArticularSeveraDia10) {
+		this.dolorArticularSeveraDia10 = dolorArticularSeveraDia10;
+	}
+	public String getDolorArticularSeveraDia11() {
+		return dolorArticularSeveraDia11;
+	}
+	public void setDolorArticularSeveraDia11(String dolorArticularSeveraDia11) {
+		this.dolorArticularSeveraDia11 = dolorArticularSeveraDia11;
+	}
+	public String getDolorArticularSeveraDia12() {
+		return dolorArticularSeveraDia12;
+	}
+	public void setDolorArticularSeveraDia12(String dolorArticularSeveraDia12) {
+		this.dolorArticularSeveraDia12 = dolorArticularSeveraDia12;
+	}
 	
-	
-	
-	
-	
-
-	
-
 }

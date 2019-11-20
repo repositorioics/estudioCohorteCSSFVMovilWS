@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
+import ni.com.sts.estudioCohorteCSSFV.modelo.HojaInfluenza;
 import ni.com.sts.estudioCohorteCSSFV.modelo.InfluenzaMuestra;
 import ni.com.sts.estudioCohorteCSSFV.modelo.MotivoCancelacion;
 import ni.com.sts.estudioCohorteCSSFV.modelo.OrdenLaboratorio;
@@ -194,6 +195,55 @@ public class HojaCierreDA implements HojaCierreService {
 	        
 	        HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
 	        
+	        //Nueva validación agreada para el proceso de cierre 10/10/2019
+	        
+	        boolean verificarCrearHojaInfluenza = false;
+	        boolean estudiosParaCrearHI = false;
+	        
+	        String estudiosP = hojaConsulta.getEstudiosParticipantes();
+	        
+	        String[] estudiosParticipantes = estudiosP.split(",");
+	        
+	        for (int i=0; i < estudiosParticipantes.length; i++) {
+	        	if (estudiosParticipantes[i].trim().equals("CH Familia") || (estudiosParticipantes[i].trim().equals("Influenza") ||
+	        			(estudiosParticipantes[i].trim().equals("UO1")))) {
+	        		estudiosParaCrearHI = true;
+	        	}
+	        }
+	        
+	        if (hojaConsulta.getEti() != null) {
+	        	if (hojaConsulta.getEti().toString().compareTo("0") == 0) {
+	        		verificarCrearHojaInfluenza = true;
+	        	}
+	        }
+	        if (hojaConsulta.getIrag() != null) {
+	        	if(hojaConsulta.getIrag().toString().compareTo("0") == 0) {
+	        		verificarCrearHojaInfluenza = true;
+	        	}
+	        }
+	        if (hojaConsulta.getInfluenza() != null) {
+	        	if (hojaConsulta.getInfluenza().toString().compareTo("0") == 0) {
+	        		verificarCrearHojaInfluenza = true;
+	        	}
+	        }
+	        
+	        if (verificarCrearHojaInfluenza && estudiosParaCrearHI && hojaConsulta.getConsulta().trim().equals("Inicial")) {
+	        	String sql2 = "select hi from HojaInfluenza hi "
+		        		+ " where hi.secHojaConsulta =:secHojaConsulta";
+	        	
+		        Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql2);
+				query2.setParameter("secHojaConsulta", hojaConsulta.getSecHojaConsulta());
+				
+				HojaInfluenza hojaInfluenza = ((HojaInfluenza) query2.uniqueResult());
+				
+				if (hojaInfluenza == null) {
+					//NO PERMITIR CERRAR LA HOJA DE CONSULTA
+					return result = UtilResultado.parserResultado(null, Mensajes.DEBE_CREAR_HOJA_INFLUENZA, 4);
+				}
+	        }
+				
+			//***************************************************************
+	        
 	        if(UtilHojaConsulta.validarTodasSecciones(hojaConsulta)) {
 	        	
 	        	query = HIBERNATE_RESOURCE.getSession().createQuery(new StringBuffer().append("select o from OrdenLaboratorio o ")
@@ -288,7 +338,7 @@ public class HojaCierreDA implements HojaCierreService {
 			            	
 			            	Long resultHojaConsulta = (Long) query.uniqueResult();
 			            	
-			            	/* Si el resultadoHojaConsulta es mayor que 0, indica que la hoja de consulta se cerro correctamente
+			            	 /*Si el resultadoHojaConsulta es mayor que 0, indica que la hoja de consulta se cerro correctamente
 			            	entonces se procede a realizar la impresion de la hoja de consulta */
 			            	if (resultHojaConsulta.intValue() > 0) {
 			            		consultaReporteService.imprimirConsultaPdf(hojaConsulta.getSecHojaConsulta());

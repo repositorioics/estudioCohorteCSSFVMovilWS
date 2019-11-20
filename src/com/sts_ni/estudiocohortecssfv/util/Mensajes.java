@@ -103,6 +103,16 @@ public class Mensajes {
     public static final String HOJA_SIN_FIS_CON_CAT_D="Para crear una hoja de zika con categoria D, solo se necesita la FIS";
     public static final String HOJA_ZIKA_SIN_CAT="No se puede crear una hoja de zika sin haber marcado la categoria en la hoja de consulta";
     public static final String HOJA_ZIKA_CON_CAT_C="No puede crear una hoja de zika con categoria C";
-
+    public static final String DEBE_CREAR_HOJA_INFLUENZA = "Para poder cerrar la Hoja de Consulta, debera crear la Hoja de Influenza";
+    public static final String ERROR_GUARDAR_EXAMEN_INFLUENZA = "No se puede enviar un examen de Influenza al laboratorio, debido a que no marco ETI, IRAG o Neumonia";
+    public static final String ERROR_GUARDAR_EXAMEN_INFLUENZA_VALORES_NULL = "No se puede enviar un examen de Influenza al laboratorio, debido a que ETI, IRAG o Neumonia no tienen valor";
+    public static final String ERROR_GUARDAR_EXAMEN_INFLUENZA_REQUERIDO = "Se debe de enviar a realizar el examen de influenza, ya que el paciente presento una ETI ó IRAG ó Neumonia";
     
+    public static final String ERROR_AL_IMPRIMIR_HOJA_INFLUENZA = "Tiene que cerrar la Hoja de Seguimiento Influenza para poder imprimir";
+    public static final String HOJA_INFLUENZA_IMPRESA = "Se envio la Hoja de Seguimiento Influenza a la impresora";
+    
+    public static final String ERROR_AL_IMPRIMIR_HOJA_ZIKA = "Tiene que cerrar la Hoja de Seguimiento Zika para poder imprimir";
+    public static final String HOJA_ZIKA_IMPRESA = "Se envio la Hoja de Seguimiento Zika a la impresora";
+    
+    public static final String ERROR_FECHA_CIERRE = "La fecha cierre no puede ser menor a la fecha de inicio del seguimiento, favor revisar la fecha de su dispositivo";
 }

@@ -17,7 +17,7 @@ public interface ExpedienteService {
 	
 	public byte[] getSeguimientoInfluenzaPdf(int paramSecHojaInfluenza);
 	
-	public void imprimirSeguimientoInfluenciaPdf(int paramSecHojaInfluenza);
+	public String imprimirSeguimientoInfluenciaPdf(int paramSecHojaInfluenza);
 
 	public String crearSeguimientoInfluenza(String paramCrearHoja);
 
@@ -35,7 +35,7 @@ public interface ExpedienteService {
 	
 	public byte[] getSeguimientoZikaPdf(int paramSecHojaZika);
 	
-	public void imprimirSeguimientoZikaPdf(int paramSecHojaZika);
+	public String imprimirSeguimientoZikaPdf(int paramSecHojaZika);
 	
 	public String buscarFichaVigilanciaIntegrada(int codExpediente, int numHojaConsulta);
 	

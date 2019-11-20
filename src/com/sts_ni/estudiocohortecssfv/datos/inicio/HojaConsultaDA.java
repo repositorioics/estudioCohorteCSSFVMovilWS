@@ -2883,6 +2883,12 @@ public class HojaConsultaDA implements HojaConsultaService {
 			Integer secOrdenLaboratorio;
 			String examen;
 			char estado;
+			
+			//Nuevo cambio agregado
+			/*Character irag;
+			Character eti;
+			Character neumonia;*/
+			//*********************
 
 			String sql = "select max(o.numOrdenLaboratorio) "
 					+ " from OrdenLaboratorio  o ";
@@ -2928,7 +2934,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 					.get("usuarioMedico")).shortValue());
 			// otroExamenLab =
 			// (hojaConsultaJSON.get("otroExamenLab").toString());
-
+			
 			query = HIBERNATE_RESOURCE.getSession().createQuery(
 					QUERY_HOJA_CONSULTA_BY_ID);
 			query.setParameter("id", secHojaConsulta);
@@ -2936,6 +2942,41 @@ public class HojaConsultaDA implements HojaConsultaService {
 			// HojaConsulta hojaConsulta = ((HojaConsulta)
 			// query.uniqueResult());
 			HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+			
+			//Nuevo cambio agregado *****************************
+			/*eti =  (hojaConsultaJSON.get("eti") != null ? hojaConsultaJSON.get("eti").toString().charAt(0) : null);
+			irag =  (hojaConsultaJSON.get("irag") != null ? hojaConsultaJSON.get("irag").toString().charAt(0) : null);
+			neumonia =  (hojaConsultaJSON.get("neumonia") != null ? hojaConsultaJSON.get("neumonia").toString().charAt(0) : null);*/
+			
+			if (hojaConsulta.getEti() != null && hojaConsulta.getIrag() != null && hojaConsulta.getNeumonia() != null) {
+				boolean examenInfluenzaRequerido = false;
+				if (hojaConsulta.getEstudiosParticipantes() != null) {
+					String[] estudios = hojaConsulta.getEstudiosParticipantes().split(",");
+					for(int i=0; i < estudios.length; i++) {
+						if (estudios[i].trim().equals("Influenza") || estudios[i].trim().equals("UO1") 
+								|| estudios[i].trim().equals("CH Familia")) {
+							examenInfluenzaRequerido = true;
+						}
+					}
+				}
+				
+				if (influenza.toString().compareTo("0") == 0 && hojaConsulta.getEti().toString().compareTo("0") != 0
+						&& hojaConsulta.getIrag().toString().compareTo("0") != 0 
+						&& hojaConsulta.getNeumonia().toString().compareTo("0") != 0) {
+					return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_EXAMEN_INFLUENZA, UtilResultado.ERROR);
+				}
+				if ((hojaConsulta.getEti().toString().compareTo("0") == 0 || hojaConsulta.getIrag().toString().compareTo("0") == 0 
+						|| hojaConsulta.getNeumonia().toString().compareTo("0") == 0)  	
+						&& influenza.toString().compareTo("0") != 0 && examenInfluenzaRequerido) {
+					return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_EXAMEN_INFLUENZA_REQUERIDO, UtilResultado.ERROR);
+				}
+			} else {
+				if (influenza.toString().compareTo("0") == 0 && hojaConsulta.getEti() == null 
+						&& hojaConsulta.getIrag() == null && hojaConsulta.getNeumonia() == null) {
+					return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_EXAMEN_INFLUENZA_VALORES_NULL, UtilResultado.ERROR);
+				}
+			}
+			//*********************
 			
 			//Guardar control de cambios
 			if(validarTodoExamenMaracdo(hojaConsulta)){

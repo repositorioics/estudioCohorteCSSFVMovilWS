@@ -700,43 +700,65 @@ public class DiagnosticoDA implements DiagnosticoService {
 		@SuppressWarnings("unchecked")
 		@Override
 	public String getSeccionesDiagnosticoCompletadas(String paramHojaConsulta) {
-			String result = null;
-			try {
+		String result = null;
+		try {
 
-				JSONParser parser = new JSONParser();
-				Object obj = (Object) parser.parse(paramHojaConsulta);
-				JSONObject hojaConsultaJSON = (JSONObject) obj;
-				
-				List  oLista = new LinkedList(); //Listado final para el resultado
-	            Map fila   = null;  
+			JSONParser parser = new JSONParser();
+			Object obj = (Object) parser.parse(paramHojaConsulta);
+			JSONObject hojaConsultaJSON = (JSONObject) obj;
 
-				Query query = HIBERNATE_RESOURCE.getSession().createQuery(
-						QUERY_HOJA_CONSULTA_BY_ID);
-				query.setParameter("id", ((Number) hojaConsultaJSON.get("secHojaConsulta"))
-						.intValue());
+			List oLista = new LinkedList(); // Listado final para el resultado
+			Map fila = null;
 
-				HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
-				
-				fila = new HashMap();
-				fila.put("esHistorialExamenesCompletada", UtilHojaConsulta.historialExamenCompletada(hojaConsulta));
-	            fila.put("esTratamientoPlanesCompletada", UtilHojaConsulta.tratamientoPlanesCompletada(hojaConsulta));
-	            fila.put("esDiagnosticoCompletada", UtilHojaConsulta.diagnosticoCompletada(hojaConsulta));
-	            fila.put("esProximaCitaCompletada", UtilHojaConsulta.proximaCitaCompletada(hojaConsulta));
-	            
-	            oLista.add(fila);
-	            
-	            result = UtilResultado.parserResultado(oLista, "", UtilResultado.OK);
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(QUERY_HOJA_CONSULTA_BY_ID);
+			query.setParameter("id", ((Number) hojaConsultaJSON.get("secHojaConsulta")).intValue());
 
-			} catch (Exception e) {
-	            e.printStackTrace();
-	            result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
-	        } finally {
-	            if (HIBERNATE_RESOURCE.getSession().isOpen()) {
-	            	HIBERNATE_RESOURCE.close();
-	            }
-	        }
-			return result;
+			HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+
+			fila = new HashMap();
+			fila.put("esHistorialExamenesCompletada", UtilHojaConsulta.historialExamenCompletada(hojaConsulta));
+			fila.put("esTratamientoPlanesCompletada", UtilHojaConsulta.tratamientoPlanesCompletada(hojaConsulta));
+			fila.put("esDiagnosticoCompletada", UtilHojaConsulta.diagnosticoCompletada(hojaConsulta));
+			fila.put("esProximaCitaCompletada", UtilHojaConsulta.proximaCitaCompletada(hojaConsulta));
+
+			oLista.add(fila);
+
+			result = UtilResultado.parserResultado(oLista, "", UtilResultado.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
 		}
-
-
+		return result;
+	}
+	
+	//Metodo para activar los diagnosticos en la hoja de consulta cambio 07/11/2019 - SC
+	public String activarDiagnosticos(int secHojaConsulta) {
+		String result = null;
+		try {
+			//JSONParser parser = new JSONParser();
+	        //JSONObject hojaConsultaJSON = (JSONObject)((Object) parser.parse(paramHojaConsulta));
+	        
+	        Query query = HIBERNATE_RESOURCE.getSession().createQuery(QUERY_HOJA_CONSULTA_BY_ID);
+	        query.setParameter("id", secHojaConsulta);
+	        
+	        HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+	        
+	        if(UtilHojaConsulta.validarSeccionesParaActivarDiagnostico(hojaConsulta)) {
+	        	result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
+	        }
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
 }

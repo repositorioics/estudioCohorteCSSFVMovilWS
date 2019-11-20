@@ -964,7 +964,9 @@ public class SintomasDA implements SintomasService {
 				hojaConsulta.setSegChick(null);
 			}
 			
-			hojaConsulta.setTurno(turno.charAt(0));
+			if(hojaConsulta.getTurno() == null) {
+				hojaConsulta.setTurno(turno.charAt(0));	
+			}
 			hojaConsulta.setTemMedc(BigDecimal.valueOf(temMedc));			
 			if(fis != null && !fis.isEmpty()) {
 				hojaConsulta.setFis( fis.trim().length() > 0 ? new SimpleDateFormat("dd/MM/yyyy").parse(fis) : null);

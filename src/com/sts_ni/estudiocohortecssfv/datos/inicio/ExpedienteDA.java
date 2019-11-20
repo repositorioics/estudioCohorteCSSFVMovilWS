@@ -400,6 +400,7 @@ public class ExpedienteDA implements ExpedienteService {
 		try {
 
 			int codExpediente;
+			int secHojaConsulta;
 			String sql;
 			Query query;
 			HojaInfluenza hojaInfluenza;
@@ -539,6 +540,8 @@ public class ExpedienteDA implements ExpedienteService {
 						((Number)fechaInicioJson.get("dayOfMonth")).intValue());
 	
 				hojaInfluenza = new HojaInfluenza();
+				secHojaConsulta = hojaConsulta.getSecHojaConsulta();
+				hojaInfluenza.setSecHojaConsulta(secHojaConsulta);//Nuevo Cambio
 				hojaInfluenza.setNumHojaSeguimiento(maxNumHojaSeguimiento);
 				hojaInfluenza.setCodExpediente(codExpediente);
 				hojaInfluenza.setFechaInicio(fechaInicio.getTime());
@@ -600,6 +603,31 @@ public class ExpedienteDA implements ExpedienteService {
 			HojaInfluenza hojaInfluenza = new HojaInfluenza();
 			SeguimientoInfluenza seguimientoInfluenza;
 			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			
+			/*Nuevo cambio 24/09/2019*/
+			String fiebreLeve;
+			String fiebreModerada;
+			String fiebreSevera;
+			String tosLeve;
+			String tosModerada;
+			String tosSevera;
+			String secrecionNasalLeve;
+			String secrecionNasalModerada;
+			String secrecionNasalSevera;
+			String dolorGargantaLeve;
+			String dolorGargantaModerada;
+			String dolorGargantaSevera;
+			String dolorCabezaLeve;
+			String dolorCabezaModerada;
+			String dolorCabezaSevera;
+			String dolorMuscularLeve;
+			String dolorMuscularModerada;
+			String dolorMuscularSevera;
+			String dolorArticularLeve;
+			String dolorArticularModerada;
+			String dolorArticularSevera;
+			Integer secHojaConsulta;
+			/*-----------------------*/
 
 			JSONParser parser = new JSONParser();
 			Object obj = (Object) parser.parse(paramHojaInfluenza);
@@ -613,6 +641,9 @@ public class ExpedienteDA implements ExpedienteService {
 					.intValue());
 			numHojaSeguimiento = ((Number) hojaInfluenzaJSON
 					.get("numHojaSeguimiento")).intValue();
+			secHojaConsulta = (hojaInfluenzaJSON.get("secHojaConsulta") != null
+					? ((Number) hojaInfluenzaJSON.get("secHojaConsulta")).intValue()
+					: null);
 					      
 			if (numHojaSeguimiento == 0) {
 //				sql = "select max(h.numHojaSeguimiento) "
@@ -648,12 +679,37 @@ public class ExpedienteDA implements ExpedienteService {
 				hojaInfluenza.setCodExpediente(codExpediente);
 				hojaInfluenza.setFis(hojaInfluenzaJSON.get("fis").toString());
 				hojaInfluenza.setFif(hojaInfluenzaJSON.get("fif").toString());
+				
+				/*String sql2 = "select h from HojaConsulta h " +
+						 " where h.codExpediente = :codExpediente order by h.secHojaConsulta desc ";
+
+				Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql2);
+				query2.setParameter("codExpediente", codExpediente);
+				query2.setMaxResults(1);
+				
+				HojaConsulta hojaConsulta = (HojaConsulta) query2.uniqueResult();*/
+				
+				hojaInfluenza.setSecHojaConsulta(hojaInfluenza.getSecHojaConsulta() != null ? hojaInfluenza.getSecHojaConsulta() : null);
+				
 				if (hojaInfluenzaJSON.containsKey("fechaCierre") && 
 						hojaInfluenzaJSON.get("fechaCierre") != null) {
 					hojaInfluenza.setFechaCierre(df.parse(hojaInfluenzaJSON
 							.get("fechaCierre").toString()));
 				}
-
+				
+				if (hojaInfluenza.getFechaCierre() != null) {
+					SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+					
+					Date fechaCierre = outputFormat.parse(hojaInfluenzaJSON.get("fechaCierre").toString());
+										
+			        Date fechaInicio = sdf.parse(hojaInfluenza.getFechaInicio().toString());
+			        //Date fechaCierre = sdf.parse(date.toString());
+			        
+			        if (fechaInicio.compareTo(fechaCierre) > 0) {
+			        	return result = UtilResultado.parserResultado(null, Mensajes.ERROR_FECHA_CIERRE, UtilResultado.ERROR);
+			        }
+				}
 			}
 			
 			if(hojaInfluenza.getCerrado() != 'S' && hojaInfluenza.getCerrado() != 's') {
@@ -733,6 +789,54 @@ public class ExpedienteDA implements ExpedienteService {
 						seguimientoInfluenza
 								.setQuedoEnCama(((String) seguimientoInfluenzaJSON
 										.get("quedoEnCama")));
+						
+						/*Nuevos campos agregados 24/09/2019*/
+						fiebreLeve = ((String) seguimientoInfluenzaJSON.get("fiebreLeve"));
+						fiebreModerada = ((String) seguimientoInfluenzaJSON.get("fiebreModerada"));
+						fiebreSevera = ((String) seguimientoInfluenzaJSON.get("fiebreSevera"));
+						tosLeve = ((String) seguimientoInfluenzaJSON.get("tosLeve"));
+						tosModerada = ((String) seguimientoInfluenzaJSON.get("tosModerada"));
+						tosSevera = ((String) seguimientoInfluenzaJSON.get("tosSevera"));
+						secrecionNasalLeve = ((String) seguimientoInfluenzaJSON.get("secrecionNasalLeve"));
+						secrecionNasalModerada = ((String) seguimientoInfluenzaJSON.get("secrecionNasalModerada"));
+						secrecionNasalSevera = ((String) seguimientoInfluenzaJSON.get("secrecionNasalSevera"));
+						dolorGargantaLeve = ((String) seguimientoInfluenzaJSON.get("dolorGargantaLeve"));
+						dolorGargantaModerada = ((String) seguimientoInfluenzaJSON.get("dolorGargantaModerada"));
+						dolorGargantaSevera = ((String) seguimientoInfluenzaJSON.get("dolorGargantaSevera"));
+						dolorCabezaLeve = ((String) seguimientoInfluenzaJSON.get("dolorCabezaLeve"));
+						dolorCabezaModerada = ((String) seguimientoInfluenzaJSON.get("dolorCabezaModerada"));
+						dolorCabezaSevera = ((String) seguimientoInfluenzaJSON.get("dolorCabezaSevera"));
+						dolorMuscularLeve = ((String) seguimientoInfluenzaJSON.get("dolorMuscularLeve"));
+						dolorMuscularModerada = ((String) seguimientoInfluenzaJSON.get("dolorMuscularModerada"));
+						dolorMuscularSevera = ((String) seguimientoInfluenzaJSON.get("dolorMuscularSevera"));
+						dolorArticularLeve = ((String) seguimientoInfluenzaJSON.get("dolorArticularLeve"));
+						dolorArticularModerada = ((String) seguimientoInfluenzaJSON.get("dolorArticularModerada"));
+						dolorArticularSevera = ((String) seguimientoInfluenzaJSON.get("dolorArticularSevera"));
+						
+						seguimientoInfluenza.setFiebreLeve(fiebreLeve);
+						seguimientoInfluenza.setFiebreModerada(fiebreModerada);
+						seguimientoInfluenza.setFiebreSevera(fiebreSevera);
+						seguimientoInfluenza.setTosLeve(tosLeve);
+						seguimientoInfluenza.setTosModerada(tosModerada);
+						seguimientoInfluenza.setTosSevera(tosSevera);
+						seguimientoInfluenza.setSecrecionNasalLeve(secrecionNasalLeve);
+						seguimientoInfluenza.setSecrecionNasalModerada(secrecionNasalModerada);
+						seguimientoInfluenza.setSecrecionNasalSevera(secrecionNasalSevera);
+						seguimientoInfluenza.setDolorGargantaLeve(dolorGargantaLeve);
+						seguimientoInfluenza.setDolorGargantaModerada(dolorGargantaModerada);
+						seguimientoInfluenza.setDolorGargantaSevera(dolorGargantaSevera);
+						seguimientoInfluenza.setDolorCabezaLeve(dolorCabezaLeve);
+						seguimientoInfluenza.setDolorCabezaModerada(dolorCabezaModerada);
+						seguimientoInfluenza.setDolorCabezaSevera(dolorCabezaSevera);
+						seguimientoInfluenza.setDolorMuscularLeve(dolorMuscularLeve);
+						seguimientoInfluenza.setDolorMuscularModerada(dolorMuscularModerada);
+						seguimientoInfluenza.setDolorMuscularSevera(dolorMuscularSevera);
+						seguimientoInfluenza.setDolorArticularLeve(dolorArticularLeve);
+						seguimientoInfluenza.setDolorArticularModerada(dolorArticularModerada);
+						seguimientoInfluenza.setDolorArticularSevera(dolorArticularSevera);
+
+						/*--------------------*/
+						
 	
 						HIBERNATE_RESOURCE.begin();
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(
@@ -787,7 +891,29 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " s.dolorArticular, " + " s.dolorOido, "
 					+ " s.respiracionRapida, " + " s.dificultadRespirar, "
 					+ " s.faltaEscuela, " + " s.quedoEnCama, "
-					+ " s.usuarioMedico "
+					+ " s.usuarioMedico, "
+					+ " s.fiebreLeve, "
+					+ " s.fiebreModerada, " 
+					+ " s.fiebreSevera, " 
+					+ " s.tosLeve, "
+					+ " s.tosModerada, " 
+					+ " s.tosSevera, " 
+					+ " s.secrecionNasalLeve, " 
+					+ " s.secrecionNasalModerada, " 
+					+ " s.secrecionNasalSevera, " 
+					+ " s.dolorGargantaLeve, " 
+					+ " s.dolorGargantaModerada, " 
+					+ " s.dolorGargantaSevera, " 
+					+ " s.dolorCabezaLeve, " 
+					+ " s.dolorCabezaModerada, " 
+					+ " s.dolorCabezaSevera, " 
+					+ " s.dolorMuscularLeve, " 
+					+ " s.dolorMuscularModerada, " 
+					+ " s.dolorMuscularSevera, " 
+					+ " s.dolorArticularLeve, " 
+					+ " s.dolorArticularModerada, " 
+					+ " s.dolorArticularSevera, "
+					+ " s.secHojaInfluenza "
 					+ " from SeguimientoInfluenza s, UsuariosView u "
 					+ " where s.usuarioMedico = u.id ";
 
@@ -827,8 +953,30 @@ public class ExpedienteDA implements ExpedienteService {
 					fila.put("faltaEscuela", object[16].toString());
 					fila.put("quedoEnCama", object[17].toString());
 					fila.put("usuarioMedico", Integer.parseInt(object[18].toString()));
+					/*----------------------------------------*/
+					fila.put("fiebreLeve", object[19] != null ? object[19].toString() : null);
+					fila.put("fiebreModerada", object[20] != null ? object[20].toString() : null);
+					fila.put("fiebreSevera", object[21] != null ? object[21].toString() : null);
+					fila.put("tosLeve", object[22] != null ? object[22].toString() : null);
+					fila.put("tosModerada", object[23] != null ? object[23].toString() : null);
+					fila.put("tosSevera", object[24] != null ? object[24].toString() : null);
+					fila.put("secrecionNasalLeve", object[25] != null ? object[25].toString() : null);
+					fila.put("secrecionNasalModerada", object[26] != null ? object[26].toString() : null);
+					fila.put("secrecionNasalSevera", object[27] != null ? object[27].toString() : null);
+					fila.put("dolorGargantaLeve", object[28] != null ? object[28].toString() : null);
+					fila.put("dolorGargantaModerada", object[29] != null ? object[29].toString() : null);
+					fila.put("dolorGargantaSevera", object[30] != null ? object[30].toString() : null);
+					fila.put("dolorCabezaLeve", object[31] != null ? object[31].toString() : null);
+					fila.put("dolorCabezaModerada", object[32] != null ? object[32].toString() : null);
+					fila.put("dolorCabezaSevera", object[33] != null ? object[33].toString() : null);
+					fila.put("dolorMuscularLeve", object[34] != null ? object[34].toString() : null);
+					fila.put("dolorMuscularModerada", object[35] != null ? object[35].toString() : null);
+					fila.put("dolorMuscularSevera", object[36] != null ? object[36].toString() : null);
+					fila.put("dolorArticularLeve", object[37] != null ? object[37].toString() : null);
+					fila.put("dolorArticularModerada", object[38] != null ? object[38].toString() : null);
+					fila.put("dolorArticularSevera", object[39] != null ? object[39].toString() : null);
+					fila.put("secHojaInfluenza", object[40] != null ? Integer.valueOf(object[40].toString()) : 0);
 					oLista.add(fila);
-
 				}
 
 				// Construir la lista a una estructura JSON
@@ -894,41 +1042,149 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " s11.consulta_inicial \"consultaInicialDia11\", "
 					+ " s12.consulta_inicial \"consultaInicialDia12\", "
 					+ " s1.fiebre \"fiebreDia1\", "
+					+ " s1.fiebre_leve \"fiebreLeveDia1\", "
+					+ " s1.fiebre_moderada \"fiebreModeradaDia1\", "
+					+ " s1.fiebre_severa \"fiebreSeveraDia1\", "
 					+ " s2.fiebre \"fiebreDia2\", "
+					+ " s2.fiebre_leve \"fiebreLeveDia2\", "
+					+ " s2.fiebre_moderada \"fiebreModeradaDia2\", "
+					+ " s2.fiebre_severa \"fiebreSeveraDia2\", "
 					+ " s3.fiebre \"fiebreDia3\", "
+					+ " s3.fiebre_leve \"fiebreLeveDia3\", "
+					+ " s3.fiebre_moderada \"fiebreModeradaDia3\", "
+					+ " s3.fiebre_severa \"fiebreSeveraDia3\", "
 					+ " s4.fiebre \"fiebreDia4\", "
+					+ " s4.fiebre_leve \"fiebreLeveDia4\", "
+					+ " s4.fiebre_moderada \"fiebreModeradaDia4\", "
+					+ " s4.fiebre_severa \"fiebreSeveraDia4\", "
 					+ " s5.fiebre \"fiebreDia5\", "
+					+ " s5.fiebre_leve \"fiebreLeveDia5\", "
+					+ " s5.fiebre_moderada \"fiebreModeradaDia5\", "
+					+ " s5.fiebre_severa \"fiebreSeveraDia5\", "
 					+ " s6.fiebre \"fiebreDia6\", "
+					+ " s6.fiebre_leve \"fiebreLeveDia6\", "
+					+ " s6.fiebre_moderada \"fiebreModeradaDia6\", "
+					+ " s6.fiebre_severa \"fiebreSeveraDia6\", "
 					+ " s7.fiebre \"fiebreDia7\", "
+					+ " s7.fiebre_leve \"fiebreLeveDia7\", "
+					+ " s7.fiebre_moderada \"fiebreModeradaDia7\", "
+					+ " s7.fiebre_severa \"fiebreSeveraDia7\", "
 					+ " s8.fiebre \"fiebreDia8\", "
+					+ " s8.fiebre_leve \"fiebreLeveDia8\", "
+					+ " s8.fiebre_moderada \"fiebreModeradaDia8\", "
+					+ " s8.fiebre_severa \"fiebreSeveraDia8\", "
 					+ " s9.fiebre \"fiebreDia9\", "
+					+ " s9.fiebre_leve \"fiebreLeveDia9\", "
+					+ " s9.fiebre_moderada \"fiebreModeradaDia9\", "
+					+ " s9.fiebre_severa \"fiebreSeveraDia9\", "
 					+ " s10.fiebre \"fiebreDia10\", "
+					+ " s10.fiebre_leve \"fiebreLeveDia10\", "
+					+ " s10.fiebre_moderada \"fiebreModeradaDia10\", "
+					+ " s10.fiebre_severa \"fiebreSeveraDia10\", "
 					+ " s11.fiebre \"fiebreDia11\", "
+					+ " s11.fiebre_leve \"fiebreLeveDia11\", "
+					+ " s11.fiebre_moderada \"fiebreModeradaDia11\", "
+					+ " s11.fiebre_severa \"fiebreSeveraDia11\", "
 					+ " s12.fiebre \"fiebreDia12\", "
+					+ " s12.fiebre_leve \"fiebreLeveDia12\", "
+					+ " s12.fiebre_moderada \"fiebreModeradaDia12\", "
+					+ " s12.fiebre_severa \"fiebreSeveraDia12\", "
 					+ " s1.tos \"tosDia1\", "
+					+ " s1.tos_leve \"tosLeveDia1\", "
+					+ " s1.tos_moderada \"tosModeradaDia1\", "
+					+ " s1.tos_severa \"tosSeveraDia1\", "
 					+ " s2.tos \"tosDia2\", "
+					+ " s2.tos_leve \"tosLeveDia2\", "
+					+ " s2.tos_moderada \"tosModeradaDia2\", "
+					+ " s2.tos_severa \"tosSeveraDia2\", "
 					+ " s3.tos \"tosDia3\", "
+					+ " s3.tos_leve \"tosLeveDia3\", "
+					+ " s3.tos_moderada \"tosModeradaDia3\", "
+					+ " s3.tos_severa \"tosSeveraDia3\", "
 					+ " s4.tos \"tosDia4\", "
+					+ " s4.tos_leve \"tosLeveDia4\", "
+					+ " s4.tos_moderada \"tosModeradaDia4\", "
+					+ " s4.tos_severa \"tosSeveraDia4\", "
 					+ " s5.tos \"tosDia5\", "
+					+ " s5.tos_leve \"tosLeveDia5\", "
+					+ " s5.tos_moderada \"tosModeradaDia5\", "
+					+ " s5.tos_severa \"tosSeveraDia5\", "
 					+ " s6.tos \"tosDia6\", "
+					+ " s6.tos_leve \"tosLeveDia6\", "
+					+ " s6.tos_moderada \"tosModeradaDia6\", "
+					+ " s6.tos_severa \"tosSeveraDia6\", "
 					+ " s7.tos \"tosDia7\", "
+					+ " s7.tos_leve \"tosLeveDia7\", "
+					+ " s7.tos_moderada \"tosModeradaDia7\", "
+					+ " s7.tos_severa \"tosSeveraDia7\", "
 					+ " s8.tos \"tosDia8\", "
+					+ " s8.tos_leve \"tosLeveDia8\", "
+					+ " s8.tos_moderada \"tosModeradaDia8\", "
+					+ " s8.tos_severa \"tosSeveraDia8\", "
 					+ " s9.tos \"tosDia9\", "
+					+ " s9.tos_leve \"tosLeveDia9\", "
+					+ " s9.tos_moderada \"tosModeradaDia9\", "
+					+ " s9.tos_severa \"tosSeveraDia9\", "
 					+ " s10.tos \"tosDia10\", "
+					+ " s10.tos_leve \"tosLeveDia10\", "
+					+ " s10.tos_moderada \"tosModeradaDia10\", "
+					+ " s10.tos_severa \"tosSeveraDia10\", "
 					+ " s11.tos \"tosDia11\", "
+					+ " s11.tos_leve \"tosLeveDia11\", "
+					+ " s11.tos_moderada \"tosModeradaDia11\", "
+					+ " s11.tos_severa \"tosSeveraDia11\", "
 					+ " s12.tos \"tosDia12\", "
+					+ " s12.tos_leve \"tosLeveDia12\", "
+					+ " s12.tos_moderada \"tosModeradaDia12\", "
+					+ " s12.tos_severa \"tosSeveraDia12\", "
 					+ " s1.secrecion_nasal \"secrecionNasalDia1\", "
+					+ " s1.secrecion_nasal_leve \"secrecionNasalLeveDia1\", "
+					+ " s1.secrecion_nasal_moderada \"secrecionNasalModeradaDia1\", "
+					+ " s1.secrecion_nasal_severa \"secrecionNasalSeveraDia1\", "
 					+ " s2.secrecion_nasal \"secrecionNasalDia2\", "
+					+ " s2.secrecion_nasal_leve \"secrecionNasalLeveDia2\", "
+					+ " s2.secrecion_nasal_moderada \"secrecionNasalModeradaDia2\", "
+					+ " s2.secrecion_nasal_severa \"secrecionNasalSeveraDia2\", "
 					+ " s3.secrecion_nasal \"secrecionNasalDia3\", "
+					+ " s3.secrecion_nasal_leve \"secrecionNasalLeveDia3\", "
+					+ " s3.secrecion_nasal_moderada \"secrecionNasalModeradaDia3\", "
+					+ " s3.secrecion_nasal_severa \"secrecionNasalSeveraDia3\", "
 					+ " s4.secrecion_nasal \"secrecionNasalDia4\", "
+					+ " s4.secrecion_nasal_leve \"secrecionNasalLeveDia4\", "
+					+ " s4.secrecion_nasal_moderada \"secrecionNasalModeradaDia4\", "
+					+ " s4.secrecion_nasal_severa \"secrecionNasalSeveraDia4\", "
 					+ " s5.secrecion_nasal \"secrecionNasalDia5\", "
+					+ " s5.secrecion_nasal_leve \"secrecionNasalLeveDia5\", "
+					+ " s5.secrecion_nasal_moderada \"secrecionNasalModeradaDia5\", "
+					+ " s5.secrecion_nasal_severa \"secrecionNasalSeveraDia5\", "
 					+ " s6.secrecion_nasal \"secrecionNasalDia6\", "
+					+ " s6.secrecion_nasal_leve \"secrecionNasalLeveDia6\", "
+					+ " s6.secrecion_nasal_moderada \"secrecionNasalModeradaDia6\", "
+					+ " s6.secrecion_nasal_severa \"secrecionNasalSeveraDia6\", "
 					+ " s7.secrecion_nasal \"secrecionNasalDia7\", "
+					+ " s7.secrecion_nasal_leve \"secrecionNasalLeveDia7\", "
+					+ " s7.secrecion_nasal_moderada \"secrecionNasalModeradaDia7\", "
+					+ " s7.secrecion_nasal_severa \"secrecionNasalSeveraDia7\", "
 					+ " s8.secrecion_nasal \"secrecionNasalDia8\", "
+					+ " s8.secrecion_nasal_leve \"secrecionNasalLeveDia8\", "
+					+ " s8.secrecion_nasal_moderada \"secrecionNasalModeradaDia8\", "
+					+ " s8.secrecion_nasal_severa \"secrecionNasalSeveraDia8\", "
 					+ " s9.secrecion_nasal \"secrecionNasalDia9\", "
+					+ " s9.secrecion_nasal_leve \"secrecionNasalLeveDia9\", "
+					+ " s9.secrecion_nasal_moderada \"secrecionNasalModeradaDia9\", "
+					+ " s9.secrecion_nasal_severa \"secrecionNasalSeveraDia9\", "
 					+ " s10.secrecion_nasal \"secrecionNasalDia10\", "
+					+ " s10.secrecion_nasal_leve \"secrecionNasalLeveDia10\", "
+					+ " s10.secrecion_nasal_moderada \"secrecionNasalModeradaDia10\", "
+					+ " s10.secrecion_nasal_severa \"secrecionNasalSeveraDia10\", "
 					+ " s11.secrecion_nasal \"secrecionNasalDia11\", "
+					+ " s11.secrecion_nasal_leve \"secrecionNasalLeveDia11\", "
+					+ " s11.secrecion_nasal_moderada \"secrecionNasalModeradaDia11\", "
+					+ " s11.secrecion_nasal_severa \"secrecionNasalSeveraDia11\", "
 					+ " s12.secrecion_nasal \"secrecionNasalDia12\", "
+					+ " s12.secrecion_nasal_leve \"secrecionNasalLeveDia12\", "
+					+ " s12.secrecion_nasal_moderada \"secrecionNasalModeradaDia12\", "
+					+ " s12.secrecion_nasal_severa \"secrecionNasalSeveraDia12\", "
 					+ " s1.congestion_nasa \"congestionNasaDia1\", "
 					+ " s2.congestion_nasa \"congestionNasaDia2\", "
 					+ " s3.congestion_nasa \"congestionNasaDia3\", "
@@ -942,17 +1198,53 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " s11.congestion_nasa \"congestionNasaDia11\", "
 					+ " s12.congestion_nasa \"congestionNasaDia12\", "
 					+ " s1.dolor_garganta \"dolorGargantaDia1\", "
+					+ " s1.dolor_garganta_leve \"dolorGargantaLeveDia1\", "
+					+ " s1.dolor_garganta_moderada \"dolorGargantaModeradaDia1\", "
+					+ " s1.dolor_garganta_severa \"dolorGargantaSeveraDia1\", "
 					+ " s2.dolor_garganta \"dolorGargantaDia2\", "
+					+ " s2.dolor_garganta_leve \"dolorGargantaLeveDia2\", "
+					+ " s2.dolor_garganta_moderada \"dolorGargantaModeradaDia2\", "
+					+ " s2.dolor_garganta_severa \"dolorGargantaSeveraDia2\", "
 					+ " s3.dolor_garganta \"dolorGargantaDia3\", "
+					+ " s3.dolor_garganta_leve \"dolorGargantaLeveDia3\", "
+					+ " s3.dolor_garganta_moderada \"dolorGargantaModeradaDia3\", "
+					+ " s3.dolor_garganta_severa \"dolorGargantaSeveraDia3\", "
 					+ " s4.dolor_garganta \"dolorGargantaDia4\", "
+					+ " s4.dolor_garganta_leve \"dolorGargantaLeveDia4\", "
+					+ " s4.dolor_garganta_moderada \"dolorGargantaModeradaDia4\", "
+					+ " s4.dolor_garganta_severa \"dolorGargantaSeveraDia4\", "
 					+ " s5.dolor_garganta \"dolorGargantaDia5\", "
+					+ " s5.dolor_garganta_leve \"dolorGargantaLeveDia5\", "
+					+ " s5.dolor_garganta_moderada \"dolorGargantaModeradaDia5\", "
+					+ " s5.dolor_garganta_severa \"dolorGargantaSeveraDia5\", "
 					+ " s6.dolor_garganta \"dolorGargantaDia6\", "
+					+ " s6.dolor_garganta_leve \"dolorGargantaLeveDia6\", "
+					+ " s6.dolor_garganta_moderada \"dolorGargantaModeradaDia6\", "
+					+ " s6.dolor_garganta_severa \"dolorGargantaSeveraDia6\", "
 					+ " s7.dolor_garganta \"dolorGargantaDia7\", "
+					+ " s7.dolor_garganta_leve \"dolorGargantaLeveDia7\", "
+					+ " s7.dolor_garganta_moderada \"dolorGargantaModeradaDia7\", "
+					+ " s7.dolor_garganta_severa \"dolorGargantaSeveraDia7\", "
 					+ " s8.dolor_garganta \"dolorGargantaDia8\", "
+					+ " s8.dolor_garganta_leve \"dolorGargantaLeveDia8\", "
+					+ " s8.dolor_garganta_moderada \"dolorGargantaModeradaDia8\", "
+					+ " s8.dolor_garganta_severa \"dolorGargantaSeveraDia8\", "
 					+ " s9.dolor_garganta \"dolorGargantaDia9\", "
+					+ " s9.dolor_garganta_leve \"dolorGargantaLeveDia9\", "
+					+ " s9.dolor_garganta_moderada \"dolorGargantaModeradaDia9\", "
+					+ " s9.dolor_garganta_severa \"dolorGargantaSeveraDia9\", "
 					+ " s10.dolor_garganta \"dolorGargantaDia10\", "
+					+ " s10.dolor_garganta_leve \"dolorGargantaLeveDia10\", "
+					+ " s10.dolor_garganta_moderada \"dolorGargantaModeradaDia10\", "
+					+ " s10.dolor_garganta_severa \"dolorGargantaSeveraDia10\", "
 					+ " s11.dolor_garganta \"dolorGargantaDia11\", "
+					+ " s11.dolor_garganta_leve \"dolorGargantaLeveDia11\", "
+					+ " s11.dolor_garganta_moderada \"dolorGargantaModeradaDia11\", "
+					+ " s11.dolor_garganta_severa \"dolorGargantaSeveraDia11\", "
 					+ " s12.dolor_garganta \"dolorGargantaDia12\", "
+					+ " s12.dolor_garganta_leve \"dolorGargantaLeveDia12\", "
+					+ " s12.dolor_garganta_moderada \"dolorGargantaModeradaDia12\", "
+					+ " s12.dolor_garganta_severa \"dolorGargantaSeveraDia12\", "
 					+ " s1.falta_apetito \"faltaApetitoDia1\", "
 					+ " s2.falta_apetito \"faltaApetitoDia2\", "
 					+ " s3.falta_apetito \"faltaApetitoDia3\", "
@@ -966,29 +1258,101 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " s11.falta_apetito \"faltaApetitoDia11\", "
 					+ " s12.falta_apetito \"faltaApetitoDia12\", "
 					+ " s1.dolor_muscular \"dolorMuscularDia1\", "
+					+ " s1.dolor_muscular_leve \"dolorMuscularLeveDia1\", "
+					+ " s1.dolor_muscular_moderada \"dolorMuscularModeradaDia1\", "
+					+ " s1.dolor_muscular_severa \"dolorMuscularSeveraDia1\", "
 					+ " s2.dolor_muscular \"dolorMuscularDia2\", "
+					+ " s2.dolor_muscular_leve \"dolorMuscularLeveDia2\", "
+					+ " s2.dolor_muscular_moderada \"dolorMuscularModeradaDia2\", "
+					+ " s2.dolor_muscular_severa \"dolorMuscularSeveraDia2\", "
 					+ " s3.dolor_muscular \"dolorMuscularDia3\", "
+					+ " s3.dolor_muscular_leve \"dolorMuscularLeveDia3\", "
+					+ " s3.dolor_muscular_moderada \"dolorMuscularModeradaDia3\", "
+					+ " s3.dolor_muscular_severa \"dolorMuscularSeveraDia3\", "
 					+ " s4.dolor_muscular \"dolorMuscularDia4\", "
+					+ " s4.dolor_muscular_leve \"dolorMuscularLeveDia4\", "
+					+ " s4.dolor_muscular_moderada \"dolorMuscularModeradaDia4\", "
+					+ " s4.dolor_muscular_severa \"dolorMuscularSeveraDia4\", "
 					+ " s5.dolor_muscular \"dolorMuscularDia5\", "
+					+ " s5.dolor_muscular_leve \"dolorMuscularLeveDia5\", "
+					+ " s5.dolor_muscular_moderada \"dolorMuscularModeradaDia5\", "
+					+ " s5.dolor_muscular_severa \"dolorMuscularSeveraDia5\", "
 					+ " s6.dolor_muscular \"dolorMuscularDia6\", "
+					+ " s6.dolor_muscular_leve \"dolorMuscularLeveDia6\", "
+					+ " s6.dolor_muscular_moderada \"dolorMuscularModeradaDia6\", "
+					+ " s6.dolor_muscular_severa \"dolorMuscularSeveraDia6\", "
 					+ " s7.dolor_muscular \"dolorMuscularDia7\", "
+					+ " s7.dolor_muscular_leve \"dolorMuscularLeveDia7\", "
+					+ " s7.dolor_muscular_moderada \"dolorMuscularModeradaDia7\", "
+					+ " s7.dolor_muscular_severa \"dolorMuscularSeveraDia7\", "
 					+ " s8.dolor_muscular \"dolorMuscularDia8\", "
+					+ " s8.dolor_muscular_leve \"dolorMuscularLeveDia8\", "
+					+ " s8.dolor_muscular_moderada \"dolorMuscularModeradaDia8\", "
+					+ " s8.dolor_muscular_severa \"dolorMuscularSeveraDia8\", "
 					+ " s9.dolor_muscular \"dolorMuscularDia9\", "
+					+ " s9.dolor_muscular_leve \"dolorMuscularLeveDia9\", "
+					+ " s9.dolor_muscular_moderada \"dolorMuscularModeradaDia9\", "
+					+ " s9.dolor_muscular_severa \"dolorMuscularSeveraDia9\", "
 					+ " s10.dolor_muscular \"dolorMuscularDia10\", "
+					+ " s10.dolor_muscular_leve \"dolorMuscularLeveDia10\", "
+					+ " s10.dolor_muscular_moderada \"dolorMuscularModeradaDia10\", "
+					+ " s10.dolor_muscular_severa \"dolorMuscularSeveraDia10\", "
 					+ " s11.dolor_muscular \"dolorMuscularDia11\", "
+					+ " s11.dolor_muscular_leve \"dolorMuscularLeveDia11\", "
+					+ " s11.dolor_muscular_moderada \"dolorMuscularModeradaDia11\", "
+					+ " s11.dolor_muscular_severa \"dolorMuscularSeveraDia11\", "
 					+ " s12.dolor_muscular \"dolorMuscularDia12\", "
+					+ " s12.dolor_muscular_leve \"dolorMuscularLeveDia12\", "
+					+ " s12.dolor_muscular_moderada \"dolorMuscularModeradaDia12\", "
+					+ " s12.dolor_muscular_severa \"dolorMuscularSeveraDia12\", "
 					+ " s1.dolor_articular \"dolorArticularDia1\", "
+					+ " s1.dolor_articular_leve \"dolorArticularLeveDia1\", "
+					+ " s1.dolor_articular_moderada \"dolorArticularModeradaDia1\", "
+					+ " s1.dolor_articular_severa \"dolorArticularSeveraDia1\", "
 					+ " s2.dolor_articular \"dolorArticularDia2\", "
+					+ " s2.dolor_articular_leve \"dolorArticularLeveDia2\", "
+					+ " s2.dolor_articular_moderada \"dolorArticularModeradaDia2\", "
+					+ " s2.dolor_articular_severa \"dolorArticularSeveraDia2\", "
 					+ " s3.dolor_articular \"dolorArticularDia3\", "
+					+ " s3.dolor_articular_leve \"dolorArticularLeveDia3\", "
+					+ " s3.dolor_articular_moderada \"dolorArticularModeradaDia3\", "
+					+ " s3.dolor_articular_severa \"dolorArticularSeveraDia3\", "
 					+ " s4.dolor_articular \"dolorArticularDia4\", "
+					+ " s4.dolor_articular_leve \"dolorArticularLeveDia4\", "
+					+ " s4.dolor_articular_moderada \"dolorArticularModeradaDia4\", "
+					+ " s4.dolor_articular_severa \"dolorArticularSeveraDia4\", "
 					+ " s5.dolor_articular \"dolorArticularDia5\", "
+					+ " s5.dolor_articular_leve \"dolorArticularLeveDia5\", "
+					+ " s5.dolor_articular_moderada \"dolorArticularModeradaDia5\", "
+					+ " s5.dolor_articular_severa \"dolorArticularSeveraDia5\", "
 					+ " s6.dolor_articular \"dolorArticularDia6\", "
+					+ " s6.dolor_articular_leve \"dolorArticularLeveDia6\", "
+					+ " s6.dolor_articular_moderada \"dolorArticularModeradaDia6\", "
+					+ " s6.dolor_articular_severa \"dolorArticularSeveraDia6\", "
 					+ " s7.dolor_articular \"dolorArticularDia7\", "
+					+ " s7.dolor_articular_leve \"dolorArticularLeveDia7\", "
+					+ " s7.dolor_articular_moderada \"dolorArticularModeradaDia7\", "
+					+ " s7.dolor_articular_severa \"dolorArticularSeveraDia7\", "
 					+ " s8.dolor_articular \"dolorArticularDia8\", "
+					+ " s8.dolor_articular_leve \"dolorArticularLeveDia8\", "
+					+ " s8.dolor_articular_moderada \"dolorArticularModeradaDia8\", "
+					+ " s8.dolor_articular_severa \"dolorArticularSeveraDia8\", "
 					+ " s9.dolor_articular \"dolorArticularDia9\", "
+					+ " s9.dolor_articular_leve \"dolorArticularLeveDia9\", "
+					+ " s9.dolor_articular_moderada \"dolorArticularModeradaDia9\", "
+					+ " s9.dolor_articular_severa \"dolorArticularSeveraDia9\", "
 					+ " s10.dolor_articular \"dolorArticularDia10\", "
+					+ " s10.dolor_articular_leve \"dolorArticularLeveDia10\", "
+					+ " s10.dolor_articular_moderada \"dolorArticularModeradaDia10\", "
+					+ " s10.dolor_articular_severa \"dolorArticularSeveraDia10\", "
 					+ " s11.dolor_articular \"dolorArticularDia11\", "
+					+ " s11.dolor_articular_leve \"dolorArticularLeveDia11\", "
+					+ " s11.dolor_articular_moderada \"dolorArticularModeradaDia11\", "
+					+ " s11.dolor_articular_severa \"dolorArticularSeveraDia11\", "
 					+ " s12.dolor_articular \"dolorArticularDia12\", "
+					+ " s12.dolor_articular_leve \"dolorArticularLeveDia12\", "
+					+ " s12.dolor_articular_moderada \"dolorArticularModeradaDia12\", "
+					+ " s12.dolor_articular_severa \"dolorArticularSeveraDia12\", "
 					+ " s1.dolor_oido \"dolorOidoDia1\", "
 					+ " s2.dolor_oido \"dolorOidoDia2\", "
 					+ " s3.dolor_oido \"dolorOidoDia3\", "
@@ -1077,18 +1441,54 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " to_char(s10.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento10\", "
 					+ " to_char(s11.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento11\", "
 					+ " to_char(s12.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento12\", "
-					+" s1.dolor_cabeza \"dolorCabezaDia1\", "
+					+ " s1.dolor_cabeza \"dolorCabezaDia1\", "
+					+ " s1.dolor_cabeza_leve \"dolorCabezaLeveDia1\", "
+					+ " s1.dolor_cabeza_moderada \"dolorCabezaModeradaDia1\", "
+					+ " s1.dolor_cabeza_severa \"dolorCabezaSeveraDia1\", "
 					+ " s2.dolor_cabeza \"dolorCabezaDia2\", "
+					+ " s2.dolor_cabeza_leve \"dolorCabezaLeveDia2\", "
+					+ " s2.dolor_cabeza_moderada \"dolorCabezaModeradaDia2\", "
+					+ " s2.dolor_cabeza_severa \"dolorCabezaSeveraDia2\", "
 					+ " s3.dolor_cabeza \"dolorCabezaDia3\", "
+					+ " s3.dolor_cabeza_leve \"dolorCabezaLeveDia3\", "
+					+ " s3.dolor_cabeza_moderada \"dolorCabezaModeradaDia3\", "
+					+ " s3.dolor_cabeza_severa \"dolorCabezaSeveraDia3\", "
 					+ " s4.dolor_cabeza \"dolorCabezaDia4\", "
+					+ " s4.dolor_cabeza_leve \"dolorCabezaLeveDia4\", "
+					+ " s4.dolor_cabeza_moderada \"dolorCabezaModeradaDia4\", "
+					+ " s4.dolor_cabeza_severa \"dolorCabezaSeveraDia4\", "
 					+ " s5.dolor_cabeza \"dolorCabezaDia5\", "
+					+ " s5.dolor_cabeza_leve \"dolorCabezaLeveDia5\", "
+					+ " s5.dolor_cabeza_moderada \"dolorCabezaModeradaDia5\", "
+					+ " s5.dolor_cabeza_severa \"dolorCabezaSeveraDia5\", "
 					+ " s6.dolor_cabeza \"dolorCabezaDia6\", "
+					+ " s6.dolor_cabeza_leve \"dolorCabezaLeveDia6\", "
+					+ " s6.dolor_cabeza_moderada \"dolorCabezaModeradaDia6\", "
+					+ " s6.dolor_cabeza_severa \"dolorCabezaSeveraDia6\", "
 					+ " s7.dolor_cabeza \"dolorCabezaDia7\", "
+					+ " s7.dolor_cabeza_leve \"dolorCabezaLeveDia7\", "
+					+ " s7.dolor_cabeza_moderada \"dolorCabezaModeradaDia7\", "
+					+ " s7.dolor_cabeza_severa \"dolorCabezaSeveraDia7\", "
 					+ " s8.dolor_cabeza \"dolorCabezaDia8\", "
+					+ " s8.dolor_cabeza_leve \"dolorCabezaLeveDia8\", "
+					+ " s8.dolor_cabeza_moderada \"dolorCabezaModeradaDia8\", "
+					+ " s8.dolor_cabeza_severa \"dolorCabezaSeveraDia8\", "
 					+ " s9.dolor_cabeza \"dolorCabezaDia9\", "
+					+ " s9.dolor_cabeza_leve \"dolorCabezaLeveDia9\", "
+					+ " s9.dolor_cabeza_moderada \"dolorCabezaModeradaDia9\", "
+					+ " s9.dolor_cabeza_severa \"dolorCabezaSeveraDia9\", "
 					+ " s10.dolor_cabeza \"dolorCabezaDia10\", "
+					+ " s10.dolor_cabeza_leve \"dolorCabezaLeveDia10\", "
+					+ " s10.dolor_cabeza_moderada \"dolorCabezaModeradaDia10\", "
+					+ " s10.dolor_cabeza_severa \"dolorCabezaSeveraDia10\", "
 					+ " s11.dolor_cabeza \"dolorCabezaDia11\", "
-					+ " s12.dolor_cabeza \"dolorCabezaDia12\" "
+					+ " s11.dolor_cabeza_leve \"dolorCabezaLeveDia11\", "
+					+ " s11.dolor_cabeza_moderada \"dolorCabezaModeradaDia11\", "
+					+ " s11.dolor_cabeza_severa \"dolorCabezaSeveraDia11\", "
+					+ " s12.dolor_cabeza \"dolorCabezaDia12\", "
+					+ " s12.dolor_cabeza_leve \"dolorCabezaLeveDia12\", "
+					+ " s12.dolor_cabeza_moderada \"dolorCabezaModeradaDia12\", "
+					+ " s12.dolor_cabeza_severa \"dolorCabezaSeveraDia12\" "
 					+ " from paciente p  "
 					+ " inner join hoja_influenza h on p.cod_expediente = h.cod_expediente "
 					+ " inner join seguimiento_influenza s on h.sec_hoja_influenza = s.sec_hoja_influenza "
@@ -1117,8 +1517,10 @@ public class ExpedienteDA implements ExpedienteService {
 
 			List result = query.list();
 
+			/*return UtilitarioReporte.mostrarReporte(nombreReporte, null,
+					result, false, null);*/
 			return UtilitarioReporte.mostrarReporte(nombreReporte, null,
-					result, false, null);
+					result, true, null);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1135,13 +1537,62 @@ public class ExpedienteDA implements ExpedienteService {
 	 * Metodo que realiza la impresion de Seguimiento Influenza.
 	 * @param numHojaSeguimiento, Numero de seguimiento influenza.
 	 */
-	public void imprimirSeguimientoInfluenciaPdf(int numHojaSeguimiento) {
+	public String imprimirSeguimientoInfluenciaPdf(int numHojaSeguimiento) {
 
-		UtilitarioReporte ureporte = new UtilitarioReporte();
-		ureporte.imprimirDocumento("rptSeguimientoInfluenza_"
-				+ numHojaSeguimiento,
-				getSeguimientoInfluenzaPdf(numHojaSeguimiento));
+		String result = null;
+		String sql;
+		Query query;
+		boolean hojaInfluenzaCerrada = false;
 
+		try {
+			sql = "select h from HojaInfluenza h where h.numHojaSeguimiento = :numHojaSeguimiento ";
+			/*sql = "select h from HojaInfluenza h "
+					+ "where CAST (h.fis as date) < current_date -14 "
+					+ "and h.cerrado = 'N' order by h.numHojaSeguimiento ";*/
+
+			query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			query.setParameter("numHojaSeguimiento", numHojaSeguimiento);
+
+			HojaInfluenza hojaInfluenza = (HojaInfluenza) query.uniqueResult();
+			
+			/*List<HojaInfluenza> hojaInfluenza = (List<HojaInfluenza>) query
+					.list();
+			
+			for (HojaInfluenza hojaFlu : hojaInfluenza) {
+				int numHoja = hojaFlu.getNumHojaSeguimiento();
+				UtilitarioReporte ureporte = new UtilitarioReporte();
+				ureporte.imprimirDocumento("rptSeguimientoInfluenza_" + numHoja,
+						getSeguimientoInfluenzaPdf(numHoja));
+			}*/
+			/*for (int i=0; i < hojaInfluenza.size(); i++) {
+				UtilitarioReporte ureporte = new UtilitarioReporte();
+				ureporte.imprimirDocumento("rptSeguimientoInfluenza_" + hojaInfluenza.get(i).getNumHojaSeguimiento(),
+						getSeguimientoInfluenzaPdf(hojaInfluenza.get(i).getNumHojaSeguimiento()));
+			}*/
+
+			if (hojaInfluenza.getCerrado() == 'S' && hojaInfluenza.getFechaCierre() != null) {
+				hojaInfluenzaCerrada = true;
+			}
+
+			if (hojaInfluenzaCerrada) {
+				UtilitarioReporte ureporte = new UtilitarioReporte();
+				ureporte.imprimirDocumento("rptSeguimientoInfluenza_" + numHojaSeguimiento,
+						getSeguimientoInfluenzaPdf(numHojaSeguimiento));
+				result = UtilResultado.parserResultado(null, Mensajes.HOJA_INFLUENZA_IMPRESA, UtilResultado.OK);
+			} else {
+				result = UtilResultado.parserResultado(null, Mensajes.ERROR_AL_IMPRIMIR_HOJA_INFLUENZA,
+						UtilResultado.ERROR);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
 	}
 	
 	@Override
@@ -1736,6 +2187,20 @@ public class ExpedienteDA implements ExpedienteService {
 						hojaZikaJSON.get("fechaCierre") != null) {
 					hojaZika.setFechaCierre(df.parse(hojaZikaJSON
 							.get("fechaCierre").toString()));
+				}
+				
+				if (hojaZika.getFechaCierre() != null) {
+					SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+					
+					Date fechaCierre = outputFormat.parse(hojaZikaJSON.get("fechaCierre").toString());
+										
+			        Date fechaInicio = sdf.parse(hojaZika.getFechaInicio().toString());
+			        //Date fechaCierre = sdf.parse(date.toString());
+			        
+			        if (fechaInicio.compareTo(fechaCierre) > 0) {
+			        	return result = UtilResultado.parserResultado(null, Mensajes.ERROR_FECHA_CIERRE, UtilResultado.ERROR);
+			        }
 				}
 
 			}
@@ -2767,14 +3232,47 @@ public class ExpedienteDA implements ExpedienteService {
 	 * Metodo que realiza la impresion de Seguimiento Zika.
 	 * @param numHojaSeguimiento, Numero de seguimiento zika.
 	 */
-	public void imprimirSeguimientoZikaPdf(int numHojaSeguimiento) {
+	public String imprimirSeguimientoZikaPdf(int numHojaSeguimiento) {
+		
+		String result = null;
+		String sql;
+		Query query;
+		boolean hojaZikaCerrada = false;
+		
+		try {
+			sql = "select h from HojaZika h where h.numHojaSeguimiento = :numHojaSeguimiento ";
 
-		UtilitarioReporte ureporte = new UtilitarioReporte();
-		ureporte.imprimirDocumento("rptSeguimientoZika_"
-				+ numHojaSeguimiento,
-				getSeguimientoZikaPdf(numHojaSeguimiento));
+			query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			query.setParameter("numHojaSeguimiento", numHojaSeguimiento);
 
+			HojaZika hojaZika = (HojaZika) query.uniqueResult();
+
+			if (hojaZika.getCerrado() == 'S' && hojaZika.getFechaCierre() != null) {
+				hojaZikaCerrada = true;
+			}
+
+			if (hojaZikaCerrada) {
+				UtilitarioReporte ureporte = new UtilitarioReporte();
+				ureporte.imprimirDocumento("rptSeguimientoZika_"
+						+ numHojaSeguimiento,
+						getSeguimientoZikaPdf(numHojaSeguimiento));
+				result = UtilResultado.parserResultado(null, Mensajes.HOJA_ZIKA_IMPRESA, UtilResultado.OK);
+			} else {
+				result = UtilResultado.parserResultado(null, Mensajes.ERROR_AL_IMPRIMIR_HOJA_ZIKA,
+						UtilResultado.ERROR);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
 	}
+
 	/***
 	 * Funcion para buscar la ficha de vigilancia integrada por codigo expediente.
 	 * @param codExpediente, @param numHojaConsulta Codigo Expediente.
