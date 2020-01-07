@@ -767,4 +767,30 @@ public class EstudioCohorteCSSFVMovilWS {
 			@WebParam(name = "secHojaConsulta", partName = "secHojaConsulta", mode = Mode.IN) int secHojaConsulta) {
 		return DIAGNOSTICO_SERVICE.activarDiagnosticos(secHojaConsulta);
 	}
+	
+	/*Fecha Creacion 6/12/2019 -- SC*/
+	@WebMethod(operationName = "getFichaEpiSindromesFebrilesPdf")
+	@WebResult(name = "getFichaEpiSindromesFebrilesPdfByte")
+	public byte[] getFichaEpiSindromesFebrilesPdf(
+			@WebParam(name = "numHojaConsulta", partName = "numHojaConsulta", mode = Mode.IN) int numHojaConsulta) {
+		return EXPEDIENTE_SERVICE
+				.getFichaEpiSindromesFebrilesPdf(numHojaConsulta);
+	}
+	
+	@WebMethod(operationName = "imprimirFichaEpiSindromesFebrilesPdf")
+	@WebResult(name = "imprimirFichaEpiSindromesFebrilesPdfvoid")
+	public void imprimirFichaEpiSindromesFebrilesPdf(
+			@WebParam(name = "numHojaConsulta") int numHojaConsulta) {
+		EXPEDIENTE_SERVICE
+				.imprimirFichaEpiSindromesFebrilesPdf(numHojaConsulta);
+	}
+	
+	@WebMethod(operationName = "getFisAndFifByCodExp")
+	@WebResult(name = "resultadoJSON")
+	public String getFisAndFifByCodExp(
+			@WebParam(name = "codExpediente", partName = "codExpediente", mode = Mode.IN) int codExpediente) {
+		return SINTOMAS_SERVICE.getFisAndFifByCodExp(codExpediente);
+	}
+	
+	//--------------------------------------------------------------------------------
 }

@@ -28,6 +28,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.sts_ni.estudiocohortecssfv.dto.FichaEpiSindromesFebriles;
 import com.sts_ni.estudiocohortecssfv.dto.HojaConsultaReporte;
 import com.sts_ni.estudiocohortecssfv.dto.SeguimientoInfluenzaReporte;
 import com.sts_ni.estudiocohortecssfv.dto.SeguimientoZikaReporte;
@@ -3955,4 +3956,76 @@ public class ExpedienteDA implements ExpedienteService {
 				+ secVigilanciaIntegrada,
 				getFichaPdf(secVigilanciaIntegrada));
 	}
+	
+	/***
+	 * Metodo que carga toda la informacion de la ficha por el numero de hoja de consulta.
+	 * @param numHojaConsulta, Fecha Creacion 06/12/2019 -- SC.
+	 */
+	public byte[] getFichaEpiSindromesFebrilesPdf(Integer numHojaConsulta) {
+		
+		String nombreReporte="fichaSindFebriles";
+		
+		String fichaSindFebriles = "fichaSindFebriles";
+		config= UtilProperty.getConfiguration("EstudioCohorteCssfvMovilWSExt.properties", "com/sts_ni/estudiocohortecssfv/properties/EstudioCohorteCssfvMovilWSInt.properties");
+		String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (fichaSindFebriles+"1").contains(".jpg")?(fichaSindFebriles+"1"):(fichaSindFebriles+"1") + ".jpg");
+		
+		path = path.replace('/', System.getProperty("file.separator").charAt(0));
+		
+		try {
+			HashMap params = new HashMap(); 
+			params.put("fichaSindFebriles1", path);
+			
+			String sql = "select h.cod_expediente \"codExpediente\", "+
+					" h.categoria \"categoria\", " + 
+					" h.num_hoja_consulta \"numHojaConsulta\", " + 
+					" h.fecha_consulta \"fechaConsulta\", " +
+					" h.fis \"fis\", " +
+					" h.fif \"fif\", " +
+					" h.expediente_fisico \"expedienteFisico\", " + 
+					" p.nombre1 ||' '||COALESCE(p.nombre2,'')||' '||p.apellido1||' '||COALESCE(p.apellido2,'') \"nombreApellido\", " + 
+					" p.tutor_nombre1 ||' '||COALESCE(p.tutor_nombre2,'')||' '||p.tutor_apellido1||' '||COALESCE(p.tutor_apellido2,'') \"tutor\", " + 
+					" p.sexo \"sexo\", " +
+					" p.fecha_nac \"fechaNac\", " +
+					" obtenerEdad(p.fecha_nac) \"edadCalc\", " +
+					" (select uv.nombre from usuarios_view uv where h.usuario_medico = uv.id) \"nombreMedico\", " +
+					" (select uv.codigopersonal from usuarios_view uv where h.usuario_medico = uv.id) \"codigoPersonal\", " +
+					" p.direccion \"direccion\", " +
+					" h.estudios_participantes \"estudiosParticipantes\" " +
+					" from hoja_consulta h " + 
+					" inner join paciente p on h.cod_expediente = p.cod_expediente " + 
+					" where h.num_hoja_consulta = :numHojaConsulta ";
+			
+			Query query = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql)
+					 .setResultTransformer(Transformers.aliasToBean(FichaEpiSindromesFebriles.class))
+					 .setParameter("numHojaConsulta", numHojaConsulta);
+
+				List result = query.list();
+
+				return UtilitarioReporte.mostrarReporte(nombreReporte, params,
+						result, false, null);		
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return null;
+	}
+	
+	/***
+	 * Metodo que realiza la impresion de la Ficha Epidemiologica para Sindromes Febriles.
+	 * Fecha Creacion 06/12/2019 -- SC.
+	 * @param numHojaConsulta.
+	 */
+	public void imprimirFichaEpiSindromesFebrilesPdf(int numHojaConsulta) {
+
+		UtilitarioReporte ureporte = new UtilitarioReporte();
+		ureporte.imprimirDocumento("fichaSindFebriles"
+				+ numHojaConsulta,
+				getFichaEpiSindromesFebrilesPdf(numHojaConsulta));
+	}
+	
 }

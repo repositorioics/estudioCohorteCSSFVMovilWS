@@ -115,4 +115,6 @@ public class Mensajes {
     public static final String HOJA_ZIKA_IMPRESA = "Se envio la Hoja de Seguimiento Zika a la impresora";
     
     public static final String ERROR_FECHA_CIERRE = "La fecha cierre no puede ser menor a la fecha de inicio del seguimiento, favor revisar la fecha de su dispositivo";
+    public static final String ERROR_GUARDAR_EXAMEN_SEROLOGIA_DENGUE_SIN_FIS = "No se puede enviar un examen de Serologia Dengue al laboratorio, debido a que el paciente no presenta FIS";
+    public static final String ERROR_GUARDAR_EXAMEN_SEROLOGIA_DENGUE_REQUERIDO = "Se debe de enviar a realizar el examen de Serologia Dengue, ya que el paciente presenta una FIS";
 }

@@ -50,6 +50,7 @@ import com.sts_ni.estudiocohortecssfv.util.HibernateResource;
 import com.sts_ni.estudiocohortecssfv.util.Mensajes;
 import com.sts_ni.estudiocohortecssfv.util.UtilHojaConsulta;
 import com.sts_ni.estudiocohortecssfv.util.UtilResultado;
+import com.sts_ni.estudiocohortecssfv.datos.inicio.ExpedienteDA;
 
 
 public class HojaConsultaDA implements HojaConsultaService {
@@ -912,7 +913,8 @@ public class HojaConsultaDA implements HojaConsultaService {
 			" h.tallaCm, h.temperaturac, " + 
 					" to_char(p.fechaNac, 'yyyyMMdd'), " + 
 					" to_char(h.fechaConsulta, 'yyyyMMdd HH:MI:SS am'), " +
-					" h.hora " + 
+					" h.hora, h.categoria, h.fif, h.consulta, h.temMedc, " +
+					" h.eritrocitos " + 
 					" from HojaConsulta h, Paciente p " + 
 					" where h.codExpediente = p.codExpediente " + 
 					" and h.secHojaConsulta = :secHojaConsulta ";
@@ -961,7 +963,13 @@ public class HojaConsultaDA implements HojaConsultaService {
 				fila.put("fechaNacimiento", hojaConsultaPaciente[6]);
 				fila.put("fechaConsulta", hojaConsultaPaciente[7]);
 				fila.put("horaConsulta", hojaConsultaPaciente[8]);
-
+				/*Nuevo campo agregado fecha creacion = 13/12/2019 - SC*/
+				fila.put("categoria", hojaConsultaPaciente[9]);
+				fila.put("fif", hojaConsultaPaciente[10] != null ? hojaConsultaPaciente[10].toString() : null);
+				fila.put("consulta", hojaConsultaPaciente[11] != null ? hojaConsultaPaciente[11] : null);
+				fila.put("temMedc", hojaConsultaPaciente[12] != null ? hojaConsultaPaciente[12].toString() : null);
+				fila.put("eritrocitos", hojaConsultaPaciente[13] != null ? hojaConsultaPaciente[13].toString() : "");
+				
 				oLista.add(fila);
 
 				// Construir la lista a una estructura JSON
@@ -2755,7 +2763,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 					" h.tallaCm, h.temperaturac, " + 
 					" to_char(p.fechaNac, 'yyyyMMdd'), " + 
 					" to_char(h.fechaConsulta, 'yyyyMMdd HH:MI:SS am'), " +
-					" h.hora " +
+					" h.hora, h.consulta " +
 					" from HojaConsulta h, Paciente p "
 					+ " where h.codExpediente = p.codExpediente "
 					+ " and h.secHojaConsulta = :secHojaConsulta ";
@@ -2803,6 +2811,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 				fila.put("fechaNacimiento", hojaConsultaPaciente[6]);
 				fila.put("fechaConsulta", hojaConsultaPaciente[7]);
 				fila.put("horaConsulta", hojaConsultaPaciente[8]);
+				fila.put("consulta", hojaConsultaPaciente[9] != null ? hojaConsultaPaciente[9] : "");
 
 				oLista.add(fila);
 
@@ -2883,6 +2892,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 			Integer secOrdenLaboratorio;
 			String examen;
 			char estado;
+			Boolean perteneceEstudioDengue = false;
 			
 			//Nuevo cambio agregado
 			/*Character irag;
@@ -2956,7 +2966,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 						if (estudios[i].trim().equals("Influenza") || estudios[i].trim().equals("UO1") 
 								|| estudios[i].trim().equals("CH Familia")) {
 							examenInfluenzaRequerido = true;
-						}
+						} 
 					}
 				}
 				
@@ -2976,7 +2986,20 @@ public class HojaConsultaDA implements HojaConsultaService {
 					return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_EXAMEN_INFLUENZA_VALORES_NULL, UtilResultado.ERROR);
 				}
 			}
-			//*********************
+			
+			/*Validacion para las serologias de dengue 10/12/2019 -- SC*/
+			/*String[] estudiosP = hojaConsulta.getEstudiosParticipantes().split(",");
+			for(int i=0; i < estudiosP.length; i++) {
+				if (estudiosP[i].trim().equals("Dengue")) {
+					perteneceEstudioDengue = true;
+				} 
+			}
+			if (hojaConsulta.getFis() == null && serologiaDengue.toString().compareTo("0") == 0 && perteneceEstudioDengue) {
+				return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_EXAMEN_SEROLOGIA_DENGUE_SIN_FIS, UtilResultado.ERROR);
+			}
+			if (hojaConsulta.getFis() != null && serologiaDengue.toString().compareTo("0") != 0 && perteneceEstudioDengue) {
+				return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_EXAMEN_SEROLOGIA_DENGUE_REQUERIDO, UtilResultado.ERROR);
+			}*/
 			
 			//Guardar control de cambios
 			if(validarTodoExamenMaracdo(hojaConsulta)){
@@ -3353,11 +3376,13 @@ public class HojaConsultaDA implements HojaConsultaService {
 					hojaConsulta.setUsuarioMedico(usuarioMedico);
 				}
 				// hojaConsulta.setOtroExamenLab(otroExamenLab);
+				
 				hojaConsulta.setEstado('4');
 
 				HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
 
 				HIBERNATE_RESOURCE.commit();
+			
 
 			} else {
 
@@ -3485,10 +3510,27 @@ public class HojaConsultaDA implements HojaConsultaService {
 				if(agregaExamen){					
 					hojaConsulta.setNumOrdenLaboratorio(maxNumOrdenLab);					
 				}
+
 				//Actualizando la hoja de consulta
 				HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
 				
 				HIBERNATE_RESOURCE.commit();
+			}
+			/*Enviar a imprimir la ficha de dengue cuando se marco la serologia de dengue
+			 * para consultas iniciales o de seguimientos y que el participante sea del estudio de dengue
+			 * realizado el 10/12/2019 -- SC*/
+			
+			String[] estudiosP = hojaConsulta.getEstudiosParticipantes().split(",");
+			for(int i=0; i < estudiosP.length; i++) {
+				if (estudiosP[i].trim().equals("Dengue")) {
+					perteneceEstudioDengue = true;
+				}
+			}
+			
+			if (serologiaDengue.toString().compareTo("0") == 0 && perteneceEstudioDengue &&
+					(hojaConsulta.getConsulta().trim().equals("Inicial") || hojaConsulta.getConsulta().trim().equals("Seguimiento"))) {
+				ExpedienteDA expedienteDA = new ExpedienteDA();
+				expedienteDA.imprimirFichaEpiSindromesFebrilesPdf(hojaConsulta.getNumHojaConsulta());
 			}
 			result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
 
@@ -4466,7 +4508,5 @@ public class HojaConsultaDA implements HojaConsultaService {
 			}
 		}
 		return result;
-
 	}
-	
 }

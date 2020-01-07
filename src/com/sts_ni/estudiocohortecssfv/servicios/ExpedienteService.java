@@ -48,4 +48,8 @@ public interface ExpedienteService {
 	public byte[] getFichaPdf(Integer secVigilanciaIntegrada);
 	
 	public void imprimirFichaPdf(int secVigilanciaIntegrada);
+	
+	public byte[] getFichaEpiSindromesFebrilesPdf(Integer numHojaConsulta);
+	
+	public void imprimirFichaEpiSindromesFebrilesPdf(int numHojaConsulta);
 }

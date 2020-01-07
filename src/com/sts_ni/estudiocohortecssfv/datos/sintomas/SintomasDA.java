@@ -1472,4 +1472,58 @@ public class SintomasDA implements SintomasService {
         }
 		return result;
 	}
+	
+	/***
+	 * Metodo para obtener la Fis, la Fif de la consulta inicial cuando se marque 
+	 * que la cosnulta es de seguimiento ó convaleciente
+	 * @param codExpediente, JSON
+	 * Fecha creacion = 17/12/2019 - SC
+	 */
+	@Override
+	public String getFisAndFifByCodExp(int codExpediente) {
+		String result = null;
+		try {
+			List oLista = new LinkedList();
+			Map fila = null;
+
+			String sql = "select h.fis, h.fif "
+					+ " from HojaConsulta h "
+					+ " where h.codExpediente= :codExpediente "
+					+ " and h.consulta = 'Inicial' "
+					+ " and h.fechaCierre is not null "
+					+ " order by h.fechaConsulta desc ";
+			
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			query.setParameter("codExpediente", codExpediente);
+			query.setMaxResults(1);
+			
+			//List queryResultado = query.list();
+
+			Object[] paciente = (Object[]) query.uniqueResult();
+			
+			if (paciente != null && paciente.length > 0) {
+				
+				fila = new HashMap();
+				fila.put("fis", paciente[0] != null ? paciente[0].toString() : "");
+				fila.put("fif", paciente[1] != null ? paciente[1].toString() : "");
+				oLista.add(fila);
+
+				// Construir la lista a una estructura JSON
+				result = UtilResultado.parserResultado(oLista, "",
+						UtilResultado.OK);
+			} /*else {
+				result = UtilResultado.parserResultado(null,
+						Mensajes.PACIENTE_NO_ENCONTRADO_RETIRADO, UtilResultado.INFO);
+			}*/
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null,
+					Mensajes.ERROR_NO_CONTROLADO, UtilResultado.ERROR);
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
 }

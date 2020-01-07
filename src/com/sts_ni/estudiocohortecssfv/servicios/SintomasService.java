@@ -40,4 +40,6 @@ public interface SintomasService {
 
 	public String getSeccionesSintomasCompletadas(String paramHojaConsulta);
 
+	public String getFisAndFifByCodExp(int codExpediente);
+
 }
