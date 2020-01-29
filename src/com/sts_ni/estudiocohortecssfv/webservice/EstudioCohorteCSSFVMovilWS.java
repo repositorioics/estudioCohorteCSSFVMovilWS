@@ -792,5 +792,14 @@ public class EstudioCohorteCSSFVMovilWS {
 		return SINTOMAS_SERVICE.getFisAndFifByCodExp(codExpediente);
 	}
 	
+	@WebMethod(operationName = "updateUafValue")
+	@WebResult(name = "updateUafValueVoid")
+	public String updateUafValue(
+			@WebParam(name = "secHojaConsulta", mode = Mode.IN) int secHojaConsulta,
+			@WebParam(name = "uaf", mode = Mode.IN) boolean uaf) {
+		return HOJA_CIERRE_SERVICE
+				.updateUafValue(secHojaConsulta, uaf);
+	}
+	
 	//--------------------------------------------------------------------------------
 }

@@ -2,6 +2,7 @@ package com.sts_ni.estudiocohortecssfv.datos.inicio;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,9 +14,12 @@ import java.util.Map;
 
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaInfluenza;
+import ni.com.sts.estudioCohorteCSSFV.modelo.HojaZika;
 import ni.com.sts.estudioCohorteCSSFV.modelo.InfluenzaMuestra;
 import ni.com.sts.estudioCohorteCSSFV.modelo.MotivoCancelacion;
 import ni.com.sts.estudioCohorteCSSFV.modelo.OrdenLaboratorio;
+import ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoInfluenza;
+import ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoZika;
 import ni.com.sts.estudioCohorteCSSFV.modelo.SerologiaChikMuestra;
 import ni.com.sts.estudioCohorteCSSFV.modelo.SerologiaDengueMuestra;
 
@@ -226,24 +230,61 @@ public class HojaCierreDA implements HojaCierreService {
 	        		verificarCrearHojaInfluenza = true;
 	        	}
 	        }
-	        
-	        if (verificarCrearHojaInfluenza && estudiosParaCrearHI && hojaConsulta.getConsulta().trim().equals("Inicial")) {
-	        	String sql2 = "select hi from HojaInfluenza hi "
-		        		+ " where hi.secHojaConsulta =:secHojaConsulta";
-	        	
-		        Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql2);
-				query2.setParameter("secHojaConsulta", hojaConsulta.getSecHojaConsulta());
-				
-				HojaInfluenza hojaInfluenza = ((HojaInfluenza) query2.uniqueResult());
-				
-				if (hojaInfluenza == null) {
-					//NO PERMITIR CERRAR LA HOJA DE CONSULTA
-					return result = UtilResultado.parserResultado(null, Mensajes.DEBE_CREAR_HOJA_INFLUENZA, 4);
-				}
+	        if (hojaConsulta.getConsulta() != null) { 
+	        	if (verificarCrearHojaInfluenza && estudiosParaCrearHI && hojaConsulta.getConsulta().trim().equals("Inicial")) {
+		        	String sql2 = "select hi from HojaInfluenza hi "
+			        		+ " where hi.secHojaConsulta =:secHojaConsulta";
+		        	
+			        Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql2);
+					query2.setParameter("secHojaConsulta", hojaConsulta.getSecHojaConsulta());
+					
+					HojaInfluenza hojaInfluenza = ((HojaInfluenza) query2.uniqueResult());
+					
+					if (hojaInfluenza == null) {
+						//NO PERMITIR CERRAR LA HOJA DE CONSULTA
+						return result = UtilResultado.parserResultado(null, Mensajes.DEBE_CREAR_HOJA_INFLUENZA, 4);
+					}
+		        }
 	        }
 				
 			//***************************************************************
 	        
+	        //Llamando a la funcion que valida el seguimiento influenza
+	        if (estudiosParaCrearHI) {
+	        	if (!validarIngresoSeguimientoInfluenza(hojaConsulta)) {
+		        	//NO PERMITIR CERRAR LA HOJA DE CONSULTA
+					return result = UtilResultado.parserResultado(null, Mensajes.DEBE_CREAR_SEGUIMIENTO_INFLUENZA, 4);
+		        } 
+	        }
+	        //*****************************************************************
+	        
+	        /* Llamado a la funcion que verifica si el participante pertenece al estudio de dengue
+	         * Fecha Creacion = 14/01/2020 - SC
+	         * */
+	        if (validarEstudioDengue(hojaConsulta)) {
+	        	if (hojaConsulta.getConsulta() != null) {
+	        		/*Se validara la creacion de la hoja de zika y el seguimiento influenza
+	        		 * siempre que isUaf sea "False"*/
+	        		if (!hojaConsulta.isUaf()) {
+	        			if (hojaConsulta.getConsulta().trim().equals("Inicial")) {
+			        		//Llamado a la funcion que valida si se puede crear la hoja de zika
+				        	if (validarCrearHojaZika(hojaConsulta)) {
+				        		if (!validarExisteHojaZika(hojaConsulta)) {
+				        			//NO PERMITIR CERRAR LA HOJA DE CONSULTA
+									return result = UtilResultado.parserResultado(null, Mensajes.DEBE_CREAR_HOJA_ZIKA, 4);
+				        		}
+				        	}
+			        	}
+			        	//Llamando a la funcion que valida el seguimiento zika
+			        	if (!validarIngresoSeguimientoZika(hojaConsulta)) {
+			        		//NO PERMITIR CERRAR LA HOJA DE CONSULTA
+							return result = UtilResultado.parserResultado(null, Mensajes.DEBE_CREAR_SEGUIMIENTO_ZIKA, 4);
+			        	}
+	        		}
+	        	}
+	        	
+	        }
+	        //*****************************************************************
 	        if(UtilHojaConsulta.validarTodasSecciones(hojaConsulta)) {
 	        	
 	        	query = HIBERNATE_RESOURCE.getSession().createQuery(new StringBuffer().append("select o from OrdenLaboratorio o ")
@@ -767,6 +808,215 @@ public class HojaCierreDA implements HojaCierreService {
 		} 
 		return nuevaHoja;
 	}
+	
+	/*
+	 * Metodo para ingresar el seguimiento de la hoja de influenza antes del cierre 
+	 * de la hoja de consulta cuando el tipo de consulta = Seguimiento/Convaleciente
+	 * Fecha Creacion: 07/01/2020 - SC
+	 */
+	private boolean validarIngresoSeguimientoInfluenza(HojaConsulta hojaConsulta) {
+		if (hojaConsulta.getConsulta() != null) {
+			if (hojaConsulta.getConsulta().trim().equals("Seguimiento")
+					|| hojaConsulta.getConsulta().trim().equals("Convaleciente")) {
 
+				String sql = "select h.secHojaConsulta "
+						+ " from HojaConsulta h "
+						+ " where h.codExpediente= :codExpediente " 
+						+ " and h.consulta = 'Inicial' "
+						+ " and h.fechaCierre is not null " 
+						+ " order by h.secHojaConsulta desc ";
 
+				Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+				query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+				query.setMaxResults(1);
+
+				Integer secHojaConsulta = 0;
+				secHojaConsulta = ((Integer) query.uniqueResult()).intValue();
+
+				if (secHojaConsulta > 0) {
+
+					sql = " select hi from HojaInfluenza hi " 
+							+ " where hi.secHojaConsulta =:secHojaConsulta";
+
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("secHojaConsulta", secHojaConsulta);
+
+					HojaInfluenza hojaInfluenza = ((HojaInfluenza) query.uniqueResult());
+
+					if (hojaInfluenza != null) {
+						if (hojaInfluenza.getFechaCierre() == null) {
+							DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+							String strDate = dateFormat.format(hojaConsulta.getFechaConsulta());
+
+							sql = " select a from SeguimientoInfluenza a "
+									+ " where a.secHojaInfluenza =:secHojaInfluenza "
+									+ " and to_char(a.fechaSeguimiento, 'yyyyMMdd') =:fechaSeguimiento)";
+
+							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+							query.setParameter("secHojaInfluenza", hojaInfluenza.getSecHojaInfluenza());
+							query.setParameter("fechaSeguimiento", strDate);
+
+							SeguimientoInfluenza seguimientoInfluenza = ((SeguimientoInfluenza) query.uniqueResult());
+
+							if (seguimientoInfluenza == null) {
+								// NO PERMITIR CERRAR LA HOJA DE CONSULTA
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	/* Metodo para verificar si el participante pertenece al estudio de dengue
+	 * Fecha Creacion: 14/01/2020 - SC 
+	 * */
+	private boolean validarEstudioDengue(HojaConsulta hojaConsulta) {
+		String estudiosP = hojaConsulta.getEstudiosParticipantes();
+        
+        String[] estudiosParticipantes = estudiosP.split(",");
+        
+        for (int i=0; i < estudiosParticipantes.length; i++) {
+        	if (estudiosParticipantes[i].trim().equals("Dengue")) {
+        		return true;
+        	}
+        }
+        return false;
+	}
+	
+	/*
+	 * Metodo para validar la creacion de la hoja de zika antes del cierre 
+	 * Fecha Creacion: 14/01/2020 - SC
+	 */
+	private boolean validarCrearHojaZika(HojaConsulta hojaConsulta) {
+		if (hojaConsulta.getCategoria().trim().equals("D") && hojaConsulta.getFis() != null 
+    			&& hojaConsulta.getSerologiaDengue().toString().compareTo("0") == 0) {
+    		return true;
+    	}
+    	if ((hojaConsulta.getCategoria().trim().equals("A") || hojaConsulta.getCategoria().trim().equals("B")) 
+    			&& hojaConsulta.getFis() != null  && hojaConsulta.getFif() != null 
+    			&& hojaConsulta.getSerologiaDengue().toString().compareTo("0") == 0) {
+    		return true;
+    	}
+		return false;
+	}
+	
+	/*
+	 * Metodo para verificar si existe la hoja de hoja de zika para poder cerrar la hoja de consulta 
+	 * Fecha Creacion: 14/01/2020 - SC
+	 */
+	private boolean validarExisteHojaZika(HojaConsulta hojaConsulta) {
+		String sql2 = "select a from HojaZika a "
+        		+ " where a.secHojaConsulta =:secHojaConsulta";
+    	
+        Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql2);
+		query2.setParameter("secHojaConsulta", hojaConsulta.getSecHojaConsulta());
+		
+		HojaZika hojaZika = ((HojaZika) query2.uniqueResult());
+		
+		if (hojaZika == null) {
+			//NO PERMITIR CERRAR LA HOJA DE CONSULTA
+			return false;
+		}
+		return true;
+	}
+	
+	/*
+	 * Metodo para ingresar el seguimiento de la hoja de zika antes del cierre 
+	 * de la hoja de consulta cuando el tipo de consulta = Seguimiento/Convaleciente
+	 * Fecha Creacion: 14/01/2020 - SC
+	 */
+	private boolean validarIngresoSeguimientoZika(HojaConsulta hojaConsulta) {
+		if (hojaConsulta.getConsulta() != null) {
+			if (hojaConsulta.getConsulta().trim().equals("Seguimiento")
+					|| hojaConsulta.getConsulta().trim().equals("Convaleciente")) {
+
+				String sql = "select h.secHojaConsulta "
+						+ " from HojaConsulta h "
+						+ " where h.codExpediente= :codExpediente " 
+						+ " and h.consulta = 'Inicial' "
+						+ " and h.fechaCierre is not null " 
+						+ " order by h.secHojaConsulta desc ";
+
+				Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+				query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+				query.setMaxResults(1);
+
+				Integer secHojaConsulta = 0;
+				secHojaConsulta = ((Integer) query.uniqueResult()).intValue();
+
+				if (secHojaConsulta > 0) {
+
+					sql = " select a from HojaZika a " 
+							+ " where a.secHojaConsulta =:secHojaConsulta";
+
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("secHojaConsulta", secHojaConsulta);
+
+					HojaZika hojaZika = ((HojaZika) query.uniqueResult());
+
+					if (hojaZika != null) {
+						if (hojaZika.getFechaCierre() == null) {
+							DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+							String strDate = dateFormat.format(hojaConsulta.getFechaConsulta());
+
+							sql = " select a from SeguimientoZika a "
+									+ " where a.secHojaZika =:secHojaZika "
+									+ " and to_char(a.fechaSeguimiento, 'yyyyMMdd') =:fechaSeguimiento)";
+
+							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+							query.setParameter("secHojaZika", hojaZika.getSecHojaZika());
+							query.setParameter("fechaSeguimiento", strDate);
+
+							SeguimientoZika seguimientoZika = ((SeguimientoZika) query.uniqueResult());
+
+							if (seguimientoZika == null) {
+								// NO PERMITIR CERRAR LA HOJA DE CONSULTA
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	/*Metodo para actualizar el valor uaf en la hoja consulta 
+	 * Fecha creacion 16/01/2020 - SC*/
+	@Override
+	public String updateUafValue(int secHojaConsulta, boolean uaf) {
+		String result = null;
+		try {
+			String sql = "select h "
+					+ " from HojaConsulta h "
+					+ " where h.secHojaConsulta= :secHojaConsulta ";
+			
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			query.setParameter("secHojaConsulta", secHojaConsulta);
+			
+			 HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+			 
+			 hojaConsulta.setUaf(uaf);
+			 
+			 HIBERNATE_RESOURCE.begin();
+	         HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
+	         HIBERNATE_RESOURCE.commit();
+			 
+	         result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO + e.getMessage(), UtilResultado.ERROR);
+			HIBERNATE_RESOURCE.rollback();
+			// TODO: handle exception
+		} finally {
+            if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+            	HIBERNATE_RESOURCE.close();
+            }
+        }
+		return result;
+	}
+	
 }

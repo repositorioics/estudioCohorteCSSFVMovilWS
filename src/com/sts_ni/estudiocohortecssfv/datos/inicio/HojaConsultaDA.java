@@ -261,7 +261,12 @@ public class HojaConsultaDA implements HojaConsultaService {
 			if(usuarioMedico != null) {
 				hojaConsulta.setUsuarioMedico(usuarioMedico);
 			}
-			hojaConsulta.setHorasv(horasv);
+			Date date = new Date();
+			DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+			String horasvServer = dateFormat.format(date);
+			
+			hojaConsulta.setHorasv(horasvServer);
+			//hojaConsulta.setHorasv(horasv);
 			
 			hojaConsulta.setEstado('2');
 
@@ -343,7 +348,11 @@ public class HojaConsultaDA implements HojaConsultaService {
 			hojaConsulta.setExpedienteFisico(expedienteFisico);
 			hojaConsulta.setUsuarioEnfermeria(usuarioEnfermeria);
 			hojaConsulta.setEstado('8');
-			hojaConsulta.setHorasv(horasv);
+			Date date = new Date();
+			DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+			String horasvServer = dateFormat.format(date);
+			//hojaConsulta.setHorasv(horasv);
+			hojaConsulta.setHorasv(horasvServer);
 			
 			MotivoCancelacion motivoCancelacion = new MotivoCancelacion();
 			motivoCancelacion.setNumHojaConsulta(secHojaConsulta);
@@ -3527,10 +3536,12 @@ public class HojaConsultaDA implements HojaConsultaService {
 				}
 			}
 			
-			if (serologiaDengue.toString().compareTo("0") == 0 && perteneceEstudioDengue &&
-					(hojaConsulta.getConsulta().trim().equals("Inicial") || hojaConsulta.getConsulta().trim().equals("Seguimiento"))) {
-				ExpedienteDA expedienteDA = new ExpedienteDA();
-				expedienteDA.imprimirFichaEpiSindromesFebrilesPdf(hojaConsulta.getNumHojaConsulta());
+			if (hojaConsulta.getConsulta() != null) {
+				if (serologiaDengue.toString().compareTo("0") == 0 && perteneceEstudioDengue &&
+						(hojaConsulta.getConsulta().trim().equals("Inicial") || hojaConsulta.getConsulta().trim().equals("Seguimiento"))) {
+					ExpedienteDA expedienteDA = new ExpedienteDA();
+					expedienteDA.imprimirFichaEpiSindromesFebrilesPdf(hojaConsulta.getNumHojaConsulta());
+				}
 			}
 			result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
 
@@ -4310,7 +4321,13 @@ public class HojaConsultaDA implements HojaConsultaService {
 				
 				if (!cambioTurno){
 					hojaConsulta.setUsuarioMedico(usuarioMedico);
-					hojaConsulta.setHora(hojaConsultaJSON.get("horaConsulta").toString());
+					
+					Date date = new Date();
+					DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+					String horaConsultaServer = dateFormat.format(date);
+					
+					hojaConsulta.setHora(horaConsultaServer);
+					//hojaConsulta.setHora(hojaConsultaJSON.get("horaConsulta").toString());
 				}
 				else
 				{

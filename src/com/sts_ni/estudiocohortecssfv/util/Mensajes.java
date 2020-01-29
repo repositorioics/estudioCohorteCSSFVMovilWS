@@ -117,4 +117,8 @@ public class Mensajes {
     public static final String ERROR_FECHA_CIERRE = "La fecha cierre no puede ser menor a la fecha de inicio del seguimiento, favor revisar la fecha de su dispositivo";
     public static final String ERROR_GUARDAR_EXAMEN_SEROLOGIA_DENGUE_SIN_FIS = "No se puede enviar un examen de Serologia Dengue al laboratorio, debido a que el paciente no presenta FIS";
     public static final String ERROR_GUARDAR_EXAMEN_SEROLOGIA_DENGUE_REQUERIDO = "Se debe de enviar a realizar el examen de Serologia Dengue, ya que el paciente presenta una FIS";
+    
+    public static final String DEBE_CREAR_SEGUIMIENTO_INFLUENZA = "Para poder cerrar la Hoja de Consulta, debera ingresar el Seguimiento Influenza para el dia de hoy";
+    public static final String DEBE_CREAR_HOJA_ZIKA = "Para poder cerrar la Hoja de Consulta, debera crear la Hoja de Zika";
+    public static final String DEBE_CREAR_SEGUIMIENTO_ZIKA = "Para poder cerrar la Hoja de Consulta, debera ingresar el Seguimiento Zika para el dia de hoy";
 }

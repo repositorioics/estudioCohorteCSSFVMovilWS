@@ -967,32 +967,47 @@ public class SintomasDA implements SintomasService {
 			if(hojaConsulta.getTurno() == null) {
 				hojaConsulta.setTurno(turno.charAt(0));	
 			}
-			hojaConsulta.setTemMedc(BigDecimal.valueOf(temMedc));			
+			hojaConsulta.setTemMedc(BigDecimal.valueOf(temMedc));
+			
 			if(fis != null && !fis.isEmpty()) {
 				hojaConsulta.setFis( fis.trim().length() > 0 ? new SimpleDateFormat("dd/MM/yyyy").parse(fis) : null);
+			} else {
+				hojaConsulta.setFis(null);
 			}
 			if(fif != null && !fif.isEmpty()) {						
 				hojaConsulta.setFif( fif.trim().length() > 0 ? new SimpleDateFormat("dd/MM/yyyy").parse(fif) : null);
+			} else {
+				hojaConsulta.setFif(null);
 			}
 			
 			if(ultDiaFiebre != null) {
 				hojaConsulta.setUltDiaFiebre( ultDiaFiebre.trim().length() > 0 ? new SimpleDateFormat("dd/MM/yyyy").parse(ultDiaFiebre) : null);
+			} else {
+				hojaConsulta.setUltDiaFiebre(null);
 			}
 			
 			if(ultDosisAntipiretico != null) {
 				hojaConsulta.setUltDosisAntipiretico( ultDosisAntipiretico.trim().length() > 0 ? new SimpleDateFormat("dd/MM/yyyy").parse(ultDosisAntipiretico) : null);
+			} else {
+				hojaConsulta.setUltDosisAntipiretico(null);
 			}
 			
 			if(amPmUltDiaFiebre != null) {
 				hojaConsulta.setAmPmUltDiaFiebre( amPmUltDiaFiebre.trim().length() > 0 ? amPmUltDiaFiebre : null);
+			} else {
+				hojaConsulta.setAmPmUltDiaFiebre(null);
 			}
 			
 			if(horaUltDosisAntipiretico != null) {
 				hojaConsulta.setHoraUltDosisAntipiretico( horaUltDosisAntipiretico.trim().length() > 0 ? new SimpleDateFormat("hh:mm").parse(horaUltDosisAntipiretico) : null);
+			} else {
+				hojaConsulta.setHoraUltDosisAntipiretico(null);
 			}
 			
 			if(amPmUltDosisAntipiretico != null) {
 				hojaConsulta.setAmPmUltDosisAntipiretico( amPmUltDosisAntipiretico.trim().length() > 0 ? amPmUltDosisAntipiretico : null);
+			} else {
+				hojaConsulta.setAmPmUltDosisAntipiretico(null);
 			}
 
 			HIBERNATE_RESOURCE.begin();

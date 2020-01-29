@@ -2074,6 +2074,10 @@ public class ExpedienteDA implements ExpedienteService {
 				hojaZika.setCerrado('N');				
 				hojaZika.setFif(FIF);
 				hojaZika.setFis(FIS);
+				/*Se agrego el campo secHojaConsulta para saber a que hoja de consulta pertenece
+				la hoja de zika creada
+				fecha creacion 13/01/2020 - SC*/
+				hojaZika.setSecHojaConsulta(hojaConsulta.getSecHojaConsulta());
 				
 				HIBERNATE_RESOURCE.begin();
 				HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaZika);
@@ -2170,6 +2174,7 @@ public class ExpedienteDA implements ExpedienteService {
 				hojaZika.setFif(hojaZikaJSON.get("fif").toString());
 				hojaZika.setCategoria(hojaZikaJSON.get("categoria").toString());
 				hojaZika.setSintomaInicial1(hojaZikaJSON.get("sintomaInicial1").toString());
+				hojaZika.setSecHojaConsulta(hojaZika.getSecHojaConsulta() != null ? hojaZika.getSecHojaConsulta() : null);
 				
 				if (hojaZikaJSON.get("sintomaInicial2") != null){
 					hojaZika.setSintomaInicial2(hojaZikaJSON.get("sintomaInicial2").toString());

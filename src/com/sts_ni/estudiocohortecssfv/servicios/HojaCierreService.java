@@ -16,4 +16,6 @@ public interface HojaCierreService {
 
 	public String validarSalirHojaConsulta(String paramHojaConsulta);
 
+	public String updateUafValue(int secHojaConsulta, boolean uaf);
+
 }
