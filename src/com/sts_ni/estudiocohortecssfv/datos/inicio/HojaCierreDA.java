@@ -209,10 +209,14 @@ public class HojaCierreDA implements HojaCierreService {
 	        String[] estudiosParticipantes = estudiosP.split(",");
 	        
 	        for (int i=0; i < estudiosParticipantes.length; i++) {
-	        	if (estudiosParticipantes[i].trim().equals("CH Familia") || (estudiosParticipantes[i].trim().equals("Influenza") ||
-	        			(estudiosParticipantes[i].trim().equals("UO1")))) {
+	        	if (estudiosParticipantes[i].trim().equals("CH Familia") || estudiosParticipantes[i].trim().equals("Influenza") || 
+	        			estudiosParticipantes[i].trim().equals("UO1")) {
 	        		estudiosParaCrearHI = true;
 	        	}
+	        	/*if (estudiosParticipantes[i].trim().equals("CH Familia") || (estudiosParticipantes[i].trim().equals("Influenza") ||
+	        			(estudiosParticipantes[i].trim().equals("UO1")))) {
+	        		estudiosParaCrearHI = true;
+	        	}*/
 	        }
 	        
 	        if (hojaConsulta.getEti() != null) {

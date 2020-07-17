@@ -82,6 +82,7 @@ public class Mensajes {
     public static final String NO_PUEDE_CREAR_HOJA_FLU_IRAG="El paciente debe presentar FIS más Irag para crear la hoja de influenza";
     public static final String NO_PUEDE_CREAR_HOJA_FLU_NEUMONIA="El paciente debe presentar FIS más Neumonia para crear la hoja de influenza";
     public static final String NO_PUEDE_CREAR_HOJA_SOLO_FIS="No se puede crear la hoja de influenza solo con FIS";
+    public static final String NO_PUEDE_CREAR_HOJA_FLU_CV="El paciente debe presentar FIS más Covid para crear la hoja de influenza";
     
     public static final String NO_PUEDE_CREAR_HOJA_FLU_ESTUDIO_DENGUE="No se puede crear la hoja de influenza, el participante solo pertenece al estudio Dengue";
     public static final String NO_PUEDE_CREAR_HOJA_ZIKA_ESTUDIO_DENGUE="No se puede crear la hoja de zika, el participante no pertenece al estudio Dengue";
@@ -107,6 +108,7 @@ public class Mensajes {
     public static final String ERROR_GUARDAR_EXAMEN_INFLUENZA = "No se puede enviar un examen de Influenza al laboratorio, debido a que no marco ETI, IRAG o Neumonia";
     public static final String ERROR_GUARDAR_EXAMEN_INFLUENZA_VALORES_NULL = "No se puede enviar un examen de Influenza al laboratorio, debido a que ETI, IRAG o Neumonia no tienen valor";
     public static final String ERROR_GUARDAR_EXAMEN_INFLUENZA_REQUERIDO = "Se debe de enviar a realizar el examen de influenza, ya que el paciente presento una ETI ó IRAG ó Neumonia";
+    public static final String ERROR_GUARDAR_EXAMEN_NO_MARCO_OEL = "Debe de marcar otro examen para poder guardar los examenes";
     
     public static final String ERROR_AL_IMPRIMIR_HOJA_INFLUENZA = "Tiene que cerrar la Hoja de Seguimiento Influenza para poder imprimir";
     public static final String HOJA_INFLUENZA_IMPRESA = "Se envio la Hoja de Seguimiento Influenza a la impresora";
@@ -121,4 +123,9 @@ public class Mensajes {
     public static final String DEBE_CREAR_SEGUIMIENTO_INFLUENZA = "Para poder cerrar la Hoja de Consulta, debera ingresar el Seguimiento Influenza para el dia de hoy";
     public static final String DEBE_CREAR_HOJA_ZIKA = "Para poder cerrar la Hoja de Consulta, debera crear la Hoja de Zika";
     public static final String DEBE_CREAR_SEGUIMIENTO_ZIKA = "Para poder cerrar la Hoja de Consulta, debera ingresar el Seguimiento Zika para el dia de hoy";
+    
+    public static final String PACIENTE_CON_EST_DENGUE_FIF_Y_CATEGORIA_D="Paciente presenta FIF, no puede ser categoria D";
+    
+    public static final String HEMOCONCENTRACION_NO_PUEDE_SER_D="Hemoconcentración no puede ser marcado como D ya que se envio a realizar el Examen de BHC";
+    public static final String BHC_CON_HEMOCONCENTRACION_D="No puede enviar a realizar el examen de BHC debido a que marco hemoconcentración D";
 }

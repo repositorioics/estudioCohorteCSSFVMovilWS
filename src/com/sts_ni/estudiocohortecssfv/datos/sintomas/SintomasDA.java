@@ -694,6 +694,7 @@ public class SintomasDA implements SintomasService {
             fila.put("eti", hojaConsulta.getEti());
             fila.put("irag", hojaConsulta.getIrag());
             fila.put("neumonia", hojaConsulta.getNeumonia());
+            fila.put("cV", hojaConsulta.getCv());
             
             oLista.add(fila);
             
@@ -1000,15 +1001,23 @@ public class SintomasDA implements SintomasService {
 			
 			if(horaUltDosisAntipiretico != null) {
 				hojaConsulta.setHoraUltDosisAntipiretico( horaUltDosisAntipiretico.trim().length() > 0 ? new SimpleDateFormat("hh:mm").parse(horaUltDosisAntipiretico) : null);
+				//String[] output = horaUltDosisAntipiretico.split(" ");
+				String getAMPM = horaUltDosisAntipiretico.substring(6, horaUltDosisAntipiretico.length());
+				if (getAMPM != null) {
+					//String valor1 = output[1].replaceAll(".", "").toUpperCase().trim();
+					hojaConsulta.setAmPmUltDosisAntipiretico(getAMPM);
+				}
+				
 			} else {
 				hojaConsulta.setHoraUltDosisAntipiretico(null);
+				hojaConsulta.setAmPmUltDosisAntipiretico(null);
 			}
 			
-			if(amPmUltDosisAntipiretico != null) {
+			/*if(amPmUltDosisAntipiretico != null) {
 				hojaConsulta.setAmPmUltDosisAntipiretico( amPmUltDosisAntipiretico.trim().length() > 0 ? amPmUltDosisAntipiretico : null);
 			} else {
 				hojaConsulta.setAmPmUltDosisAntipiretico(null);
-			}
+			}*/
 
 			HIBERNATE_RESOURCE.begin();
 			HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
@@ -1107,7 +1116,8 @@ public class SintomasDA implements SintomasService {
 					}
 					// Verificamos si ETI o Neumonia es verdadero en la hoja de consulta y si existe fecha inicio sintomas o fecha inicio fiebre
 					if ((hojaConsulta.getEti() !=  null && hojaConsulta.getEti().compareTo('0') == 0 
-							|| hojaConsulta.getNeumonia() !=  null && hojaConsulta.getNeumonia().compareTo('0') == 0) 
+							|| hojaConsulta.getNeumonia() !=  null && hojaConsulta.getNeumonia().compareTo('0') == 0
+							|| hojaConsulta.getCv() !=  null && hojaConsulta.getCv().compareTo('0') == 0) 
 							&& (hojaConsulta.getFis() != null || hojaConsulta.getFif() != null)) {
 						//Crear la Ficha para ETI
 						String sql = "Select vi "
@@ -1241,7 +1251,8 @@ public class SintomasDA implements SintomasService {
 				
 				// Verificamos si ETI o Neumonia es verdadero en la hoja de consulta y si existe fecha inicio sintomas o fecha inicio fiebre
 				if ((hojaConsulta.getEti() !=  null && hojaConsulta.getEti().compareTo('0') == 0 
-						|| hojaConsulta.getNeumonia() !=  null && hojaConsulta.getNeumonia().compareTo('0') == 0) 
+						|| hojaConsulta.getNeumonia() !=  null && hojaConsulta.getNeumonia().compareTo('0') == 0
+						|| hojaConsulta.getCv() !=  null && hojaConsulta.getCv().compareTo('0') == 0) 
 						&& (hojaConsulta.getFis() != null || hojaConsulta.getFif() != null)) {
 					//Crear la Ficha para ETI
 					String sql = "Select vi "

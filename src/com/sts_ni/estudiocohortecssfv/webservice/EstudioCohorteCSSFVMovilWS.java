@@ -441,9 +441,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	@WebResult(name = "resultadoJSON")
 	public String guardarSeguimientoInfluenza(
 			@WebParam(name = "paramHojaInfluenza", partName = "paramHojaInfluenza", mode = Mode.IN) String paramHojaInfluenza,
-			@WebParam(name = "paramSeguimientoInfluenza", partName = "paramSeguimientoInfluenza", mode = Mode.IN) String paramSeguimientoInfluenza) {
+			@WebParam(name = "paramSeguimientoInfluenza", partName = "paramSeguimientoInfluenza", mode = Mode.IN) String paramSeguimientoInfluenza, 
+			@WebParam(name = "user", partName = "user", mode = Mode.IN) String user) {
 		return EXPEDIENTE_SERVICE.guardarSeguimientoInfluenza(
-				paramHojaInfluenza, paramSeguimientoInfluenza);
+				paramHojaInfluenza, paramSeguimientoInfluenza, user);
 	}
 
 	@WebMethod(operationName = "actualizarEstadoEnConsulta")
@@ -695,9 +696,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	@WebResult(name = "resultadoJSON")
 	public String guardarSeguimientoZika(
 			@WebParam(name = "paramHojaZika", partName = "paramHojaZika", mode = Mode.IN) String paramHojaZika,
-			@WebParam(name = "paramSeguimientoZika", partName = "paramSeguimientoZika", mode = Mode.IN) String paramSeguimientoZika) {
+			@WebParam(name = "paramSeguimientoZika", partName = "paramSeguimientoZika", mode = Mode.IN) String paramSeguimientoZika,
+			@WebParam(name = "user", partName = "user", mode = Mode.IN) String user) {
 		return EXPEDIENTE_SERVICE.guardarSeguimientoZika(
-				paramHojaZika, paramSeguimientoZika);
+				paramHojaZika, paramSeguimientoZika, user);
 	}
 	
 	@WebMethod(operationName = "getSeguimientoZikaPdf")

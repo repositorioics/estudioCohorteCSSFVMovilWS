@@ -1,21 +1,28 @@
 package com.sts.ni.estudiocohortecssfv.datos.diagnostico;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import ni.com.sts.estudioCohorteCSSFV.modelo.ConsEstudios;
 import ni.com.sts.estudioCohorteCSSFV.modelo.Diagnostico;
 import ni.com.sts.estudioCohorteCSSFV.modelo.EscuelaCatalogo;
+import ni.com.sts.estudioCohorteCSSFV.modelo.EstudioCatalogo;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
+import ni.com.sts.estudioCohorteCSSFV.modelo.HojaInfluenza;
+import ni.com.sts.estudioCohorteCSSFV.modelo.SeguimientoInfluenza;
+import ni.com.sts.estudioCohorteCSSFV.modelo.VigilanciaIntegradaIragEti;
 
 import org.hibernate.Query;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.sts_ni.estudiocohortecssfv.datos.controlcambios.ControlCambiosDA;
+import com.sts_ni.estudiocohortecssfv.datos.inicio.ExpedienteDA;
 import com.sts_ni.estudiocohortecssfv.servicios.DiagnosticoService;
 import com.sts_ni.estudiocohortecssfv.util.HibernateResource;
 import com.sts_ni.estudiocohortecssfv.util.Mensajes;
@@ -366,7 +373,7 @@ public class DiagnosticoDA implements DiagnosticoService {
 		String result = null;
 		try {
 			int secHojaConsulta;
-
+			
 			Short diagnostico1;
 			Short diagnostico2;
 			Short diagnostico3;
@@ -417,58 +424,67 @@ public class DiagnosticoDA implements DiagnosticoService {
 				}
 				
 				
-				if(diagnostico2 != null) {
-					if(hojaConsulta.getDiagnostico2().intValue() != diagnostico2.intValue()) {
-						sql = "select d " +
-	                        " from Diagnostico d " +
-	                        " where d.secDiagnostico = :id ";
-					
-						query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-						query.setParameter("id", diagnostico2.intValue());
-					
-						diagnostico = ((Diagnostico) query.uniqueResult());
-						
-						if(diagnostico != null && diagnostico.getDiagnostico() != null){
-							lstDiagnosticos.put(2, diagnostico.getDiagnostico());
-						}
-					}
-				}
-				
-				if(diagnostico3 != null) {
-					if(hojaConsulta.getDiagnostico3().intValue() != diagnostico3.intValue()) {
-						sql = "select d " +
+				if(diagnostico2 != null && diagnostico2 > 0) {
+					if (hojaConsulta.getDiagnostico2() != null) {
+						if(hojaConsulta.getDiagnostico2().intValue() != diagnostico2.intValue()) {
+							sql = "select d " +
 		                        " from Diagnostico d " +
 		                        " where d.secDiagnostico = :id ";
 						
-						query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-						query.setParameter("id", diagnostico3.intValue());
+							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+							query.setParameter("id", diagnostico2.intValue());
 						
-						diagnostico = ((Diagnostico) query.uniqueResult());
-						
-						if(diagnostico != null && diagnostico.getDiagnostico() != null){
-							lstDiagnosticos.put(3, diagnostico.getDiagnostico());
+							diagnostico = ((Diagnostico) query.uniqueResult());
+							
+							if(diagnostico != null && diagnostico.getDiagnostico() != null){
+								lstDiagnosticos.put(2, diagnostico.getDiagnostico());
+							}
 						}
 					}
+					
 				}
 				
-				if(diagnostico4 != null) {
-					if(hojaConsulta.getDiagnostico4().intValue() != diagnostico4.intValue()) {
-						sql = "select d " +
-		                        " from Diagnostico d " +
-		                        " where d.secDiagnostico = :id ";
-						
-						query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-						query.setParameter("id", diagnostico4.intValue());
-						
-						diagnostico = ((Diagnostico) query.uniqueResult());
-						
-						if(diagnostico != null && diagnostico.getDiagnostico() != null){
-							lstDiagnosticos.put(4, diagnostico.getDiagnostico());
+				if(diagnostico3 != null && diagnostico3 > 0) {
+					if (hojaConsulta.getDiagnostico3() != null) {
+						if(hojaConsulta.getDiagnostico3().intValue() != diagnostico3.intValue()) {
+							sql = "select d " +
+			                        " from Diagnostico d " +
+			                        " where d.secDiagnostico = :id ";
+							
+							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+							query.setParameter("id", diagnostico3.intValue());
+							
+							diagnostico = ((Diagnostico) query.uniqueResult());
+							
+							if(diagnostico != null && diagnostico.getDiagnostico() != null){
+								lstDiagnosticos.put(3, diagnostico.getDiagnostico());
+							}
 						}
 					}
+					
 				}
 				
-				if(otroDiagnostico != null) {
+				if(diagnostico4 != null && diagnostico4 > 0) {
+					if (hojaConsulta.getDiagnostico4() != null) {
+						if(hojaConsulta.getDiagnostico4().intValue() != diagnostico4.intValue()) {
+							sql = "select d " +
+			                        " from Diagnostico d " +
+			                        " where d.secDiagnostico = :id ";
+							
+							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+							query.setParameter("id", diagnostico4.intValue());
+							
+							diagnostico = ((Diagnostico) query.uniqueResult());
+							
+							if(diagnostico != null && diagnostico.getDiagnostico() != null){
+								lstDiagnosticos.put(4, diagnostico.getDiagnostico());
+							}
+						}
+					}
+					
+				}
+				
+				if(otroDiagnostico != null && otroDiagnostico.length() > 0) {
 					if(hojaConsulta.getOtroDiagnostico().compareTo(otroDiagnostico) != 0) {
 						lstDiagnosticos.put(5, otroDiagnostico);
 					}
@@ -479,6 +495,55 @@ public class DiagnosticoDA implements DiagnosticoService {
 				ctrlCambiosDA.guardarCtrlDiagnosticoHC(hojaConsulta, lstDiagnosticos, 
 						usuarioLogiado);
 			}
+			
+			/* Llamando al metodo para crear la hoja de influenza
+			 * 08/06/2020 - SC
+			 * Si el diagnostico es SCV
+			 * */
+			if ((diagnostico1 == 101 || diagnostico2 == 101 || diagnostico3 == 101 || diagnostico4 == 101) 
+					&& hojaConsulta.getCv().toString().compareTo("0") == 0) {
+				
+				/*Verificamos si existe una hoja de influenza para el paciente seleccionado*/
+				
+				String sql2 = "Select h "
+						+ " from HojaInfluenza h "
+						+ " where h.secHojaConsulta = :secHojaConsulta";
+								
+				Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql2);
+				query2.setParameter("secHojaConsulta", hojaConsulta.getSecHojaConsulta());
+
+				HojaInfluenza hojaInfluenza = ((HojaInfluenza) query2.uniqueResult());
+
+				/*Verificamos que la hoja de influenza no exista*/
+				
+				if (hojaInfluenza == null) {
+					JSONObject json = new JSONObject();
+					json.put("codExpediente", hojaConsulta.getCodExpediente());
+					String valor = crearSeguimientoInfluenza(json.toString());
+					if (!valor.equals("OK")) {
+						return UtilResultado.parserResultado(null, valor,
+								UtilResultado.INFO);
+					}
+				}
+				
+				/*Metodo para crear la ficja epidemiologica de forma automatica*/
+				
+				String sql3 = "Select vi from VigilanciaIntegradaIragEti vi "
+						+ " where vi.secHojaConsulta = :secHojaConsulta";
+
+				Query query3 = HIBERNATE_RESOURCE.getSession().createQuery(sql3);
+				query3.setParameter("secHojaConsulta", hojaConsulta.getSecHojaConsulta());
+
+				VigilanciaIntegradaIragEti vigilanciaIntegrada = ((VigilanciaIntegradaIragEti) query3.uniqueResult());
+				if (vigilanciaIntegrada == null) {
+					String crearFicha = crearFichaEpidemiologica(hojaConsulta);
+					if (!crearFicha.equals("OK")) {
+						return UtilResultado.parserResultado(null, crearFicha,
+								UtilResultado.INFO);
+					}
+				}
+			}
+			/*++++++++++++++++++++*/
 			
 			hojaConsulta.setSecHojaConsulta(secHojaConsulta);
 			hojaConsulta.setDiagnostico1(diagnostico1);
@@ -758,6 +823,270 @@ public class DiagnosticoDA implements DiagnosticoService {
 			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
 				HIBERNATE_RESOURCE.close();
 			}
+		}
+		return result;
+	}
+	
+	public String crearSeguimientoInfluenza(String paramCrearHoja) {
+		String result = null;
+		try {
+
+			int codExpediente;
+			int secHojaConsulta;
+			String sql;
+			Query query;
+			HojaInfluenza hojaInfluenza;
+			SeguimientoInfluenza seguimientoInfluenza;
+			Boolean tieneEstDengue = false;
+			
+			JSONParser parser = new JSONParser();
+			Object obj = (Object) parser.parse(paramCrearHoja);
+			JSONObject crearHojaJson = (JSONObject) obj;
+
+			codExpediente = (((Number) crearHojaJson.get("codExpediente"))
+					.intValue());
+			
+			//obtenemos la ultima hoja de consulta para el código de expediente
+			sql = "select h from HojaConsulta h " +
+				 " where h.codExpediente = :codExpediente order by h.secHojaConsulta desc ";
+
+			query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			query.setParameter("codExpediente", codExpediente);
+			query.setMaxResults(1);
+			
+			HojaConsulta hojaConsulta = (HojaConsulta) query.uniqueResult();
+			
+			if (hojaConsulta == null) {
+				result = UtilResultado.parserResultado(null, Mensajes.NO_EXISTE_HC_CODEXP, UtilResultado.INFO);
+
+			} else {
+				
+				//Retornamos mensaje si el particpante solo pertenece al estudio de dengue
+				sql = "select ec from ConsEstudios c, EstudioCatalogo ec " + 
+						" where c.codigoConsentimiento = ec.codEstudio"  + 
+						" and c.codigoExpediente = :codExpediente " + 
+						" and c.retirado != '1' " +
+						" group by ec.codEstudio, ec.descEstudio";
+				
+				query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+				query.setParameter("codExpediente", codExpediente);
+
+				List<EstudioCatalogo> lstConsEstudios = (List<EstudioCatalogo>) query.list();
+				
+				// Si lstConsEstudios solo tiene un estudio y este es dengue retornamos mensaje
+				if (lstConsEstudios != null && lstConsEstudios.size() <= 1) {
+					for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
+						if (estudioCatalogo.getDescEstudio().trim().equals("Dengue")) {
+							return Mensajes.NO_PUEDE_CREAR_HOJA_FLU_ESTUDIO_DENGUE;
+						}
+					}
+				} 
+				/* Verificando que todos los campos requeridos para crear la hoja de influenza no esten vacios(null) o falso(1).
+				 * Si no se cumple la condición retornamos aviso*/
+				if (hojaConsulta.getFif() == null && hojaConsulta.getFis() == null
+						&& (hojaConsulta.getEti() == null || hojaConsulta.getEti().toString().compareTo("0") != 0)
+						&& (hojaConsulta.getIrag() == null || hojaConsulta.getIrag().toString().compareTo("0") != 0)
+						&& (hojaConsulta.getNeumonia() == null || hojaConsulta.getNeumonia().toString().compareTo("0") != 0) 
+						&& (hojaConsulta.getCv() == null || hojaConsulta.getCv().toString().compareTo("0") != 0)) {
+					return Mensajes.NO_PUEDE_CREAR_HOJA_FLU;
+				}
+				// Si la FIF y FIS estan sin datos(null) y ETI es 0 entoces retornamos aviso
+				if ((hojaConsulta.getFif() == null && hojaConsulta.getFis() == null)
+						&& hojaConsulta.getEti().toString().compareTo("0") == 0) {
+					return Mensajes.NO_PUEDE_CREAR_HOJA_FLU_ETI;
+				}
+				// Si la FIF y FIS estan sin datos(null) y IRAG es 0 entoces retornamos aviso
+				if ((hojaConsulta.getFif() == null && hojaConsulta.getFis() == null)
+						&& hojaConsulta.getIrag().toString().compareTo("0") == 0) {
+					return Mensajes.NO_PUEDE_CREAR_HOJA_FLU_IRAG;
+				}
+				// Si la FIF y FIS estan sin datos(null) y Neumonia es 0 entoces retornamos aviso
+				if ((hojaConsulta.getFif() == null && hojaConsulta.getFis() == null)
+						&& hojaConsulta.getNeumonia().toString().compareTo("0") == 0) {
+					return Mensajes.NO_PUEDE_CREAR_HOJA_FLU_NEUMONIA;
+				}
+				// Si la FIF y FIS estan sin datos(null) y Cv es 0 entoces retornamos aviso
+				if ((hojaConsulta.getFif() == null && hojaConsulta.getFis() == null)
+						&& hojaConsulta.getCv().toString().compareTo("0") == 0) {
+					return Mensajes.NO_PUEDE_CREAR_HOJA_FLU_CV;
+				}
+				// Si existe solo la FIS y los valores de eti, irag y neumonia son iguales a 1 entoces retornamos aviso
+				if ((hojaConsulta.getFis() != null && hojaConsulta.getFif() == null
+						 && (hojaConsulta.getEti() == null || hojaConsulta.getEti().toString().compareTo("0") != 0) 
+						 && (hojaConsulta.getIrag() == null || hojaConsulta.getIrag().toString().compareTo("0") != 0)
+						 && (hojaConsulta.getNeumonia() == null || hojaConsulta.getNeumonia().toString().compareTo("0") != 0)
+						 && (hojaConsulta.getCv() == null || hojaConsulta.getCv().toString().compareTo("0") != 0))) {
+					return Mensajes.NO_PUEDE_CREAR_HOJA_SOLO_FIS;
+				}
+				// verificando si tiene hojas abiertas
+				sql = "select count(*) from hoja_influenza where cerrado = 'N' and cod_expediente = :codExpediente";
+				query = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
+				query.setParameter("codExpediente", codExpediente);
+				
+				BigInteger totalActivos = (BigInteger) query.uniqueResult();
+				
+				// Si tiene uno o mas activos retornamos aviso
+				if (totalActivos.intValue() > 0) {
+					return Mensajes.HOJA_INF_NO_CERRADA;
+				}			
+				
+				String FIF, FIS, NUEVAFIF;
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				FIF = hojaConsulta.getFif() != null ? sdf.format(hojaConsulta.getFif()) : "";
+				FIS = hojaConsulta.getFis() != null ? sdf.format(hojaConsulta.getFis()) : "";
+				NUEVAFIF = hojaConsulta.getNuevaFif() != null ? sdf.format(hojaConsulta.getNuevaFif()) : "";
+			
+				sql = "select max(h.numHojaSeguimiento) "
+						+ " from HojaInfluenza h ";
+	
+				query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+	
+				Integer maxNumHojaSeguimiento = (query.uniqueResult() == null) ? 1 : 
+					((Integer) query.uniqueResult()).intValue() + 1;
+				
+			    Date fechaInicio = new Date();
+				
+				hojaInfluenza = new HojaInfluenza();
+				secHojaConsulta = hojaConsulta.getSecHojaConsulta();
+				hojaInfluenza.setSecHojaConsulta(secHojaConsulta);//Nuevo Cambio
+				hojaInfluenza.setNumHojaSeguimiento(maxNumHojaSeguimiento);
+				hojaInfluenza.setCodExpediente(codExpediente);
+				hojaInfluenza.setFechaInicio(fechaInicio);
+				hojaInfluenza.setCerrado('N');
+				// Si existe nueva fecha inicio de fiebre se guarda la NUEVAFIF
+				if (NUEVAFIF != null && NUEVAFIF != "") {
+					hojaInfluenza.setFif(NUEVAFIF);
+				} else { // Se guarda la FIF
+					hojaInfluenza.setFif(FIF);
+				}
+				hojaInfluenza.setFis(FIS);
+				
+				HIBERNATE_RESOURCE.begin();
+				HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaInfluenza);
+				HIBERNATE_RESOURCE.commit();
+
+				result = "OK";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = Mensajes.ERROR_NO_CONTROLADO;
+			HIBERNATE_RESOURCE.rollback();
+			// TODO: handle exception
+		}
+		return result;
+	}
+	
+	public String crearFichaEpidemiologica(HojaConsulta hojaConsulta) {
+		String sql;
+		Query query;
+		String result = null;
+		boolean crearFicha = false;
+		try {
+			// Verificamos si ETI o Neumonia es verdadero en la hoja de consulta y si existe
+			// fecha inicio sintomas o fecha inicio fiebre
+			if ((hojaConsulta.getEti() != null && hojaConsulta.getEti().compareTo('0') == 0
+					|| hojaConsulta.getNeumonia() != null && hojaConsulta.getNeumonia().compareTo('0') == 0
+					|| hojaConsulta.getCv() != null && hojaConsulta.getCv().compareTo('0') == 0)
+					&& (hojaConsulta.getFis() != null || hojaConsulta.getFif() != null)) {
+				
+				// obteniendo los estudios a los que pertenece el participante
+				sql = "select ec from ConsEstudios c, EstudioCatalogo ec "
+						+ " where c.codigoConsentimiento = ec.codEstudio "
+						+ " and c.codigoExpediente = :codExpediente "
+						+ " and c.retirado != '1' group by ec.codEstudio, ec.descEstudio";
+
+				query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+				query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+
+				List<EstudioCatalogo> lstConsEstudios = (List<EstudioCatalogo>) query.list();
+
+				for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
+					if (estudioCatalogo.getDescEstudio().equals("Influenza")
+							|| estudioCatalogo.getDescEstudio().equals("CH Familia")
+							|| estudioCatalogo.getDescEstudio().equals("Influenza UO1")
+							|| estudioCatalogo.getDescEstudio().equals("UO1")) {
+						crearFicha = true;
+					}
+				}
+
+				// Se crea la ficha si el participante pertenece a los estudios de Influeza y CH
+				// Familia
+				if (crearFicha) {
+					VigilanciaIntegradaIragEti vigilanciaIntegradaResult = new VigilanciaIntegradaIragEti();
+					vigilanciaIntegradaResult.setSecHojaConsulta(hojaConsulta.getSecHojaConsulta());
+					vigilanciaIntegradaResult.setCodExpediente(hojaConsulta.getCodExpediente());
+					vigilanciaIntegradaResult.setNumHojaConsulta(hojaConsulta.getNumHojaConsulta());
+					vigilanciaIntegradaResult.setEti('0'); // TRUE
+					vigilanciaIntegradaResult.setIrag('1'); // FALSE
+					vigilanciaIntegradaResult.setIragInusitada('1'); // FALSE
+					vigilanciaIntegradaResult.setFechaCreacion(new Date());
+					vigilanciaIntegradaResult.setUsuarioMedico(hojaConsulta.getUsuarioMedico());
+					crearFicha = false;
+					HIBERNATE_RESOURCE.begin();
+					HIBERNATE_RESOURCE.getSession().saveOrUpdate(vigilanciaIntegradaResult);
+					HIBERNATE_RESOURCE.commit();
+
+					result = "OK";
+				} else {
+					result = "No ha marcado Eti ó Neumonia ó No a ingresado la FIS, Favor verificar";
+				}
+			} else {
+				// Verificamos si IRAG en la hoja de consulta es verdadero y si existe fecha
+				// inicio sintomas o fecha inicio fiebre
+				if (hojaConsulta.getIrag() != null && hojaConsulta.getIrag().compareTo('0') == 0
+						&& (hojaConsulta.getFis() != null || hojaConsulta.getFif() != null)) {
+
+					// obteniendo los estudios a los que pertenece el participante
+					sql = "select ec from ConsEstudios c, EstudioCatalogo ec "
+							+ " where c.codigoConsentimiento = ec.codEstudio "
+							+ " and c.codigoExpediente = :codExpediente "
+							+ " and c.retirado != '1' group by ec.codEstudio, ec.descEstudio";
+
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+					query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+
+					List<EstudioCatalogo> lstConsEstudios = (List<EstudioCatalogo>) query.list();
+
+					for (EstudioCatalogo estudioCatalogo : lstConsEstudios) {
+						if (estudioCatalogo.getDescEstudio().equals("Influenza")
+								|| estudioCatalogo.getDescEstudio().equals("CH Familia")
+								|| estudioCatalogo.getDescEstudio().equals("Influenza UO1")
+								|| estudioCatalogo.getDescEstudio().equals("UO1")) {
+							crearFicha = true;
+						}
+					}
+
+					// Se crea la ficha si el participante pertenece a los estudios de Influeza y CH
+					// Familia
+					if (crearFicha) {
+						VigilanciaIntegradaIragEti vigilanciaIntegradaResult = new VigilanciaIntegradaIragEti();
+						vigilanciaIntegradaResult.setSecHojaConsulta(hojaConsulta.getSecHojaConsulta());
+						vigilanciaIntegradaResult.setCodExpediente(hojaConsulta.getCodExpediente());
+						vigilanciaIntegradaResult.setNumHojaConsulta(hojaConsulta.getNumHojaConsulta());
+						vigilanciaIntegradaResult.setEti('1'); // FALSE
+						vigilanciaIntegradaResult.setIrag('0'); // TRUE
+						vigilanciaIntegradaResult.setIragInusitada('1'); // FALSE
+						vigilanciaIntegradaResult.setFechaCreacion(new Date());
+						vigilanciaIntegradaResult.setUsuarioMedico(hojaConsulta.getUsuarioMedico());
+						crearFicha = false;
+						HIBERNATE_RESOURCE.begin();
+						HIBERNATE_RESOURCE.getSession().saveOrUpdate(vigilanciaIntegradaResult);
+						HIBERNATE_RESOURCE.commit();
+
+						result = "OK";
+					} else {
+						result = "No ha marcado IRAG ó No a ingresado la FIS, Favor verificar";
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = Mensajes.ERROR_NO_CONTROLADO;
+			HIBERNATE_RESOURCE.rollback();
+			// TODO: handle exception
 		}
 		return result;
 	}

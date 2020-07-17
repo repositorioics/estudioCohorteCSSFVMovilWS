@@ -18,6 +18,7 @@ import ni.com.sts.estudioCohorteCSSFV.modelo.EghResultados;
 import ni.com.sts.estudioCohorteCSSFV.modelo.EgoResultados;
 import ni.com.sts.estudioCohorteCSSFV.modelo.EstudioCatalogo;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
+import ni.com.sts.estudioCohorteCSSFV.modelo.HorarioAtencion;
 import ni.com.sts.estudioCohorteCSSFV.modelo.InfluenzaMuestra;
 import ni.com.sts.estudioCohorteCSSFV.modelo.MalariaResultados;
 import ni.com.sts.estudioCohorteCSSFV.modelo.MotivoCancelacion;
@@ -2162,6 +2163,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 			Character eti;
 			Character irag;
 			Character neumonia;
+			Character cV;
 			String usuarioLogiado;
 
 			JSONParser parser = new JSONParser();
@@ -2183,6 +2185,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 			eti = (hojaConsultaJSON.get("eti").toString().charAt(0));
 			irag = (hojaConsultaJSON.get("irag").toString().charAt(0));
 			neumonia = (hojaConsultaJSON.get("neumonia").toString().charAt(0));
+			cV = (hojaConsultaJSON.get("cV").toString().charAt(0));
 			
 			usuarioLogiado = (hojaConsultaJSON.get("usuarioLogiado").toString());
 
@@ -2202,6 +2205,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 				hcNueva.setEti(eti);
 				hcNueva.setIrag(irag);
 				hcNueva.setNeumonia(neumonia);
+				hcNueva.setNeumonia(cV);
 				
 				ControlCambiosDA ctrlCambiosDA = new ControlCambiosDA();
 				ctrlCambiosDA.guardarCtrlReferencia(hojaConsulta, hcNueva, usuarioLogiado);
@@ -2215,6 +2219,17 @@ public class HojaConsultaDA implements HojaConsultaService {
 			hojaConsulta.setEti(eti);
 			hojaConsulta.setIrag(irag);
 			hojaConsulta.setNeumonia(neumonia);
+			hojaConsulta.setCv(cV);
+			
+			if (cV.toString().compareTo("0") == 0) {
+				hojaConsulta.setOel('0');
+				hojaConsulta.setOtroExamenLab("HCV");
+				hojaConsulta.setDiagnostico2((short) 101);
+			} else {
+				hojaConsulta.setOel('1');
+				hojaConsulta.setOtroExamenLab(null);
+				hojaConsulta.setDiagnostico2(null);
+			}
 
 			HIBERNATE_RESOURCE.begin();
 			HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
@@ -2529,12 +2544,25 @@ public class HojaConsultaDA implements HojaConsultaService {
 					result = UtilResultado.parserResultado(null, Mensajes.PACIENTE_NO_PUEDE_SER_CATEGORIA_NA, UtilResultado.ERROR);
 					return result;
 				}
+				if (perteneceEstDengue && categoria.trim().equals("D") && hojaConsulta.getFif() != null ) {
+					result = UtilResultado.parserResultado(null, Mensajes.PACIENTE_CON_EST_DENGUE_FIF_Y_CATEGORIA_D, UtilResultado.ERROR);
+					return result;
+				}
 				if ((!perteneceEstDengue && categoria.trim().equals("A")) || 
 						(!perteneceEstDengue && categoria.trim().equals("B")) ||
 						(!perteneceEstDengue && categoria.trim().equals("C")) ||
 						(!perteneceEstDengue && categoria.trim().equals("D"))) {
 					result = UtilResultado.parserResultado(null, Mensajes.PACIENTE_NO_PUEDE_SER_CATEGORIA_ABCD, UtilResultado.ERROR);
 					return result;
+				}
+			}
+			
+			if (hojaConsulta.getBhc() != null) {
+				if (hojaConsulta.getBhc().toString().compareTo("0") == 0) {
+					if (hemoconc == '2') {
+						result = UtilResultado.parserResultado(null, Mensajes.HEMOCONCENTRACION_NO_PUEDE_SER_D, UtilResultado.ERROR);
+						return result;
+					}
 				}
 			}
 			
@@ -2772,7 +2800,8 @@ public class HojaConsultaDA implements HojaConsultaService {
 					" h.tallaCm, h.temperaturac, " + 
 					" to_char(p.fechaNac, 'yyyyMMdd'), " + 
 					" to_char(h.fechaConsulta, 'yyyyMMdd HH:MI:SS am'), " +
-					" h.hora, h.consulta " +
+					" h.hora, h.categoria, h.fif, h.consulta, h.temMedc, " +
+					" h.eritrocitos " +
 					" from HojaConsulta h, Paciente p "
 					+ " where h.codExpediente = p.codExpediente "
 					+ " and h.secHojaConsulta = :secHojaConsulta ";
@@ -2820,7 +2849,12 @@ public class HojaConsultaDA implements HojaConsultaService {
 				fila.put("fechaNacimiento", hojaConsultaPaciente[6]);
 				fila.put("fechaConsulta", hojaConsultaPaciente[7]);
 				fila.put("horaConsulta", hojaConsultaPaciente[8]);
-				fila.put("consulta", hojaConsultaPaciente[9] != null ? hojaConsultaPaciente[9] : "");
+				/*Nuevo campo agregado fecha creacion = 13/12/2019 - SC*/
+				fila.put("categoria", hojaConsultaPaciente[9]);
+				fila.put("fif", hojaConsultaPaciente[10] != null ? hojaConsultaPaciente[10].toString() : null);
+				fila.put("consulta", hojaConsultaPaciente[11] != null ? hojaConsultaPaciente[11] : null);
+				fila.put("temMedc", hojaConsultaPaciente[12] != null ? hojaConsultaPaciente[12].toString() : null);
+				fila.put("eritrocitos", hojaConsultaPaciente[13] != null ? hojaConsultaPaciente[13].toString() : "");
 
 				oLista.add(fila);
 
@@ -2996,6 +3030,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 				}
 			}
 			
+			
 			/*Validacion para las serologias de dengue 10/12/2019 -- SC*/
 			/*String[] estudiosP = hojaConsulta.getEstudiosParticipantes().split(",");
 			for(int i=0; i < estudiosP.length; i++) {
@@ -3009,6 +3044,15 @@ public class HojaConsultaDA implements HojaConsultaService {
 			if (hojaConsulta.getFis() != null && serologiaDengue.toString().compareTo("0") != 0 && perteneceEstudioDengue) {
 				return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_EXAMEN_SEROLOGIA_DENGUE_REQUERIDO, UtilResultado.ERROR);
 			}*/
+			
+			if (hojaConsulta.getHemoconc() != null) {
+				if (hojaConsulta.getHemoconc() == '2') {
+					if (bhc == '0') {
+						return result = UtilResultado.parserResultado(null, Mensajes.BHC_CON_HEMOCONCENTRACION_D, UtilResultado.ERROR);
+					}
+				}
+			}
+			
 			
 			//Guardar control de cambios
 			if(validarTodoExamenMaracdo(hojaConsulta)){
@@ -3386,6 +3430,14 @@ public class HojaConsultaDA implements HojaConsultaService {
 				}
 				// hojaConsulta.setOtroExamenLab(otroExamenLab);
 				
+				/*Validacion para verificar si viene marcado otro examen laboratorio,
+				 * si viene marcado y este es no entonces limpia el texto de otro examen laboratorio*/
+				if (hojaConsulta.getOel() != null) {
+					if (hojaConsulta.getOel().toString().compareTo("0") != 0) {
+						hojaConsulta.setOtroExamenLab(null);
+					}
+				}
+				
 				hojaConsulta.setEstado('4');
 
 				HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
@@ -3423,6 +3475,15 @@ public class HojaConsultaDA implements HojaConsultaService {
 				} else {
 					hojaConsulta.setUsuarioMedico(usuarioMedico);
 				}
+				
+				/*Validacion para verificar si viene marcado otro examen laboratorio,
+				 * si viene marcado y este es no entonces limpia el texto de otro examen laboratorio*/
+				if (hojaConsulta.getOel() != null) {
+					if (hojaConsulta.getOel().toString().compareTo("0") != 0) {
+						hojaConsulta.setOtroExamenLab(null);
+					}
+				}
+				
 				// hojaConsulta.setOtroExamenLab(otroExamenLab);
 				hojaConsulta.setEstado('4');
 
@@ -4212,8 +4273,13 @@ public class HojaConsultaDA implements HojaConsultaService {
 
 			HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
 
+			if (hojaConsulta.getOel().toString().compareTo("0") == 0) {
+				hojaConsulta.setOtroExamenLab(otroExamenLab.toUpperCase());//se agrego el upper case para que los datos vallan en mayuscula
+			} else {
+				hojaConsulta.setOtroExamenLab(null);
+			}
 			// hojaConsulta.setSecHojaConsulta(secHojaConsulta);
-			hojaConsulta.setOtroExamenLab(otroExamenLab);
+			//hojaConsulta.setOtroExamenLab(otroExamenLab);
 
 			HIBERNATE_RESOURCE.begin();
 			HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
@@ -4325,9 +4391,28 @@ public class HojaConsultaDA implements HojaConsultaService {
 					Date date = new Date();
 					DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
 					String horaConsultaServer = dateFormat.format(date);
-					
-					hojaConsulta.setHora(horaConsultaServer);
+					if(!UtilHojaConsulta.validarSeccionesParaCambiarHoraConsulta(hojaConsulta)) {
+						hojaConsulta.setHora(horaConsultaServer);
+					}
 					//hojaConsulta.setHora(hojaConsultaJSON.get("horaConsulta").toString());
+					
+					/* Validacion para marcar el turno*/
+					if (hojaConsulta.getTurno() == null) {
+						
+						Calendar hoy = Calendar.getInstance();
+						
+						String sql = "select ha " +
+		                         "from HorarioAtencion ha " +
+		                         "where cast( ha.dia as integer) = :diaSemana " +
+		                         "and to_char(current_timestamp, 'HH24:MI') " +
+		                         "between to_char(ha.horaInicio, 'HH24:MI') and to_char(ha.horaFin, 'HH24:MI')";
+						
+						Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql)
+								.setParameter("diaSemana", hoy.get(Calendar.DAY_OF_WEEK));
+						
+						HorarioAtencion horarioAtencion = ((HorarioAtencion) query2.uniqueResult());
+						hojaConsulta.setTurno(horarioAtencion.getTurno());
+					}
 				}
 				else
 				{

@@ -660,6 +660,20 @@ public class UtilHojaConsulta {
 		SimpleDateFormat sdf = new SimpleDateFormat(formato);
 		return sdf.format(fecha);
 	}
+	
+	public static boolean validarSeccionesParaCambiarHoraConsulta(HojaConsulta hojaConsulta) {
+		return generalesCompletada(hojaConsulta) || estadoGeneralCompletada(hojaConsulta) || 
+				gastrointestinalCompletada(hojaConsulta) || osteomuscularCompletada(hojaConsulta) ||
+				cabezaCompletada(hojaConsulta) || deshidratacionCompletada(hojaConsulta) ||
+				cutaneoCompletada(hojaConsulta) || gargantaCompletada(hojaConsulta) ||
+				renalCompletada(hojaConsulta) || estadoNutricionalCompletada(hojaConsulta) || 
+				respiratorioCompletada(hojaConsulta) || referenciaCompletada(hojaConsulta) ||
+				vacunaCompletada(hojaConsulta) || historialExamenCompletada(hojaConsulta) ||
+				tratamientoPlanesCompletada(hojaConsulta) || diagnosticoCompletada(hojaConsulta) ||
+				proximaCitaCompletada(hojaConsulta)
+				//Nueva Linea de codigo agregada
+				&& categoriaCompletada(hojaConsulta);
+	}
 
 	/*public static Date StringToDate(String fecha, String formato) throws ParseException{
 		SimpleDateFormat sdf = new SimpleDateFormat(formato);

@@ -85,13 +85,20 @@ public class UtilitarioReporte  {
     public static byte[] getMostrarReporte( String nombreReporte,
             Map<String, Object> parametros, List<?> collectionDataSource,
             boolean indicarDirSubReport, boolean multipleReporte, HojaConsulta datosAdicionales) {
-        
+        	boolean isFlu = false;
     	try{
     		
     		 // Construir la URL donde se encuentran los reportes.
             String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + (nombreReporte.contains(".jasper")?nombreReporte:nombreReporte + ".jasper");
             String pathPag2 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"2").contains(".jasper")?(nombreReporte+"2"):(nombreReporte+"2") + ".jasper");
-                        
+            String pathPagFlu3 = "";
+            String pathPagFlu4 = "";
+            if (nombreReporte.equals("rptSeguimientoInfluenza")) {
+            	isFlu = true;
+            	pathPagFlu3 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"3").contains(".jasper")?(nombreReporte+"3"):(nombreReporte+"3") + ".jasper");
+                pathPagFlu4 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"4").contains(".jasper")?(nombreReporte+"4"):(nombreReporte+"4") + ".jasper");
+            }
+                
             path = path.replace('/', System.getProperty("file.separator").charAt(0));
 
                         
@@ -110,6 +117,12 @@ public class UtilitarioReporte  {
             if (multipleReporte){
 	            JasperPrint fileAnexo = JasperFillManager.fillReport(pathPag2, parametros, new JRBeanCollectionDataSource(collectionDataSource));
 	            report.addPage(fileAnexo.removePage( 0 ));
+	            if (isFlu) {
+	            	JasperPrint fileAnexoFlu3 = JasperFillManager.fillReport(pathPagFlu3, parametros, new JRBeanCollectionDataSource(collectionDataSource));
+		            JasperPrint fileAnexoFlu4 = JasperFillManager.fillReport(pathPagFlu4, parametros, new JRBeanCollectionDataSource(collectionDataSource));
+		            report.addPage(fileAnexoFlu3.removePage( 0 ));
+		            report.addPage(fileAnexoFlu4.removePage( 0 ));
+	            }
 	            
 	            if(datosAdicionales != null){
 	            	HashMap params = new HashMap(); 
