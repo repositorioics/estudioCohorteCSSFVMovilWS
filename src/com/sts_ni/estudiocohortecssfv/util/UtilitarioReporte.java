@@ -67,9 +67,10 @@ public class UtilitarioReporte  {
      * @param collectionDataSource Colección de DataSources para el reporte.
      */
      public static byte[] mostrarReporte( String nombreReporte,
-             Map<String, Object> parametros, List<?> collectionDataSource, boolean multipleReporte, HojaConsulta datosAdicionales) {
+             Map<String, Object> parametros, List<?> collectionDataSource, boolean multipleReporte, HojaConsulta datosAdicionales, 
+             boolean tieneSeguimientoQuinceDias) {
 
-        return getMostrarReporte( nombreReporte, parametros, collectionDataSource, false,multipleReporte, datosAdicionales);
+        return getMostrarReporte( nombreReporte, parametros, collectionDataSource, false,multipleReporte, datosAdicionales, tieneSeguimientoQuinceDias);
      }
 
     /**
@@ -84,7 +85,7 @@ public class UtilitarioReporte  {
     */
     public static byte[] getMostrarReporte( String nombreReporte,
             Map<String, Object> parametros, List<?> collectionDataSource,
-            boolean indicarDirSubReport, boolean multipleReporte, HojaConsulta datosAdicionales) {
+            boolean indicarDirSubReport, boolean multipleReporte, HojaConsulta datosAdicionales, boolean tieneSeguimientoQuinceDias) {
         	boolean isFlu = false;
     	try{
     		
@@ -93,7 +94,7 @@ public class UtilitarioReporte  {
             String pathPag2 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"2").contains(".jasper")?(nombreReporte+"2"):(nombreReporte+"2") + ".jasper");
             String pathPagFlu3 = "";
             String pathPagFlu4 = "";
-            if (nombreReporte.equals("rptSeguimientoInfluenza")) {
+            if (nombreReporte.equals("rptSeguimientoInfluenza") && tieneSeguimientoQuinceDias) {
             	isFlu = true;
             	pathPagFlu3 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"3").contains(".jasper")?(nombreReporte+"3"):(nombreReporte+"3") + ".jasper");
                 pathPagFlu4 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"4").contains(".jasper")?(nombreReporte+"4"):(nombreReporte+"4") + ".jasper");

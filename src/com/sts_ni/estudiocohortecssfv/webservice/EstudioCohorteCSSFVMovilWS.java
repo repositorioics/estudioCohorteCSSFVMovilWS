@@ -803,5 +803,11 @@ public class EstudioCohorteCSSFVMovilWS {
 				.updateUafValue(secHojaConsulta, uaf);
 	}
 	
+	@WebMethod(operationName = "obtenerUltimaVersionApk")
+	@WebResult(name = "resultadoJSON")
+	public String obtenerUltimaVersionApk() {
+		return HOJA_CONSULTA_SERVICE.obtenerUltimaVersionApk();
+	}
+	
 	//--------------------------------------------------------------------------------
 }

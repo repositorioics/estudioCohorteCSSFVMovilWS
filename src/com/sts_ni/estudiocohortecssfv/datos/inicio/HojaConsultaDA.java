@@ -4611,4 +4611,50 @@ public class HojaConsultaDA implements HojaConsultaService {
 		}
 		return result;
 	}
+	
+	/***
+	 * Metodo para obtener la ultima version de la aplicacion
+	 * de la hoja de consulta digital
+	 */
+	@Override
+	public String obtenerUltimaVersionApk() {
+		String result = null;
+		try {
+			List oLista = new LinkedList();
+			Map fila = null;
+			String valorParametro;
+			
+			String sql = "select valores " + 
+					" from ParametrosSistemas p where p.nombreParametro ='VERSION_APK_HOJA_CONSULTA'";
+
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+
+			valorParametro = query.uniqueResult().toString();
+			//Object[] valorParametro = (Object[]) query.uniqueResult();
+			result =  valorParametro != null ? valorParametro : "";
+			/*if (valorParametro != null) {
+				fila = new HashMap();
+				
+				fila.put("valor", valorParametro[0] != null ? valorParametro[0].toString() : "");
+				oLista.add(fila);
+
+				// Construir la lista a una estructura JSON
+				result = UtilResultado.parserResultado(oLista, "",
+						UtilResultado.OK);
+			}*/
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null,
+					Mensajes.ERROR_NO_CONTROLADO + e.getMessage(),
+					UtilResultado.ERROR);
+			HIBERNATE_RESOURCE.rollback();
+			// TODO: handle exception
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
 }

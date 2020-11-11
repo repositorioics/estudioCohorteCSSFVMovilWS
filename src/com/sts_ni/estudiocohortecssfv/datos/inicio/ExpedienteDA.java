@@ -2413,11 +2413,24 @@ public class ExpedienteDA implements ExpedienteService {
 					.setParameter("numHojaSeguimiento", numHojaSeguimiento);
 
 			List result = query.list();
+			
+			String sql2 =" select s from SeguimientoInfluenza s, HojaInfluenza h "
+					+ " where s.secHojaInfluenza = h.secHojaInfluenza "
+					+ " and h.numHojaSeguimiento = :numHojaSeguimiento and s.controlDia = :controlDia ";
+			Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql2);
+			query2.setParameter("numHojaSeguimiento", numHojaSeguimiento);
+			query2.setParameter("controlDia", 15);
+			boolean tieneSeguimientoQuinceDias = false;
+			SeguimientoInfluenza seguimientoInfluenza = ((SeguimientoInfluenza) query2.uniqueResult());
+			if (seguimientoInfluenza != null) {
+				tieneSeguimientoQuinceDias = true;
+			}
+		
 
 			/*return UtilitarioReporte.mostrarReporte(nombreReporte, null,
 					result, false, null);*/
 			return UtilitarioReporte.mostrarReporte(nombreReporte, null,
-					result, true, null);
+					result, true, null, tieneSeguimientoQuinceDias);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -4118,7 +4131,7 @@ public class ExpedienteDA implements ExpedienteService {
 			List result = query.list();
 
 			return UtilitarioReporte.mostrarReporte(nombreReporte, null,
-					result, true, null);
+					result, true, null, false);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -4835,7 +4848,7 @@ public class ExpedienteDA implements ExpedienteService {
 				List result = query.list();
 
 				return UtilitarioReporte.mostrarReporte(nombreReporte, params,
-						result, true, null);		
+						result, true, null, false);		
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -4904,7 +4917,7 @@ public class ExpedienteDA implements ExpedienteService {
 				List result = query.list();
 
 				return UtilitarioReporte.mostrarReporte(nombreReporte, params,
-						result, false, null);		
+						result, false, null, false);		
 			
 		} catch (Exception e) {
 			// TODO: handle exception

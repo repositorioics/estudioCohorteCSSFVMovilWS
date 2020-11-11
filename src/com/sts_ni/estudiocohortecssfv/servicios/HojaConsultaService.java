@@ -70,5 +70,7 @@ public interface HojaConsultaService {
 	public String getListaMedicos(String paramNombre);
 
 	public String actualizarEstadoEnfermeria(String paramHojaConsulta);
+	
+	public String obtenerUltimaVersionApk();
 
 }

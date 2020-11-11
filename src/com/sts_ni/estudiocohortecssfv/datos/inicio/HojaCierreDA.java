@@ -59,6 +59,8 @@ public class HojaCierreDA implements HojaCierreService {
 	@Override
 	public String cargarGrillaCierre(String paramHojaConsulta) {
 		String result;
+		Boolean hojaInfluenzaActiva = false;
+		Boolean hojaZikaActiva = false;
 		try {
 			
 			List oLista = new LinkedList();
@@ -121,6 +123,33 @@ public class HojaCierreDA implements HojaCierreService {
 	            fila.put("nombreEnfermera", "--");
 	        }
 	        
+	        /*Nueva validacion*/
+	        String sql = "select count(*) from hoja_influenza where cerrado = 'N' and cod_expediente = :codExpediente";
+	        Query query2 = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
+			query2.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+			
+			BigInteger totalActivoFlu = (BigInteger) query2.uniqueResult();
+			
+			// Si tiene una hoja de influeza activa retornamos true
+			if (totalActivoFlu.intValue() > 0) {
+				hojaInfluenzaActiva = true;
+			}
+			
+			String sql2 = "select count(*) from hoja_zika where cerrado = 'N' and cod_expediente = :codExpediente";
+	        Query query3 = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql2);
+			query3.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+			
+			BigInteger totalActivoZika = (BigInteger) query3.uniqueResult();
+			
+			// Si tiene una hoja de zika activa retornamos true
+			if (totalActivoZika.intValue() > 0) {
+				hojaZikaActiva = true;
+			}
+			
+			fila.put("hojaInfluenzaActiva", hojaInfluenzaActiva);
+			fila.put("hojaZikaActiva", hojaZikaActiva);
+			/*Fin Nueva validacion*/
+			
 	        oLista.add(fila);
 	        
 	        result = UtilResultado.parserResultado(oLista, "", UtilResultado.OK);

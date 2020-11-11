@@ -333,9 +333,9 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 		
 		if(hcon != null && ((hcon.getHistoriaExamenFisico() != null && hcon.getHistoriaExamenFisico().trim().length() > 2000) 
 			|| (hcon.getPlanes() != null && hcon.getPlanes().trim().length() > 460)	)){
-			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, hcon);
+			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, hcon, false);
 		} else {	    
-			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, null);
+			return  UtilitarioReporte.mostrarReporte(nombreReporte, parametros, result,true, null, false);
 		}
 	
 	} catch (Exception e) {
