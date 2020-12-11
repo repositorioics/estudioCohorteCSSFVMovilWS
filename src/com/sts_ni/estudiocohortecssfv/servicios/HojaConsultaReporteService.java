@@ -8,5 +8,7 @@ public interface HojaConsultaReporteService {
 	public void imprimirConsultaPdf(Integer secHojaConsulta);
 	
 	public void imprimirConsultaTest();
+	
+	public void reImprimirHojaConsultaPdf(Integer secHojaConsulta, int consultorio);
 
 }

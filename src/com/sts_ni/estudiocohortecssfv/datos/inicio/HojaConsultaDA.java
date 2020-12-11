@@ -224,6 +224,8 @@ public class HojaConsultaDA implements HojaConsultaService {
 			Short usuarioEnfermeria;
 			Short usuarioMedico = null;
 			String horasv;
+			Character consultaRespiratoria;
+			
 
 			JSONParser parser = new JSONParser();
 			Object obj = (Object) parser.parse(paramHojaConsulta);
@@ -246,6 +248,9 @@ public class HojaConsultaDA implements HojaConsultaService {
 			}
 			
 			horasv = ((hojaConsultaJSON.get("horasv").toString()));
+			
+			consultaRespiratoria = (hojaConsultaJSON.get("consultaRespiratoria")
+							.toString().charAt(0));
 
 			Query query = HIBERNATE_RESOURCE.getSession().createQuery(
 					QUERY_HOJA_CONSULTA_BY_ID);
@@ -267,7 +272,10 @@ public class HojaConsultaDA implements HojaConsultaService {
 			String horasvServer = dateFormat.format(date);
 			
 			hojaConsulta.setHorasv(horasvServer);
+			
 			//hojaConsulta.setHorasv(horasv);
+			
+			hojaConsulta.setConsultaRespiratorio(consultaRespiratoria);
 			
 			hojaConsulta.setEstado('2');
 
@@ -308,6 +316,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 			Short usuarioEnfermeria;
 			String motivo;
 			String horasv;
+			Character consultaRespiratoria;
  
 			JSONParser parser = new JSONParser();
 			Object obj = (Object) parser.parse(paramHojaConsulta);
@@ -335,6 +344,9 @@ public class HojaConsultaDA implements HojaConsultaService {
 			
 			horasv = ((hojaConsultaJSON.get("horasv").toString()));
 			
+			consultaRespiratoria = (hojaConsultaJSON.get("consultaRespiratoria")
+					.toString().charAt(0));
+			
 
 			Query query = HIBERNATE_RESOURCE.getSession().createQuery(
 					QUERY_HOJA_CONSULTA_BY_ID);
@@ -348,6 +360,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 			hojaConsulta.setTemperaturac(BigDecimal.valueOf(temperaturac));
 			hojaConsulta.setExpedienteFisico(expedienteFisico);
 			hojaConsulta.setUsuarioEnfermeria(usuarioEnfermeria);
+			hojaConsulta.setConsultaRespiratorio(consultaRespiratoria);
 			hojaConsulta.setEstado('8');
 			Date date = new Date();
 			DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
@@ -820,7 +833,8 @@ public class HojaConsultaDA implements HojaConsultaService {
 						" and e.codigo not in('1', '8','7','9') ") ;
 //					+ " and to_char(h.fechaConsulta, 'yyyyMMdd') = to_char(current_date, 'yyyyMMdd') ";
 
-			sql += "order by h.ordenLlegada asc";
+			sql += "order by h"
+					+ ".ordenLlegada asc";
 
 			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
 
@@ -924,7 +938,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 					" to_char(p.fechaNac, 'yyyyMMdd'), " + 
 					" to_char(h.fechaConsulta, 'yyyyMMdd HH:MI:SS am'), " +
 					" h.hora, h.categoria, h.fif, h.consulta, h.temMedc, " +
-					" h.eritrocitos " + 
+					" h.eritrocitos, h.serologiaDengue, h.eti " + 
 					" from HojaConsulta h, Paciente p " + 
 					" where h.codExpediente = p.codExpediente " + 
 					" and h.secHojaConsulta = :secHojaConsulta ";
@@ -973,12 +987,15 @@ public class HojaConsultaDA implements HojaConsultaService {
 				fila.put("fechaNacimiento", hojaConsultaPaciente[6]);
 				fila.put("fechaConsulta", hojaConsultaPaciente[7]);
 				fila.put("horaConsulta", hojaConsultaPaciente[8]);
-				/*Nuevo campo agregado fecha creacion = 13/12/2019 - SC*/
+				/*Nuevo campo agregado fecha creacion 13/12/2019 - SC*/
 				fila.put("categoria", hojaConsultaPaciente[9]);
 				fila.put("fif", hojaConsultaPaciente[10] != null ? hojaConsultaPaciente[10].toString() : null);
 				fila.put("consulta", hojaConsultaPaciente[11] != null ? hojaConsultaPaciente[11] : null);
 				fila.put("temMedc", hojaConsultaPaciente[12] != null ? hojaConsultaPaciente[12].toString() : null);
 				fila.put("eritrocitos", hojaConsultaPaciente[13] != null ? hojaConsultaPaciente[13].toString() : "");
+				/*Nuevo campo agregado fecha creacion 23/11/2020 - SC*/
+				fila.put("serologiaDengue", hojaConsultaPaciente[14] != null ? hojaConsultaPaciente[14].toString() : "");
+				fila.put("eti", hojaConsultaPaciente[15] != null ? hojaConsultaPaciente[15].toString() : "");
 				
 				oLista.add(fila);
 
@@ -2801,7 +2818,7 @@ public class HojaConsultaDA implements HojaConsultaService {
 					" to_char(p.fechaNac, 'yyyyMMdd'), " + 
 					" to_char(h.fechaConsulta, 'yyyyMMdd HH:MI:SS am'), " +
 					" h.hora, h.categoria, h.fif, h.consulta, h.temMedc, " +
-					" h.eritrocitos " +
+					" h.eritrocitos, h.serologiaDengue, h.eti " +
 					" from HojaConsulta h, Paciente p "
 					+ " where h.codExpediente = p.codExpediente "
 					+ " and h.secHojaConsulta = :secHojaConsulta ";
@@ -2849,12 +2866,15 @@ public class HojaConsultaDA implements HojaConsultaService {
 				fila.put("fechaNacimiento", hojaConsultaPaciente[6]);
 				fila.put("fechaConsulta", hojaConsultaPaciente[7]);
 				fila.put("horaConsulta", hojaConsultaPaciente[8]);
-				/*Nuevo campo agregado fecha creacion = 13/12/2019 - SC*/
+				/*Nuevo campo agregado fecha creacion 13/12/2019 - SC*/
 				fila.put("categoria", hojaConsultaPaciente[9]);
 				fila.put("fif", hojaConsultaPaciente[10] != null ? hojaConsultaPaciente[10].toString() : null);
 				fila.put("consulta", hojaConsultaPaciente[11] != null ? hojaConsultaPaciente[11] : null);
 				fila.put("temMedc", hojaConsultaPaciente[12] != null ? hojaConsultaPaciente[12].toString() : null);
 				fila.put("eritrocitos", hojaConsultaPaciente[13] != null ? hojaConsultaPaciente[13].toString() : "");
+				/*Nuevo campo agregado fecha creacion 23/11/2020 - SC*/
+				fila.put("serologiaDengue", hojaConsultaPaciente[14] != null ? hojaConsultaPaciente[14].toString() : "");
+				fila.put("eti", hojaConsultaPaciente[15] != null ? hojaConsultaPaciente[15].toString() : "");
 
 				oLista.add(fila);
 
@@ -3600,8 +3620,15 @@ public class HojaConsultaDA implements HojaConsultaService {
 			if (hojaConsulta.getConsulta() != null) {
 				if (serologiaDengue.toString().compareTo("0") == 0 && perteneceEstudioDengue &&
 						(hojaConsulta.getConsulta().trim().equals("Inicial") || hojaConsulta.getConsulta().trim().equals("Seguimiento"))) {
+					
 					ExpedienteDA expedienteDA = new ExpedienteDA();
-					expedienteDA.imprimirFichaEpiSindromesFebrilesPdf(hojaConsulta.getNumHojaConsulta());
+					
+					if (hojaConsulta.getConsultaRespiratorio() != null && 
+							hojaConsulta.getConsultaRespiratorio().toString().compareTo("0") == 0) {
+						expedienteDA.imprimirFichaEpiSindromesFebrilesPdf(hojaConsulta.getNumHojaConsulta(), 1);	
+					} else {
+						expedienteDA.imprimirFichaEpiSindromesFebrilesPdf(hojaConsulta.getNumHojaConsulta(), 0);
+					}
 				}
 			}
 			result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
@@ -4642,6 +4669,84 @@ public class HojaConsultaDA implements HojaConsultaService {
 				result = UtilResultado.parserResultado(oLista, "",
 						UtilResultado.OK);
 			}*/
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = UtilResultado.parserResultado(null,
+					Mensajes.ERROR_NO_CONTROLADO + e.getMessage(),
+					UtilResultado.ERROR);
+			HIBERNATE_RESOURCE.rollback();
+			// TODO: handle exception
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return result;
+	}
+	
+	/***
+	 * Metodo para obtener las consultas que estan en respiratorio
+	 * de la hoja de consulta digital
+	 * fecha creacion 27/11/2020 - SC 
+	 */
+	@Override
+	public String getListaConsultasRespitatorio() {
+		String result = null;
+		try {
+			List oLista = new LinkedList();
+			Map fila = null;
+			
+			String sql = "select h.sec_hoja_consulta, " +
+					"h.cod_expediente, " +
+					"h.num_hoja_consulta, " +
+					"(select e.descripcion from estados_hoja e where CAST(h.estado AS INTEGER) = e.sec_estado) as estado, " +
+					"(select um.nombre from Usuarios_View um where h.usuario_Medico = um.id) as usuarioMedico, " +
+					"(select um.nombre from Usuarios_View um where h.usuario_enfermeria = um.id) as usuarioEnfermeria, " + 
+					"(select um.nombre from Usuarios_View um where h.medico_cambio_turno = um.id) as medicoCambioTurno " +
+					"from hoja_consulta h " + 
+					"where h.consulta_respiratorio = '0' " +
+					"and to_char(h.fecha_consulta, 'yyyyMMdd') = to_char(current_date, 'yyyyMMdd') "+
+					"order by h.estado asc";
+
+			Query query = HIBERNATE_RESOURCE.getSession().createSQLQuery(sql);
+
+			List<Object[]> objLista = new ArrayList<Object[]>();
+						
+			if(query.list() != null)
+				objLista.addAll((List<Object[]>) query.list());
+
+			if (objLista != null && objLista.size() > 0) {
+
+				for (Object[] object : objLista) {
+
+					// Construir la fila del registro actual usando arreglos
+
+					fila = new HashMap();
+					fila.put("secHojaConsulta", (object[0] != null) ? object[0].toString() : null);
+					fila.put("codExpediente", (object[1] != null) ? object[1].toString() : null);
+					fila.put("numHojaConsulta", (object[2] != null) ? object[2].toString() : null);
+					fila.put("estado", (object[3] != null) ? object[3].toString() : null);
+					fila.put("usuarioMedico", (object[4] != null) ? object[4].toString() : null);
+					fila.put("usuarioEnfermeria", (object[5] != null) ? object[5].toString() : null);
+					fila.put("medicoCambioTurno", (object[6] != null) ? object[6].toString() : null);
+					
+					/*fila.put("enEspera", object[7].toString());
+					fila.put("enConsulta", object[8].toString());
+					fila.put("enLaboratorio", object[6].toString());
+					fila.put("cerrado", object[6].toString());
+					fila.put("abandono", object[6].toString());*/
+
+					oLista.add(fila);
+				}
+
+				// Construir la lista a una estructura JSON
+				result = UtilResultado.parserResultado(oLista, "",
+						UtilResultado.OK);
+			} else {
+				result = UtilResultado.parserResultado(null, Mensajes.NO_PACIENTE_CONSULTA_RESPIRATORIO,
+						UtilResultado.INFO);
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

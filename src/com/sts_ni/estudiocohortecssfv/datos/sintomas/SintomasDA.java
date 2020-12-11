@@ -1552,4 +1552,90 @@ public class SintomasDA implements SintomasService {
 		}
 		return result;
 	}
+	
+	/*
+	 * Nueva validacion para indicar si reune criterios Eti, Irag o Neumonia Fecha
+	 * creacion 24/11/2020 - SC
+	 */
+	@SuppressWarnings({ "unchecked" })
+	@Override
+	public String alertaCriteriosEti(String paramHojaConsulta) {
+		StringBuffer result = new StringBuffer();
+		try {
+			Integer secHojaConsulta;
+
+			JSONParser parser = new JSONParser();
+			Object obj = (Object) parser.parse(paramHojaConsulta);
+			JSONObject hojaConsultaJSON = (JSONObject) obj;
+
+			secHojaConsulta = ((Number) hojaConsultaJSON.get("secHojaConsulta")).intValue();
+
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(QUERY_HOJA_CONSULTA_BY_ID);
+			query.setParameter("id", secHojaConsulta);
+
+			HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+
+			if (hojaConsulta.getFiebre() != null && hojaConsulta.getFiebre().compareTo('0') == 0) {
+				if (hojaConsulta.getFif() != null) {
+
+					Calendar fechaConsulta = new GregorianCalendar();
+					fechaConsulta.setTime(hojaConsulta.getFechaConsulta());
+					Calendar fechaSintoma = new GregorianCalendar();
+					fechaSintoma.setTime(hojaConsulta.getFis());
+					fechaSintoma.add(Calendar.DAY_OF_MONTH, 1);
+					Calendar fechaInicioFiebre = new GregorianCalendar();
+					fechaInicioFiebre.setTime(hojaConsulta.getFif());
+					Calendar hoy = Calendar.getInstance();
+					int dayEti = -1;
+					int dayFiebre = -1;
+
+					long difSintoma = fechaConsulta.getTimeInMillis() - fechaSintoma.getTimeInMillis();
+					dayEti = (int) (difSintoma / (1000 * 24 * 60 * 60));
+
+					long difFiebre = hoy.getTimeInMillis() - fechaInicioFiebre.getTimeInMillis();
+					dayFiebre = (int) (difFiebre / (1000 * 24 * 60 * 60));
+
+					if (dayEti <= 4) {
+						if (UtilHojaConsulta.validarCasoETI(hojaConsulta)) {
+							result.append(Mensajes.MATRIZ_CASO_ETI).append("\n");
+						}
+					}
+
+					if (dayFiebre <= 4) {
+						if (UtilHojaConsulta.validarCasoIRAG(hojaConsulta)) {
+							result.append(Mensajes.MATRIZ_CASO_IRAG).append("\n");
+						}
+					}
+
+					if (UtilHojaConsulta.validarCasoNeumonia(hojaConsulta)) {
+						result.append(Mensajes.MATRIZ_CASO_NEUMO).append("\n");
+					}
+
+					if (dayFiebre >= 5 || dayFiebre == -1) {
+						if (UtilHojaConsulta.validarCasoIRAG(hojaConsulta)) {
+							result.append(Mensajes.MATRIZ_CASO_IRAG_FIEBRE).append("\n");
+						}
+					}
+				}
+			} else {
+				
+				if (UtilHojaConsulta.validarCasoNeumonia(hojaConsulta)) {
+					result.append(Mensajes.MATRIZ_CASO_NEUMO).append("\n");
+				}
+
+				if (UtilHojaConsulta.validarCasoIRAG(hojaConsulta)) {
+					result.append(Mensajes.MATRIZ_CASO_IRAG_SIN_FIEBRE).append("\n");
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+		return (result != null && !result.toString().isEmpty()) ? result.toString() : "";
+	}
 }

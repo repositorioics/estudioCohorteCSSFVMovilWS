@@ -50,6 +50,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 public class UtilitarioReporte  {
 
  private static CompositeConfiguration config;
+ private CompositeConfiguration configPrint;
  
  static Logger logger;
  
@@ -146,7 +147,7 @@ public class UtilitarioReporte  {
     	return null;
     }
     
-    public  void imprimirDocumento(String nombres,byte[] archivoByte){
+    public  void imprimirDocumento(String nombres, byte[] archivoByte){
     	
     	String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.pdf") + (nombres.contains(".pdf")?nombres:nombres + ".pdf");
     	
@@ -160,7 +161,85 @@ public class UtilitarioReporte  {
            fileOuputStream.close();
            
            PDDocument pdf = PDDocument.load(path);
-		   pdf.silentPrint();
+           
+           /*---------------------*/
+           configPrint = UtilProperty.getConfigurationfromExternalFile("estudioCohorteCSSFVOPC.properties");
+           String impresoraConsultorio = configPrint.getString("CONSULTORIOMEDICO");
+           
+           javax.print.PrintService[] service = PrinterJob.lookupPrintServices(); 
+           DocPrintJob docPrintJob = null;
+           
+           //int count = service.length;
+           for (int i = 0; i < service.length; i++) {
+             if (service[i].getName().equals(impresoraConsultorio)) {
+            	 System.out.println("Consultorio Medico: " + service[i].getName());
+            	 docPrintJob = service[i].createPrintJob();
+             }
+           }
+
+           PrinterJob pjob = PrinterJob.getPrinterJob();
+           pjob.setPrintService(docPrintJob.getPrintService());
+           pjob.setJobName("job");
+           pdf.silentPrint(pjob);
+           /*---------------------*/
+          
+           
+		   //pdf.silentPrint();
+    		
+    	} catch(IOException e) {
+    		
+    		e.printStackTrace();
+    	} catch (PrinterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	        
+	}
+    
+    public  void imprimirDocumentoV2(String nombres, byte[] archivoByte, int consultorio) {
+    	
+    	String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.pdf") + (nombres.contains(".pdf")?nombres:nombres + ".pdf");
+    	
+  	    File file = new File(path);
+    	try
+    	{
+              //convert array of bytes into file
+           FileOutputStream fileOuputStream =
+                      new FileOutputStream(file);
+           fileOuputStream.write(archivoByte);
+           fileOuputStream.close();
+           
+           PDDocument pdf = PDDocument.load(path);
+           
+           /*---------------------*/
+           configPrint = UtilProperty.getConfigurationfromExternalFile("estudioCohorteCSSFVOPC.properties");
+           String impresoraConsultorio = configPrint.getString("CONSULTORIOMEDICO");
+           String impresoraRespiratorio = configPrint.getString("CONSULTORIORESPIRATORIO");
+           
+           javax.print.PrintService[] service = PrinterJob.lookupPrintServices(); 
+           DocPrintJob docPrintJob = null;
+           
+           //int count = service.length;
+           for (int i = 0; i < service.length; i++) {
+             if (service[i].getName().equals(impresoraConsultorio) && consultorio <= 0) {
+            	 System.out.println("Consultorio Medico: " + service[i].getName());
+            	 docPrintJob = service[i].createPrintJob();
+             }
+             
+             if (service[i].getName().equals(impresoraRespiratorio) && consultorio > 0) {
+            	 System.out.println("Consultorio Resp: " + service[i].getName());
+            	 docPrintJob = service[i].createPrintJob();
+             }
+           }
+
+           PrinterJob pjob = PrinterJob.getPrinterJob();
+           pjob.setPrintService(docPrintJob.getPrintService());
+           pjob.setJobName("job");
+           pdf.silentPrint(pjob);
+           /*---------------------*/
+          
+           
+		   //pdf.silentPrint();
     		
     	} catch(IOException e) {
     		
@@ -173,12 +252,11 @@ public class UtilitarioReporte  {
 	}
     
     
-    public  void imprimirDocumentoFicha(String nombres,byte[] archivoByte){
+    public  void imprimirHojaConsulta(String nombres, byte[] archivoByte, boolean esConsultaRespiratoria){
     	
     	String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.pdf") + (nombres.contains(".pdf")?nombres:nombres + ".pdf");
     	
   	    File file = new File(path);
-  	    int copies = 3;
     	try
     	{
               //convert array of bytes into file
@@ -187,11 +265,104 @@ public class UtilitarioReporte  {
            fileOuputStream.write(archivoByte);
            fileOuputStream.close();
            
+           PDDocument pdf = PDDocument.load(path);
+           
+           /*---------------------*/
+           configPrint = UtilProperty.getConfigurationfromExternalFile("estudioCohorteCSSFVOPC.properties");
+           String impresoraConsultorio = configPrint.getString("CONSULTORIOMEDICO");
+           String impresoraRespiratorio = configPrint.getString("CONSULTORIORESPIRATORIO");
+           
+           javax.print.PrintService[] service = PrinterJob.lookupPrintServices(); 
+           DocPrintJob docPrintJob = null;
+           
+           //int count = service.length;
+           for (int i = 0; i < service.length; i++) {
+             if (service[i].getName().equals(impresoraConsultorio) && !esConsultaRespiratoria) {
+            	 System.out.println("Consultorio Medico: " + service[i].getName());
+            	 docPrintJob = service[i].createPrintJob();
+             }
+             
+             if (service[i].getName().equals(impresoraRespiratorio) && esConsultaRespiratoria) {
+            	 System.out.println("Consultorio Resp: " + service[i].getName());
+            	 docPrintJob = service[i].createPrintJob();
+             }
+           }
+
+           PrinterJob pjob = PrinterJob.getPrinterJob();
+           pjob.setPrintService(docPrintJob.getPrintService());
+           pjob.setJobName("job");
+           pdf.silentPrint(pjob);
+           /*---------------------*/
+          
+           
+		   //pdf.silentPrint();
+    		
+    	} catch(IOException e) {
+    		
+    		e.printStackTrace();
+    	} catch (PrinterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	        
+	}
+    
+    
+    public void imprimirDocumentoFicha(String nombres,byte[] archivoByte, int consultorio){
+    	
+    	String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.pdf") + (nombres.contains(".pdf")?nombres:nombres + ".pdf");
+    	
+  	    File file = new File(path);
+  	    int copies = 3;
+    	try
+    	{
+              //convert array of bytes into file
+           /*FileOutputStream fileOuputStream =
+                      new FileOutputStream(file);
+           fileOuputStream.write(archivoByte);
+           fileOuputStream.close();
+           
            PrinterJob printJob = PrinterJob.getPrinterJob();
            printJob.setCopies(copies);
            
            PDDocument pdf = PDDocument.load(path);
-		   pdf.silentPrint(printJob);
+		   pdf.silentPrint(printJob);*/
+    		
+    		//convert array of bytes into file
+            FileOutputStream fileOuputStream =
+                       new FileOutputStream(file);
+            fileOuputStream.write(archivoByte);
+            fileOuputStream.close();
+            
+            PDDocument pdf = PDDocument.load(path);
+            
+            /*---------------------*/
+            configPrint = UtilProperty.getConfigurationfromExternalFile("estudioCohorteCSSFVOPC.properties");
+            String impresoraConsultorio = configPrint.getString("CONSULTORIOMEDICO");
+            String impresoraRespiratorio = configPrint.getString("CONSULTORIORESPIRATORIO");
+            
+            javax.print.PrintService[] service = PrinterJob.lookupPrintServices(); 
+            DocPrintJob docPrintJob = null;
+            
+            //int count = service.length;
+            for (int i = 0; i < service.length; i++) {
+            	if (service[i].getName().equals(impresoraConsultorio) && consultorio <= 0) {
+               	 System.out.println("Consultorio Medico: " + service[i].getName());
+               	 docPrintJob = service[i].createPrintJob();
+                }
+            	
+                if (service[i].getName().equals(impresoraRespiratorio) && consultorio > 0) {
+               	 System.out.println("Consultorio Resp: " + service[i].getName());
+               	 docPrintJob = service[i].createPrintJob();
+                }
+            }
+
+            PrinterJob pjob = PrinterJob.getPrinterJob();
+            pjob.setPrintService(docPrintJob.getPrintService());
+            pjob.setCopies(copies);
+            pjob.setJobName("job");
+            pdf.silentPrint(pjob);
+            /*---------------------*/
     		
     	} catch(IOException e) {
     		

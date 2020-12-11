@@ -317,6 +317,19 @@ public class HojaCierreDA implements HojaCierreService {
 	        	}
 	        	
 	        }
+	        /*Nueva validacion no permitir el cierre de la hoja cuando una consulta 
+	         * es convaleciente y es categoria C 
+	         * fecha creacion 23/11/2020 - SC*/
+	        if (hojaConsulta.getConsulta() != null) {
+	        	if (hojaConsulta.getConsulta().trim().equals("Convaleciente")) {
+		        	if (hojaConsulta.getCategoria() != null) {
+		        		if (hojaConsulta.getCategoria().trim().equals("C")) {
+		        			return result = UtilResultado.parserResultado(null, Mensajes.CONSULTA_CONVALECIENTE_CON_CATEGORIA_C, 4);
+		        		}
+		        	}
+		        }
+	        }
+	        
 	        //*****************************************************************
 	        if(UtilHojaConsulta.validarTodasSecciones(hojaConsulta)) {
 	        	

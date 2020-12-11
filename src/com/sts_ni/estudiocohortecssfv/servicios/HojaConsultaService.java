@@ -73,4 +73,6 @@ public interface HojaConsultaService {
 	
 	public String obtenerUltimaVersionApk();
 
+	public String getListaConsultasRespitatorio();
+
 }

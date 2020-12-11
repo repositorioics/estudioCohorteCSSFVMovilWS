@@ -14,6 +14,8 @@ import com.sts_ni.estudiocohortecssfv.dto.HojaConsultaReporte;
 import com.sts_ni.estudiocohortecssfv.servicios.ControlCambiosService;
 import com.sts_ni.estudiocohortecssfv.servicios.HojaConsultaReporteService;
 import com.sts_ni.estudiocohortecssfv.util.HibernateResource;
+import com.sts_ni.estudiocohortecssfv.util.Mensajes;
+import com.sts_ni.estudiocohortecssfv.util.UtilResultado;
 import com.sts_ni.estudiocohortecssfv.util.UtilitarioReporte;
 
 /***
@@ -25,14 +27,54 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 	
 	private static final HibernateResource HIBERNATE_RESOURCE = new HibernateResource();
 	private ControlCambiosService controlCambiosService = new ControlCambiosDA();
+	private static String QUERY_HOJA_CONSULTA_BY_ID = "select h from HojaConsulta h where h.secHojaConsulta = :id";
 	/***
 	 * Metodo Para imprimir en la impresora por defecto la Hoja de consulta.
 	 */
-	public void imprimirConsultaPdf(Integer secHojaConsulta){
-		
-		 UtilitarioReporte ureporte=new UtilitarioReporte();
-	     ureporte.imprimirDocumento("HojaConsulta_" + secHojaConsulta, 
-	    		 					getHojaConsultaPdf( secHojaConsulta));
+	public void imprimirConsultaPdf(Integer secHojaConsulta) {
+		boolean esConsultaRespiratoria = false;
+		try 
+		{
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(
+					QUERY_HOJA_CONSULTA_BY_ID);
+			
+			query.setParameter("id", secHojaConsulta);
+
+			HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+			
+			if (hojaConsulta.getConsultaRespiratorio() != null) {
+				if (hojaConsulta.getConsultaRespiratorio().toString().compareTo("0") == 0) {
+					esConsultaRespiratoria = true;
+				}
+			}
+			
+			 UtilitarioReporte ureporte=new UtilitarioReporte();
+		     ureporte.imprimirHojaConsulta("HojaConsulta_" + secHojaConsulta, 
+		    		 					getHojaConsultaPdf( secHojaConsulta), esConsultaRespiratoria);
+		     
+		}  catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+		}
+
+	}
+	
+	public void reImprimirHojaConsultaPdf(Integer secHojaConsulta, int consultorio) {
+		try 
+		{
+
+			 UtilitarioReporte ureporte=new UtilitarioReporte();
+		     ureporte.imprimirDocumentoV2("HojaConsulta_" + secHojaConsulta, 
+		    		 					getHojaConsultaPdf( secHojaConsulta), consultorio);
+		     
+		}  catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 
 	}
 	

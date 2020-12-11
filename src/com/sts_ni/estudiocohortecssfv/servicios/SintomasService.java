@@ -42,4 +42,6 @@ public interface SintomasService {
 
 	public String getFisAndFifByCodExp(int codExpediente);
 
+	public String alertaCriteriosEti(String paramHojaConsulta);
+
 }

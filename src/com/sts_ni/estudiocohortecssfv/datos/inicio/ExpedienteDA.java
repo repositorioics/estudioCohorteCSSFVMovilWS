@@ -2447,7 +2447,7 @@ public class ExpedienteDA implements ExpedienteService {
 	 * Metodo que realiza la impresion de Seguimiento Influenza.
 	 * @param numHojaSeguimiento, Numero de seguimiento influenza.
 	 */
-	public String imprimirSeguimientoInfluenciaPdf(int numHojaSeguimiento) {
+	public String imprimirSeguimientoInfluenciaPdf(int numHojaSeguimiento, int consultorio) {
 
 		String result = null;
 		String sql;
@@ -2486,8 +2486,8 @@ public class ExpedienteDA implements ExpedienteService {
 
 			if (hojaInfluenzaCerrada) {
 				UtilitarioReporte ureporte = new UtilitarioReporte();
-				ureporte.imprimirDocumento("rptSeguimientoInfluenza_" + numHojaSeguimiento,
-						getSeguimientoInfluenzaPdf(numHojaSeguimiento));
+				ureporte.imprimirDocumentoV2("rptSeguimientoInfluenza_" + numHojaSeguimiento,
+						getSeguimientoInfluenzaPdf(numHojaSeguimiento), consultorio);
 				result = UtilResultado.parserResultado(null, Mensajes.HOJA_INFLUENZA_IMPRESA, UtilResultado.OK);
 			} else {
 				result = UtilResultado.parserResultado(null, Mensajes.ERROR_AL_IMPRIMIR_HOJA_INFLUENZA,
@@ -2506,13 +2506,13 @@ public class ExpedienteDA implements ExpedienteService {
 	}
 	
 	@Override
-	public String reimpresionHojaConsulta(int paramsecHojaConsulta) {
+	public String reimpresionHojaConsulta(int paramsecHojaConsulta, int consultorio) {
 		String result = null;
 		try {
 			consultaReporteService = new HojaConsultaReporteDA();
 
 			try {
-            	consultaReporteService.imprimirConsultaPdf(paramsecHojaConsulta);
+            	consultaReporteService.reImprimirHojaConsultaPdf(paramsecHojaConsulta, consultorio);
             } catch(Exception e) {
             	e.printStackTrace();
             }
@@ -4148,7 +4148,7 @@ public class ExpedienteDA implements ExpedienteService {
 	 * Metodo que realiza la impresion de Seguimiento Zika.
 	 * @param numHojaSeguimiento, Numero de seguimiento zika.
 	 */
-	public String imprimirSeguimientoZikaPdf(int numHojaSeguimiento) {
+	public String imprimirSeguimientoZikaPdf(int numHojaSeguimiento, int consultorio) {
 		
 		String result = null;
 		String sql;
@@ -4169,9 +4169,9 @@ public class ExpedienteDA implements ExpedienteService {
 
 			if (hojaZikaCerrada) {
 				UtilitarioReporte ureporte = new UtilitarioReporte();
-				ureporte.imprimirDocumento("rptSeguimientoZika_"
+				ureporte.imprimirDocumentoV2("rptSeguimientoZika_"
 						+ numHojaSeguimiento,
-						getSeguimientoZikaPdf(numHojaSeguimiento));
+						getSeguimientoZikaPdf(numHojaSeguimiento), consultorio);
 				result = UtilResultado.parserResultado(null, Mensajes.HOJA_ZIKA_IMPRESA, UtilResultado.OK);
 			} else {
 				result = UtilResultado.parserResultado(null, Mensajes.ERROR_AL_IMPRIMIR_HOJA_ZIKA,
@@ -4864,12 +4864,12 @@ public class ExpedienteDA implements ExpedienteService {
 	 * Metodo que realiza la impresion de Seguimiento Zika.
 	 * @param secVigilanciaIntegrada.
 	 */
-	public void imprimirFichaPdf(int secVigilanciaIntegrada) {
+	public void imprimirFichaPdf(int secVigilanciaIntegrada, int consultorio) {
 
 		UtilitarioReporte ureporte = new UtilitarioReporte();
 		ureporte.imprimirDocumentoFicha("VigilanciaInfeccionesRespiratorias"
 				+ secVigilanciaIntegrada,
-				getFichaPdf(secVigilanciaIntegrada));
+				getFichaPdf(secVigilanciaIntegrada), consultorio);
 	}
 	
 	/***
@@ -4935,12 +4935,12 @@ public class ExpedienteDA implements ExpedienteService {
 	 * Fecha Creacion 06/12/2019 -- SC.
 	 * @param numHojaConsulta.
 	 */
-	public void imprimirFichaEpiSindromesFebrilesPdf(int numHojaConsulta) {
+	public void imprimirFichaEpiSindromesFebrilesPdf(int numHojaConsulta, int consultorio) {
 
 		UtilitarioReporte ureporte = new UtilitarioReporte();
-		ureporte.imprimirDocumento("fichaSindFebriles"
+		ureporte.imprimirDocumentoV2("fichaSindFebriles"
 				+ numHojaConsulta,
-				getFichaEpiSindromesFebrilesPdf(numHojaConsulta));
+				getFichaEpiSindromesFebrilesPdf(numHojaConsulta), consultorio);
 	}
 	
 }

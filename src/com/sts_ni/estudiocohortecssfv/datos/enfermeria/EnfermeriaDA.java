@@ -35,7 +35,8 @@ public class EnfermeriaDA implements EnfermeriaService {
 
 			String sql = "select h.expedienteFisico, p.edad, p.sexo, h.pesoKg, " + 
 					" h.tallaCm, h.temperaturac, " + 
-					" h.usuarioMedico " + 
+					" h.usuarioMedico, " +
+					" h.consultaRespiratorio " + 
 					" from HojaConsulta h, Paciente p " + 
 					" where h.codExpediente = p.codExpediente " + 
 					" and h.secHojaConsulta = :secHojaConsulta ";
@@ -57,6 +58,9 @@ public class EnfermeriaDA implements EnfermeriaService {
 				fila.put("temperaturac", hojaConsultaPaciente[5]);
 				if(hojaConsultaPaciente[6] != null) {
 					fila.put("usuarioMedico", hojaConsultaPaciente[6]);
+				}
+				if(hojaConsultaPaciente[7] != null) {
+					fila.put("consultaRespiratorio", hojaConsultaPaciente[7]);
 				}
 
 				oLista.add(fila);

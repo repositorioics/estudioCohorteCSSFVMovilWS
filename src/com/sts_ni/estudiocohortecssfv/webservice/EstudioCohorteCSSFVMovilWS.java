@@ -567,9 +567,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	@WebMethod(operationName = "imprimirSeguimientoInfluenciaPdf")
 	@WebResult(name = "resultadoJSON")
 	public String imprimirSeguimientoInfluenciaPdf(
-			@WebParam(name = "paramNumHojaSeguimiento") int paramNumHojaSeguimiento) {
+			@WebParam(name = "paramNumHojaSeguimiento") int paramNumHojaSeguimiento, 
+			@WebParam(name = "paramImpresora") int paramImpresora) {
 		return EXPEDIENTE_SERVICE
-				.imprimirSeguimientoInfluenciaPdf(paramNumHojaSeguimiento);
+				.imprimirSeguimientoInfluenciaPdf(paramNumHojaSeguimiento, paramImpresora);
 	}
 	
 	
@@ -656,8 +657,9 @@ public class EstudioCohorteCSSFVMovilWS {
 	@WebMethod(operationName = "reimpresionHojaConsulta")
 	@WebResult(name = "hojaConsultaJSON")
 	public String reimpresionHojaConsulta(
-			@WebParam(name = "paramsecHojaConsulta", partName = "paramsecHojaConsulta", mode = Mode.IN) int paramsecHojaConsulta) {
-		return EXPEDIENTE_SERVICE.reimpresionHojaConsulta(paramsecHojaConsulta);
+			@WebParam(name = "paramsecHojaConsulta", partName = "paramsecHojaConsulta", mode = Mode.IN) int paramsecHojaConsulta,
+			@WebParam(name = "paramImpresora") int paramImpresora) {
+		return EXPEDIENTE_SERVICE.reimpresionHojaConsulta(paramsecHojaConsulta, paramImpresora);
 	}
 	
 	//Hoja Zika
@@ -713,9 +715,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	@WebMethod(operationName = "imprimirSeguimientoZikaPdf")
 	@WebResult(name = "resultadoJSON")
 	public String imprimirSeguimientoZikaPdf(
-			@WebParam(name = "paramNumHojaSeguimiento") int paramNumHojaSeguimiento) {
+			@WebParam(name = "paramNumHojaSeguimiento") int paramNumHojaSeguimiento, 
+			@WebParam(name = "paramImpresora") int paramImpresora) {
 		return EXPEDIENTE_SERVICE
-				.imprimirSeguimientoZikaPdf(paramNumHojaSeguimiento);
+				.imprimirSeguimientoZikaPdf(paramNumHojaSeguimiento, paramImpresora);
 	}
 	
 	@WebMethod(operationName = "buscarFichaVigilanciaIntegrada")
@@ -758,9 +761,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	@WebMethod(operationName = "imprimirFichaPdf")
 	@WebResult(name = "imprimirFichaPdfvoid")
 	public void imprimirFichaPdf(
-			@WebParam(name = "secVigilanciaIntegrada") int secVigilanciaIntegrada) {
+			@WebParam(name = "secVigilanciaIntegrada") int secVigilanciaIntegrada,
+			@WebParam(name = "paramImpresora") int paramImpresora) {
 		EXPEDIENTE_SERVICE
-				.imprimirFichaPdf(secVigilanciaIntegrada);
+				.imprimirFichaPdf(secVigilanciaIntegrada, paramImpresora);
 	}
 	
 	@WebMethod(operationName = "procesoActivarDiagnostico")
@@ -782,9 +786,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	@WebMethod(operationName = "imprimirFichaEpiSindromesFebrilesPdf")
 	@WebResult(name = "imprimirFichaEpiSindromesFebrilesPdfvoid")
 	public void imprimirFichaEpiSindromesFebrilesPdf(
-			@WebParam(name = "numHojaConsulta") int numHojaConsulta) {
+			@WebParam(name = "numHojaConsulta") int numHojaConsulta,
+			@WebParam(name = "paramImpresora") int paramImpresora) {
 		EXPEDIENTE_SERVICE
-				.imprimirFichaEpiSindromesFebrilesPdf(numHojaConsulta);
+				.imprimirFichaEpiSindromesFebrilesPdf(numHojaConsulta, paramImpresora);
 	}
 	
 	@WebMethod(operationName = "getFisAndFifByCodExp")
@@ -809,5 +814,17 @@ public class EstudioCohorteCSSFVMovilWS {
 		return HOJA_CONSULTA_SERVICE.obtenerUltimaVersionApk();
 	}
 	
+	@WebMethod(operationName = "alertaCriteriosEti")
+	@WebResult(name = "resultadoJSON")
+	public String alertaCriteriosEti(
+			@WebParam(name = "paramHojaConsulta", partName = "paramHojaConsulta", mode = Mode.IN) String paramHojaConsulta) {
+		return SINTOMAS_SERVICE.alertaCriteriosEti(paramHojaConsulta);
+	}
+	
+	@WebMethod(operationName = "getListaConsultasRespitatorio")
+	@WebResult(name = "resultadoJSON")
+	public String getListaConsultasRespitatorio() {
+		return HOJA_CONSULTA_SERVICE.getListaConsultasRespitatorio();
+	}
 	//--------------------------------------------------------------------------------
 }

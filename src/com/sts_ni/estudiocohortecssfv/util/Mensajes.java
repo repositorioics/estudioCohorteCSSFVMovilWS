@@ -128,4 +128,8 @@ public class Mensajes {
     
     public static final String HEMOCONCENTRACION_NO_PUEDE_SER_D="Hemoconcentración no puede ser marcado como D ya que se envio a realizar el Examen de BHC";
     public static final String BHC_CON_HEMOCONCENTRACION_D="No puede enviar a realizar el examen de BHC debido a que marco hemoconcentración D";
+    
+    public static final String CONSULTA_CONVALECIENTE_CON_CATEGORIA_C="No se puede cerrar la hoja ya que la consulta es Convaleciente con Categoria C";
+    
+    public static final String NO_PACIENTE_CONSULTA_RESPIRATORIO="No hay pacientes para Consulta Respiratoria.";
 }

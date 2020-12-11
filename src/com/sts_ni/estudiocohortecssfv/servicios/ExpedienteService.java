@@ -17,11 +17,11 @@ public interface ExpedienteService {
 	
 	public byte[] getSeguimientoInfluenzaPdf(int paramSecHojaInfluenza);
 	
-	public String imprimirSeguimientoInfluenciaPdf(int paramSecHojaInfluenza);
+	public String imprimirSeguimientoInfluenciaPdf(int paramSecHojaInfluenza, int consultorio);
 
 	public String crearSeguimientoInfluenza(String paramCrearHoja);
 
-	public String reimpresionHojaConsulta(int paramsecHojaConsulta);
+	public String reimpresionHojaConsulta(int paramsecHojaConsulta, int consultorio);
 	
 	public String getListaSeguimientoZika(int paramSecHojaZika);
 	
@@ -35,7 +35,7 @@ public interface ExpedienteService {
 	
 	public byte[] getSeguimientoZikaPdf(int paramSecHojaZika);
 	
-	public String imprimirSeguimientoZikaPdf(int paramSecHojaZika);
+	public String imprimirSeguimientoZikaPdf(int paramSecHojaZika, int consultorio);
 	
 	public String buscarFichaVigilanciaIntegrada(int codExpediente, int numHojaConsulta);
 	
@@ -47,9 +47,9 @@ public interface ExpedienteService {
 	
 	public byte[] getFichaPdf(Integer secVigilanciaIntegrada);
 	
-	public void imprimirFichaPdf(int secVigilanciaIntegrada);
+	public void imprimirFichaPdf(int secVigilanciaIntegrada, int consultorio);
 	
 	public byte[] getFichaEpiSindromesFebrilesPdf(Integer numHojaConsulta);
 	
-	public void imprimirFichaEpiSindromesFebrilesPdf(int numHojaConsulta);
+	public void imprimirFichaEpiSindromesFebrilesPdf(int numHojaConsulta, int consultorio);
 }
