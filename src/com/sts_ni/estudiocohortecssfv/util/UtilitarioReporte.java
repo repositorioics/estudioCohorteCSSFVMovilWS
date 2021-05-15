@@ -308,12 +308,12 @@ public class UtilitarioReporte  {
 	}
     
     
-    public void imprimirDocumentoFicha(String nombres,byte[] archivoByte, int consultorio){
+    public void imprimirDocumentoFicha(String nombres,byte[] archivoByte, int consultorio, Integer valorParametro){
     	
     	String path = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.pdf") + (nombres.contains(".pdf")?nombres:nombres + ".pdf");
     	
   	    File file = new File(path);
-  	    int copies = 3;
+  	    //int copies = 5;
     	try
     	{
               //convert array of bytes into file
@@ -356,12 +356,14 @@ public class UtilitarioReporte  {
                	 docPrintJob = service[i].createPrintJob();
                 }
             }
-
-            PrinterJob pjob = PrinterJob.getPrinterJob();
-            pjob.setPrintService(docPrintJob.getPrintService());
-            pjob.setCopies(copies);
-            pjob.setJobName("job");
-            pdf.silentPrint(pjob);
+            
+            for (int j = 0; j < valorParametro; j++) {
+            	PrinterJob pjob = PrinterJob.getPrinterJob();
+                pjob.setPrintService(docPrintJob.getPrintService());
+                //pjob.setCopies(copies);
+                pjob.setJobName("job");
+                pdf.silentPrint(pjob);
+            }
             /*---------------------*/
     		
     	} catch(IOException e) {

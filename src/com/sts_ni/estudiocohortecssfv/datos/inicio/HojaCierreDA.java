@@ -263,6 +263,7 @@ public class HojaCierreDA implements HojaCierreService {
 	        		verificarCrearHojaInfluenza = true;
 	        	}
 	        }
+	        
 	        if (hojaConsulta.getConsulta() != null) { 
 	        	if (verificarCrearHojaInfluenza && estudiosParaCrearHI && hojaConsulta.getConsulta().trim().equals("Inicial")) {
 		        	String sql2 = "select hi from HojaInfluenza hi "
@@ -911,6 +912,53 @@ public class HojaCierreDA implements HojaCierreService {
 						}
 					}
 				}
+			} else {
+				String sql = "select h.secHojaConsulta "
+						+ " from HojaConsulta h "
+						+ " where h.codExpediente= :codExpediente " 
+						+ " and h.consulta = 'Inicial' "
+						//+ " and h.fechaCierre is not null " 
+						+ " order by h.secHojaConsulta desc ";
+
+				Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+				query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+				query.setMaxResults(1);
+
+				Integer secHojaConsulta = 0;
+				secHojaConsulta = ((Integer) query.uniqueResult()).intValue();
+
+				if (secHojaConsulta > 0) {
+
+					sql = " select hi from HojaInfluenza hi " 
+							+ " where hi.secHojaConsulta =:secHojaConsulta";
+
+					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("secHojaConsulta", secHojaConsulta);
+
+					HojaInfluenza hojaInfluenza = ((HojaInfluenza) query.uniqueResult());
+
+					if (hojaInfluenza != null) {
+						if (hojaInfluenza.getFechaCierre() == null) {
+							DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+							String strDate = dateFormat.format(hojaConsulta.getFechaConsulta());
+
+							sql = " select a from SeguimientoInfluenza a "
+									+ " where a.secHojaInfluenza =:secHojaInfluenza "
+									+ " and to_char(a.fechaSeguimiento, 'yyyyMMdd') =:fechaSeguimiento)";
+
+							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+							query.setParameter("secHojaInfluenza", hojaInfluenza.getSecHojaInfluenza());
+							query.setParameter("fechaSeguimiento", strDate);
+
+							SeguimientoInfluenza seguimientoInfluenza = ((SeguimientoInfluenza) query.uniqueResult());
+
+							if (seguimientoInfluenza == null) {
+								// NO PERMITIR CERRAR LA HOJA DE CONSULTA
+								return false;
+							}
+						}
+					}
+				}
 			}
 		}
 		return true;
@@ -937,15 +985,17 @@ public class HojaCierreDA implements HojaCierreService {
 	 * Fecha Creacion: 14/01/2020 - SC
 	 */
 	private boolean validarCrearHojaZika(HojaConsulta hojaConsulta) {
-		if (hojaConsulta.getCategoria().trim().equals("D") && hojaConsulta.getFis() != null 
-    			&& hojaConsulta.getSerologiaDengue().toString().compareTo("0") == 0) {
-    		return true;
-    	}
-    	if ((hojaConsulta.getCategoria().trim().equals("A") || hojaConsulta.getCategoria().trim().equals("B")) 
-    			&& hojaConsulta.getFis() != null  && hojaConsulta.getFif() != null 
-    			&& hojaConsulta.getSerologiaDengue().toString().compareTo("0") == 0) {
-    		return true;
-    	}
+		if (hojaConsulta.getCategoria() != null) {
+			if (hojaConsulta.getCategoria().trim().equals("D") && hojaConsulta.getFis() != null 
+	    			&& hojaConsulta.getSerologiaDengue().toString().compareTo("0") == 0) {
+	    		return true;
+	    	}
+	    	if ((hojaConsulta.getCategoria().trim().equals("A") || hojaConsulta.getCategoria().trim().equals("B")) 
+	    			&& hojaConsulta.getFis() != null  && hojaConsulta.getFif() != null 
+	    			&& hojaConsulta.getSerologiaDengue().toString().compareTo("0") == 0) {
+	    		return true;
+	    	}
+		}
 		return false;
 	}
 	

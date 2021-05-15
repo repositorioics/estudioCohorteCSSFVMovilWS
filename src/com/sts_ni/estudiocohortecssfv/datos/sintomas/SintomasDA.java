@@ -1501,7 +1501,7 @@ public class SintomasDA implements SintomasService {
 	
 	/***
 	 * Metodo para obtener la Fis, la Fif de la consulta inicial cuando se marque 
-	 * que la cosnulta es de seguimiento ó convaleciente
+	 * la consulta de seguimiento ó convaleciente
 	 * @param codExpediente, JSON
 	 * Fecha creacion = 17/12/2019 - SC
 	 */

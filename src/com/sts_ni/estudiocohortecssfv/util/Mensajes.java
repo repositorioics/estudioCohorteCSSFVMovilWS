@@ -101,7 +101,7 @@ public class Mensajes {
     public static final String PACIENTE_NO_PUEDE_SER_CATEGORIA_NA="Este paciente no puede ser categoria NA";
     public static final String PACIENTE_NO_PUEDE_SER_CATEGORIA_ABCD="Este paciente no puede ser categoria A, B, C, D";
     
-    public static final String HOJA_SIN_FIS_CON_CAT_D="Para crear una hoja de zika con categoria D, solo se necesita la FIS";
+    public static final String HOJA_SIN_FIS_CON_CAT_D="Para crear una hoja de zika con categoria D, necesita ingresar la FIS";
     public static final String HOJA_ZIKA_SIN_CAT="No se puede crear una hoja de zika sin haber marcado la categoria en la hoja de consulta";
     public static final String HOJA_ZIKA_CON_CAT_C="No puede crear una hoja de zika con categoria C";
     public static final String DEBE_CREAR_HOJA_INFLUENZA = "Para poder cerrar la Hoja de Consulta, debera crear la Hoja de Influenza";
@@ -132,4 +132,5 @@ public class Mensajes {
     public static final String CONSULTA_CONVALECIENTE_CON_CATEGORIA_C="No se puede cerrar la hoja ya que la consulta es Convaleciente con Categoria C";
     
     public static final String NO_PACIENTE_CONSULTA_RESPIRATORIO="No hay pacientes para Consulta Respiratoria.";
+    
 }

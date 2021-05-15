@@ -553,23 +553,23 @@ public class UtilHojaConsulta {
 	}
 	
 	public static boolean categoriaCompletada(HojaConsulta hojaConsulta) {
-		if(hojaConsulta.getCategoria() != null ||
-				hojaConsulta.getManifestacionHemorragica() != null ||
-				hojaConsulta.getPruebaTorniquetePositiva() != null ||
-				hojaConsulta.getPetequia10Pt() != null ||
-				hojaConsulta.getPetequia20Pt() != null ||
-				hojaConsulta.getPetequiasEspontaneas() != null ||
-				hojaConsulta.getPielExtremidadesFrias() != null ||
-				hojaConsulta.getPalidezEnExtremidades() != null ||
-				hojaConsulta.getEpistaxis() != null  ||
-				hojaConsulta.getGingivorragia() != null  ||
-				hojaConsulta.getLlenadoCapilar2seg() != null  ||
-				hojaConsulta.getCianosis() != null  ||
-				hojaConsulta.getHipermenorrea() != null  ||
-				hojaConsulta.getHematemesis() != null  ||
-				hojaConsulta.getMelena() != null  ||
-				hojaConsulta.getHemoconc() != null  ||
-				hojaConsulta.getLinfocitosaAtipicos() != null) {
+		if(hojaConsulta.getCategoria() != null &&
+				hojaConsulta.getManifestacionHemorragica() != null &&
+				hojaConsulta.getPruebaTorniquetePositiva() != null &&
+				hojaConsulta.getPetequia10Pt() != null &&
+				hojaConsulta.getPetequia20Pt() != null &&
+				hojaConsulta.getPetequiasEspontaneas() != null &&
+				hojaConsulta.getPielExtremidadesFrias() != null &&
+				hojaConsulta.getPalidezEnExtremidades() != null &&
+				hojaConsulta.getEpistaxis() != null  &&
+				hojaConsulta.getGingivorragia() != null  &&
+				hojaConsulta.getLlenadoCapilar2seg() != null  &&
+				hojaConsulta.getCianosis() != null  &&
+				hojaConsulta.getHipermenorrea() != null  &&
+				hojaConsulta.getHematemesis() != null  &&
+				hojaConsulta.getMelena() != null  &&
+				hojaConsulta.getHemoconc() != null) {
+				//hojaConsulta.getLinfocitosaAtipicos() 
 			return true;
 		}
 		

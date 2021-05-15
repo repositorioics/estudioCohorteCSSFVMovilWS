@@ -93,7 +93,6 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 	String nombreReporte="HojaConsulta";
 	try {
 	    List  oLista = new LinkedList(); //Listado final para el resultado
-	  
 	
 	    String sql = " select " +
 				" h.cod_expediente \"codExpediente\" ,  " +
@@ -102,7 +101,8 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 				"h.peso_kg \"pesoKg\", " +
 				"h.talla_cm \"tallaCm\",  " +
 				"p.edad, " +
-				"obtenerEdad(fecha_nac) \"edadCalculada\", " +
+				//"obtenerEdad(fecha_nac) \"edadCalculada\", " +
+				"obteneredad2(fecha_nac, CAST(h.fecha_consulta AS DATE)) \"edadCalculada\", " + //Obtiendo la edad que tenia el paciente el dia de la consulta
 				"p.fecha_nac \"FechaNac\", " +
 				"p.sexo, " +
 				"h.fcia_resp \"fciaResp\", " +
@@ -359,6 +359,7 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 	   Query query =  HIBERNATE_RESOURCE.getSession().createSQLQuery(sql)
 		        .setResultTransformer(Transformers.aliasToBean(HojaConsultaReporte.class))
 	     .setParameter("secHojaConsulta", secHojaConsulta);
+	   
 	   
 	   List result = query.list();
        

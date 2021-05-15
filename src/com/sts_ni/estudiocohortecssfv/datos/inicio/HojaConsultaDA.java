@@ -680,6 +680,8 @@ public class HojaConsultaDA implements HojaConsultaService {
 					" to_char(h.fecha_Consulta, 'yyyyMMdd HH12:MI:SS') \"fcon\", e.codigo, h.usuario_Medico, " +
 					" h.medico_Cambio_Turno, " +
 					" (select um.nombre from Usuarios_View um where h.usuario_Medico = um.id), " +
+					" h.fcia_resp, " +
+					" h.consulta_respiratorio, " +
 					" e.orden, h.orden_Llegada " +
 					" from hoja_consulta h " +
 					" inner join paciente p on p.cod_Expediente = h.cod_Expediente " +
@@ -719,6 +721,8 @@ public class HojaConsultaDA implements HojaConsultaService {
 					fila.put("usuarioMedico", object[13]);
 					fila.put("medicoCambioTurno", object[14]);
 					fila.put("nombreMedico", (object[15] != null) ? object[15].toString() : null);
+					fila.put("fcia_resp", (object[16] != null) ? object[16].toString() : null);
+					fila.put("consulta_respiratorio", (object[17] != null) ? object[17].toString() : null);
 
 					oLista.add(fila);
 				}
@@ -2871,10 +2875,10 @@ public class HojaConsultaDA implements HojaConsultaService {
 				fila.put("fif", hojaConsultaPaciente[10] != null ? hojaConsultaPaciente[10].toString() : null);
 				fila.put("consulta", hojaConsultaPaciente[11] != null ? hojaConsultaPaciente[11] : null);
 				fila.put("temMedc", hojaConsultaPaciente[12] != null ? hojaConsultaPaciente[12].toString() : null);
-				fila.put("eritrocitos", hojaConsultaPaciente[13] != null ? hojaConsultaPaciente[13].toString() : "");
+				fila.put("eritrocitos", hojaConsultaPaciente[13] != null ? hojaConsultaPaciente[13].toString() : null);
 				/*Nuevo campo agregado fecha creacion 23/11/2020 - SC*/
-				fila.put("serologiaDengue", hojaConsultaPaciente[14] != null ? hojaConsultaPaciente[14].toString() : "");
-				fila.put("eti", hojaConsultaPaciente[15] != null ? hojaConsultaPaciente[15].toString() : "");
+				fila.put("serologiaDengue", hojaConsultaPaciente[14] != null ? hojaConsultaPaciente[14].toString() : null);
+				fila.put("eti", hojaConsultaPaciente[15] != null ? hojaConsultaPaciente[15].toString() : null);
 
 				oLista.add(fila);
 

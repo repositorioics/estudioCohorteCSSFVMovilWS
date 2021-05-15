@@ -2829,7 +2829,7 @@ public class ExpedienteDA implements ExpedienteService {
 				fila.put("numHojaSeguimiento", ((Integer)paciente[5]).intValue());
 				fila.put("fif", (paciente[6] != null) ? paciente[6].toString() : "");
 				fila.put("fis", (paciente[7] != null) ? paciente[7].toString() : "");
-				fila.put("secHojaInfluenza", ((Integer)paciente[8]).intValue());
+				fila.put("secHojaZika", ((Integer)paciente[8]).intValue());
 				fila.put("cerrado", paciente[9].toString().charAt(0));
 				fila.put("categoria", (paciente[10] != null) ? paciente[10].toString() : "");
 				fila.put("sintomaIncial1", (paciente[11] != null) ? paciente[11].toString() : "");
@@ -2895,7 +2895,7 @@ public class ExpedienteDA implements ExpedienteService {
 			if(hojaConsulta == null){
 				result = UtilResultado.parserResultado(null, Mensajes.NO_EXISTE_HC_CODEXP, UtilResultado.INFO);
 			
-			}else{
+			} else {
 				
 				//Retornamos mensaje si el particpante no pertenece al estudio de dengue
 				sql = "select ec from ConsEstudios c, EstudioCatalogo ec " + 
@@ -2934,10 +2934,13 @@ public class ExpedienteDA implements ExpedienteService {
 					if (hojaConsulta.getFis() == null) {
 						return UtilResultado.parserResultado(null, Mensajes.HOJA_SIN_FIS_CON_CAT_D, UtilResultado.INFO);
 					}
-				} else if (hojaConsulta.getCategoria().trim().equals("C")
+				}
+				if (hojaConsulta.getCategoria().trim().equals("C")
 						|| hojaConsulta.getCategoria().trim().equals("NA")) { // si la categoria es C ó NA retornamos mensaje
 					return UtilResultado.parserResultado(null, Mensajes.HOJA_ZIKA_CON_CAT_C, UtilResultado.INFO);
-				} else { // verificamos que la categoria sea A ó B y tengan Fis y Fif
+				} 
+				if (hojaConsulta.getCategoria().trim().equals("A")
+						|| hojaConsulta.getCategoria().trim().equals("B")) { // verificamos que la categoria sea A ó B y tengan Fis y Fif
 					if (hojaConsulta.getFif() == null || hojaConsulta.getFis() == null) {
 						return UtilResultado.parserResultado(null, Mensajes.HOJA_SIN_FIS_FIF, UtilResultado.INFO);
 					}
@@ -4723,7 +4726,8 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " p.edad, "
 					+ " p.sexo, "
 					+ " p.fecha_nac \"fechaNac\", "
-					+ "obtenerEdad(p.fecha_nac) \"edadCalculada\", "
+					//+ "obtenerEdad(p.fecha_nac) \"edadCalculada\", "
+					+ "obteneredad2(fecha_nac, CAST(h.fecha_consulta AS DATE)) \"edadCalculada\", " //Obtiendo la edad que tenia el paciente el dia de la consulta
 					+ " vi.barrio ||', '||COALESCE(vi.direccion,'')||', '||COALESCE(vi.telefono,'') \"barrio\", "
 					//+ " vi.departamento, "
 					//+ " vi.municipio, "
@@ -4865,11 +4869,20 @@ public class ExpedienteDA implements ExpedienteService {
 	 * @param secVigilanciaIntegrada.
 	 */
 	public void imprimirFichaPdf(int secVigilanciaIntegrada, int consultorio) {
+		
+		String valorParametro;
+		
+		String sql = "select valores " + 
+				" from ParametrosSistemas p where p.nombreParametro ='NUM_IMPRESIONES_FICHA_INFLUENZA'";
+		
+		Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+		
+		valorParametro = query.uniqueResult().toString();
 
 		UtilitarioReporte ureporte = new UtilitarioReporte();
 		ureporte.imprimirDocumentoFicha("VigilanciaInfeccionesRespiratorias"
 				+ secVigilanciaIntegrada,
-				getFichaPdf(secVigilanciaIntegrada), consultorio);
+				getFichaPdf(secVigilanciaIntegrada), consultorio, Integer.valueOf(valorParametro));
 	}
 	
 	/***
