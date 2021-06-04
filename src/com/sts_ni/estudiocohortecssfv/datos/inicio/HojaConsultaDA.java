@@ -28,7 +28,9 @@ import ni.com.sts.estudioCohorteCSSFV.modelo.SerologiaChikMuestra;
 import ni.com.sts.estudioCohorteCSSFV.modelo.SerologiaDengueMuestra;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.JDBCException;
 import org.hibernate.Query;
+import org.hibernate.exception.ConstraintViolationException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

@@ -216,8 +216,17 @@ public class UtilitarioReporte  {
            String impresoraConsultorio = configPrint.getString("CONSULTORIOMEDICO");
            String impresoraRespiratorio = configPrint.getString("CONSULTORIORESPIRATORIO");
            
-           javax.print.PrintService[] service = PrinterJob.lookupPrintServices(); 
+           javax.print.PrintService[] service = PrinterJob.lookupPrintServices();
+           //PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+           
            DocPrintJob docPrintJob = null;
+           
+           
+           System.out.println("SERVICE: " + service);
+           System.out.println("SERVICE LENGHT: " + service.length);
+           System.out.println("Consultorio Medico: " + impresoraConsultorio);
+           //System.out.println("PRINTSERVICES: " + printServices.length);
+           
            
            //int count = service.length;
            for (int i = 0; i < service.length; i++) {

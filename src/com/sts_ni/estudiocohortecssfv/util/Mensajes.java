@@ -133,4 +133,6 @@ public class Mensajes {
     
     public static final String NO_PACIENTE_CONSULTA_RESPIRATORIO="No hay pacientes para Consulta Respiratoria.";
     
+    public static final String ERROR_NUM_HOJA_CONSULTA_DUPLICADA="Error al generar la hoja de consulta, intente nuevamente: ";
+    
 }

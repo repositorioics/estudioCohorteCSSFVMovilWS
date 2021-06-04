@@ -61,7 +61,7 @@ public class HibernateResource {
     /**
     * Ejecutamos la transacción.
     */
-    public void commit() {
+    public void commit() throws Exception{
         try {
             if (getSession().getTransaction().isActive()){
                 getSession().getTransaction().commit();
@@ -70,6 +70,7 @@ public class HibernateResource {
         } catch (Exception e) {
             System.out.println("---- EXCEPTION");
             System.out.println("Error en JTA Transaction: " + e.toString());
+            throw e;
         }
     }
 
