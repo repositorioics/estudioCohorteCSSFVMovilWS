@@ -126,8 +126,47 @@ public class UtilitarioReporte  {
 		            report.addPage(fileAnexoFlu4.removePage( 0 ));
 	            }
 	            
-	            if(datosAdicionales != null){
-	            	HashMap params = new HashMap(); 
+	            if(datosAdicionales != null) {
+	            	if ((datosAdicionales.getHistoriaExamenFisico() != null && 
+	            			datosAdicionales.getHistoriaExamenFisico().trim().length() > 2000) &&
+	            			(datosAdicionales.getPlanes() != null && datosAdicionales.getPlanes().trim().length() > 460)) {
+	            		
+	            		HashMap params = new HashMap(); 
+		            	params.put("planes", datosAdicionales.getPlanes());
+		            	params.put("historiaExamenFisico", datosAdicionales.getHistoriaExamenFisico());
+		            	params.put("numHojaConsulta", datosAdicionales.getNumHojaConsulta());
+		            	params.put("codExpediente", datosAdicionales.getCodExpediente());
+		            	params.put("expedienteFisico", datosAdicionales.getExpedienteFisico());
+		            	
+		            	String pathPag4 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"4").contains(".jasper")?(nombreReporte+"4"):(nombreReporte+"4") + ".jasper");
+		            	JasperPrint fileAnexo4 = JasperFillManager.fillReport(pathPag4, params, new JRBeanCollectionDataSource(collectionDataSource));
+		            	report.addPage(fileAnexo4.removePage( 0 ));
+		            	
+	            		if (datosAdicionales.getHistoriaExamenFisico() != null && 
+		            			datosAdicionales.getHistoriaExamenFisico().trim().length() > 6000) {
+	            			String pathPag5 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"5").contains(".jasper")?(nombreReporte+"5"):(nombreReporte+"5") + ".jasper");
+			            	JasperPrint fileAnexo5 = JasperFillManager.fillReport(pathPag5, params, new JRBeanCollectionDataSource(collectionDataSource));
+			            	report.addPage(fileAnexo5.removePage( 0 ));
+			            	
+	            		}
+	            		if (datosAdicionales.getPlanes() != null && datosAdicionales.getPlanes().trim().length() > 460) {
+	            			String pathPag6 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"6").contains(".jasper")?(nombreReporte+"6"):(nombreReporte+"6") + ".jasper");
+			            	JasperPrint fileAnexo6 = JasperFillManager.fillReport(pathPag6, params, new JRBeanCollectionDataSource(collectionDataSource));
+			            	report.addPage(fileAnexo6.removePage( 0 ));
+	            		}
+	            	} else {
+	            		HashMap params = new HashMap(); 
+		            	params.put("planes", datosAdicionales.getPlanes());
+		            	params.put("historiaExamenFisico", datosAdicionales.getHistoriaExamenFisico());
+		            	params.put("numHojaConsulta", datosAdicionales.getNumHojaConsulta());
+		            	params.put("codExpediente", datosAdicionales.getCodExpediente());
+		            	params.put("expedienteFisico", datosAdicionales.getExpedienteFisico());
+		            	
+		            	String pathPag3 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"3").contains(".jasper")?(nombreReporte+"3"):(nombreReporte+"3") + ".jasper");
+		            	JasperPrint fileAnexo2 = JasperFillManager.fillReport(pathPag3, params, new JRBeanCollectionDataSource(collectionDataSource));
+		            	report.addPage(fileAnexo2.removePage( 0 ));
+	            	}
+	            	/*HashMap params = new HashMap(); 
 	            	params.put("planes", datosAdicionales.getPlanes());
 	            	params.put("historiaExamenFisico", datosAdicionales.getHistoriaExamenFisico());
 	            	params.put("numHojaConsulta", datosAdicionales.getNumHojaConsulta());
@@ -136,7 +175,7 @@ public class UtilitarioReporte  {
 	            	
 	            	String pathPag3 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"3").contains(".jasper")?(nombreReporte+"3"):(nombreReporte+"3") + ".jasper");
 	            	JasperPrint fileAnexo2 = JasperFillManager.fillReport(pathPag3, params, new JRBeanCollectionDataSource(collectionDataSource));
-	            	report.addPage(fileAnexo2.removePage( 0 ));
+	            	report.addPage(fileAnexo2.removePage( 0 ));*/
 	            }
             }
           return  JasperExportManager.exportReportToPdf(report);
@@ -178,9 +217,11 @@ public class UtilitarioReporte  {
            }
 
            PrinterJob pjob = PrinterJob.getPrinterJob();
-           pjob.setPrintService(docPrintJob.getPrintService());
-           pjob.setJobName("job");
-           pdf.silentPrint(pjob);
+           if (docPrintJob != null) {
+        	   pjob.setPrintService(docPrintJob.getPrintService());
+               pjob.setJobName("job");
+               pdf.silentPrint(pjob);
+           }
            /*---------------------*/
           
            
@@ -242,9 +283,11 @@ public class UtilitarioReporte  {
            }
 
            PrinterJob pjob = PrinterJob.getPrinterJob();
-           pjob.setPrintService(docPrintJob.getPrintService());
-           pjob.setJobName("job");
-           pdf.silentPrint(pjob);
+           if (docPrintJob != null) {
+        	   pjob.setPrintService(docPrintJob.getPrintService());
+               pjob.setJobName("job");
+               pdf.silentPrint(pjob);
+           }
            /*---------------------*/
           
            
@@ -298,9 +341,11 @@ public class UtilitarioReporte  {
            }
 
            PrinterJob pjob = PrinterJob.getPrinterJob();
-           pjob.setPrintService(docPrintJob.getPrintService());
-           pjob.setJobName("job");
-           pdf.silentPrint(pjob);
+           if (docPrintJob != null) {
+        	   pjob.setPrintService(docPrintJob.getPrintService());
+               pjob.setJobName("job");
+               pdf.silentPrint(pjob);
+           }
            /*---------------------*/
           
            

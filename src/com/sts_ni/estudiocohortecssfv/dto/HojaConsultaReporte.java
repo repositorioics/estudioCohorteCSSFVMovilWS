@@ -336,6 +336,9 @@ public class HojaConsultaReporte {
 	private String noAtiendeLlamadoEnfermeria;
 	private String noAtiendeLlamadoMedico;
 	
+	private String codSupervisor;
+	private String nombreSupervisor;
+	
 	public int getNumHojaConsulta() {
 		return numHojaConsulta;
 	}
@@ -1646,4 +1649,19 @@ public class HojaConsultaReporte {
 	public void setNoAtiendeLlamadoMedico(String noAtiendeLlamadoMedico) {
 		this.noAtiendeLlamadoMedico = noAtiendeLlamadoMedico;
 	}
+	
+	public String getCodSupervisor() {
+		return codSupervisor;
+	}
+	public void setcodSupervisor(String codSupervisor) {
+		this.codSupervisor = codSupervisor;
+	}
+	
+	public String getNombreSupervisor() {
+		return nombreSupervisor;
+	}
+	public void setNombreSupervisor(String nombreSupervisor) {
+		this.nombreSupervisor = nombreSupervisor;
+	}
+	
 }

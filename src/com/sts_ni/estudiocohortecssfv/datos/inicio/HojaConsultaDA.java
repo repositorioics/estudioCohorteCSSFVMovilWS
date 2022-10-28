@@ -3446,14 +3446,14 @@ public class HojaConsultaDA implements HojaConsultaService {
 				hojaConsulta.setInfluenza(influenza);
 				hojaConsulta.setOel(oel);
 				
-				if(hojaConsulta.getUsuarioMedico() != null ) {
+				/*if(hojaConsulta.getUsuarioMedico() != null ) {
 					if(hojaConsulta.getUsuarioMedico() != usuarioMedico) {
 						
 						hojaConsulta.setMedicoCambioTurno(usuarioMedico);
 					}
 				} else {
 					hojaConsulta.setUsuarioMedico(usuarioMedico);
-				}
+				}*/
 				// hojaConsulta.setOtroExamenLab(otroExamenLab);
 				
 				/*Validacion para verificar si viene marcado otro examen laboratorio,
@@ -3493,14 +3493,14 @@ public class HojaConsultaDA implements HojaConsultaService {
 				hojaConsulta.setInfluenza(influenza);
 				hojaConsulta.setOel(oel);
 				
-				if(hojaConsulta.getUsuarioMedico() != null ) {
+				/*if(hojaConsulta.getUsuarioMedico() != null ) {
 					if(hojaConsulta.getUsuarioMedico() != usuarioMedico) {
 						
 						hojaConsulta.setMedicoCambioTurno(usuarioMedico);
 					}
 				} else {
 					hojaConsulta.setUsuarioMedico(usuarioMedico);
-				}
+				}*/
 				
 				/*Validacion para verificar si viene marcado otro examen laboratorio,
 				 * si viene marcado y este es no entonces limpia el texto de otro examen laboratorio*/

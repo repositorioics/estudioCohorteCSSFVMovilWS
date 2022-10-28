@@ -321,6 +321,8 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 				" mtc.motivo \"motivoCancelacion\", " +
 				" h.no_atiende_llamado_enfermeria \"noAtiendeLlamadoEnfermeria\", " +
 				" h.no_atiende_llamado_medico \"noAtiendeLlamadoMedico\", " +
+				" superv.codigopersonal \"codSupervisor\",  " +
+				" superv.nombre \"nombreSupervisor\", " +
 				//------------------------------------------
 				" (SELECT array_to_string( " + 
 				"  ARRAY(select DISTINCT " +
@@ -351,6 +353,7 @@ public class HojaConsultaReporteDA implements HojaConsultaReporteService {
 				" left join usuarios_view uvmed on h.usuario_medico=uvmed.id "+
 				" left join usuarios_view uvenf on h.usuario_enfermeria=uvenf.id "+
 				" left join usuarios_view umcamt on h.medico_cambio_turno=umcamt.id " +
+				" left join usuarios_view superv on h.supervisor=superv.id " +
 				" left join motivo_cancelacion mtc on h.sec_hoja_consulta = mtc.num_hoja_consulta";
 	    
 	if(secHojaConsulta > 0)

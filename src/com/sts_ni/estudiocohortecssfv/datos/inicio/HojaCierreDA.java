@@ -5,12 +5,14 @@ import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaInfluenza;
@@ -218,6 +220,7 @@ public class HojaCierreDA implements HojaCierreService {
 	 */
 	public String procesoCierre(String paramHojaConsulta) {
 		String result;
+		boolean imprimirHoja = true;
 		try {
 			consultaReporteService = new HojaConsultaReporteDA();
 			JSONParser parser = new JSONParser();
@@ -331,6 +334,12 @@ public class HojaCierreDA implements HojaCierreService {
 		        }
 	        }
 	        
+	        /*Obteniendo el supervisor*/
+	        String supervisor = supervisorHojaConsulta(hojaConsulta.getUsuarioMedico(), hojaConsulta.getMedicoCambioTurno());
+	        if (supervisor == null) {
+	        	return result = UtilResultado.parserResultado(null, Mensajes.ERROR_SUPERVISOR, 4);
+	        }
+	        
 	        //*****************************************************************
 	        if(UtilHojaConsulta.validarTodasSecciones(hojaConsulta)) {
 	        	
@@ -412,7 +421,23 @@ public class HojaCierreDA implements HojaCierreService {
 				        } else {
 				        	hojaConsulta.setFechaCierre(new SimpleDateFormat("yyyyMMdd HH:mm:ss").parse(hojaConsultaJSON.get("fechaCierre").toString()));
 				        }
+				        
+				        /*Si los usuarios medico son distintos al de zoila, grethel, lilly, jennyfer imprimir 27/09/2021*/ 
+				        if (hojaConsulta.getUsuarioMedico() == 60 || hojaConsulta.getUsuarioMedico() == 16 || 
+	            				hojaConsulta.getUsuarioMedico() == 98 || hojaConsulta.getUsuarioMedico() == 94 || 
+	            				hojaConsulta.getUsuarioMedico() == 133) {
+				        	imprimirHoja = false;
+	            		}
+				        
 				        hojaConsulta.setEstado('7');
+				        hojaConsulta.setSupervisor(Short.valueOf(supervisor));
+				        hojaConsulta.setUsuarioCierraHoja(hojaConsulta.getUsuarioMedico());
+				        if (imprimirHoja) {
+				        	hojaConsulta.setHojaImpresa('S');
+				        } else {
+				        	hojaConsulta.setHojaImpresa('N');
+				        }
+				        /*HojaImpresa, UsuarioCierraHoja*/
 				        HIBERNATE_RESOURCE.begin();
 			            HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
 			            HIBERNATE_RESOURCE.commit();
@@ -429,7 +454,9 @@ public class HojaCierreDA implements HojaCierreService {
 			            	 /*Si el resultadoHojaConsulta es mayor que 0, indica que la hoja de consulta se cerro correctamente
 			            	entonces se procede a realizar la impresion de la hoja de consulta */
 			            	if (resultHojaConsulta.intValue() > 0) {
-			            		consultaReporteService.imprimirConsultaPdf(hojaConsulta.getSecHojaConsulta());
+			            		if (imprimirHoja) { 
+			            			consultaReporteService.imprimirConsultaPdf(hojaConsulta.getSecHojaConsulta());
+			            		}
 			            	} else {
 			            		result = UtilResultado.parserResultado(null, Mensajes.HOJA_CONSULTA_NO_SE_PUDO_CERRAR, UtilResultado.INFO);
 			            	}
@@ -535,14 +562,28 @@ public class HojaCierreDA implements HojaCierreService {
 	        HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
 	        
 	        if(hojaConsulta.getEstado() == '7') {
-		        
-		        HIBERNATE_RESOURCE.begin();
-		        HojaConsulta nuevaHojaConsulta = cargarNuevaHojaConsulta(hojaConsulta);
-	            HIBERNATE_RESOURCE.getSession().saveOrUpdate(nuevaHojaConsulta);
-	            HIBERNATE_RESOURCE.commit();
-	            
-	            result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
-            
+	        	String sql = " select h.codExpediente" +
+						" from HojaConsulta h " +
+						//" where to_char(h.fechaConsulta, 'yyyyMMdd') = to_char(current_date, 'yyyyMMdd') " +
+						" where h.estado not in('7', '8', '9') " +
+						" and h.codExpediente = :codExpediente";
+	        	
+	        	Query query2 = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+				query2.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+				
+				Boolean existeExpActivo = query2.list().size() > 0;
+				if (!existeExpActivo) {
+					HIBERNATE_RESOURCE.begin();
+			        HojaConsulta nuevaHojaConsulta = cargarNuevaHojaConsulta(hojaConsulta);
+		            HIBERNATE_RESOURCE.getSession().saveOrUpdate(nuevaHojaConsulta);
+		            HIBERNATE_RESOURCE.commit();
+		            
+		            result = UtilResultado.parserResultado(null, "", UtilResultado.OK);
+				} else {
+					result = UtilResultado.parserResultado(null,
+							Mensajes.CODIGO_PACIENTE_YA_INGRESADO,
+							UtilResultado.ERROR);
+				}
 	        } else {
 	        	result = UtilResultado.parserResultado(null, Mensajes.HOJA_CONSULTA_NO_CERRADA, UtilResultado.ERROR);
 	        }
@@ -818,6 +859,7 @@ public class HojaCierreDA implements HojaCierreService {
 			nuevaHoja.setTallaCm(anteriorHoja.getTallaCm());
 			nuevaHoja.setTemperaturac(anteriorHoja.getTemperaturac());
 			nuevaHoja.setEstudiosParticipantes(estudios);
+			nuevaHoja.setConsultaRespiratorio('1');
 			
 			//Se guarda la hora enfermeria cuando se crea la observacion
 			nuevaHoja.setHorasv(horaEnfermeria);
@@ -862,103 +904,105 @@ public class HojaCierreDA implements HojaCierreService {
 	 * Fecha Creacion: 07/01/2020 - SC
 	 */
 	private boolean validarIngresoSeguimientoInfluenza(HojaConsulta hojaConsulta) {
-		if (hojaConsulta.getConsulta() != null) {
-			if (hojaConsulta.getConsulta().trim().equals("Seguimiento")
-					|| hojaConsulta.getConsulta().trim().equals("Convaleciente")) {
+		if (hojaConsulta.getConsulta() != null && hojaConsulta.getLugarAtencion() != null) {
+			if (hojaConsulta.getLugarAtencion().trim().equals("CS SFV")) {
+				if (hojaConsulta.getConsulta().trim().equals("Seguimiento")
+						|| hojaConsulta.getConsulta().trim().equals("Convaleciente")) {
 
-				String sql = "select h.secHojaConsulta "
-						+ " from HojaConsulta h "
-						+ " where h.codExpediente= :codExpediente " 
-						+ " and h.consulta = 'Inicial' "
-						+ " and h.fechaCierre is not null " 
-						+ " order by h.secHojaConsulta desc ";
+					String sql = "select h.secHojaConsulta "
+							+ " from HojaConsulta h "
+							+ " where h.codExpediente= :codExpediente " 
+							+ " and h.consulta = 'Inicial' "
+							+ " and h.fechaCierre is not null " 
+							+ " order by h.secHojaConsulta desc ";
 
-				Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-				query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
-				query.setMaxResults(1);
+					Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+					query.setMaxResults(1);
 
-				Integer secHojaConsulta = 0;
-				secHojaConsulta = ((Integer) query.uniqueResult()).intValue();
+					Integer secHojaConsulta = 0;
+					secHojaConsulta = ((Integer) query.uniqueResult()).intValue();
 
-				if (secHojaConsulta > 0) {
+					if (secHojaConsulta > 0) {
 
-					sql = " select hi from HojaInfluenza hi " 
-							+ " where hi.secHojaConsulta =:secHojaConsulta";
+						sql = " select hi from HojaInfluenza hi " 
+								+ " where hi.secHojaConsulta =:secHojaConsulta";
 
-					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-					query.setParameter("secHojaConsulta", secHojaConsulta);
+						query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+						query.setParameter("secHojaConsulta", secHojaConsulta);
 
-					HojaInfluenza hojaInfluenza = ((HojaInfluenza) query.uniqueResult());
+						HojaInfluenza hojaInfluenza = ((HojaInfluenza) query.uniqueResult());
 
-					if (hojaInfluenza != null) {
-						if (hojaInfluenza.getFechaCierre() == null) {
-							DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-							String strDate = dateFormat.format(hojaConsulta.getFechaConsulta());
+						if (hojaInfluenza != null) {
+							if (hojaInfluenza.getFechaCierre() == null) {
+								DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+								String strDate = dateFormat.format(hojaConsulta.getFechaConsulta());
 
-							sql = " select a from SeguimientoInfluenza a "
-									+ " where a.secHojaInfluenza =:secHojaInfluenza "
-									+ " and to_char(a.fechaSeguimiento, 'yyyyMMdd') =:fechaSeguimiento)";
+								sql = " select a from SeguimientoInfluenza a "
+										+ " where a.secHojaInfluenza =:secHojaInfluenza "
+										+ " and to_char(a.fechaSeguimiento, 'yyyyMMdd') =:fechaSeguimiento)";
 
-							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-							query.setParameter("secHojaInfluenza", hojaInfluenza.getSecHojaInfluenza());
-							query.setParameter("fechaSeguimiento", strDate);
+								query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+								query.setParameter("secHojaInfluenza", hojaInfluenza.getSecHojaInfluenza());
+								query.setParameter("fechaSeguimiento", strDate);
 
-							SeguimientoInfluenza seguimientoInfluenza = ((SeguimientoInfluenza) query.uniqueResult());
+								SeguimientoInfluenza seguimientoInfluenza = ((SeguimientoInfluenza) query.uniqueResult());
 
-							if (seguimientoInfluenza == null) {
-								// NO PERMITIR CERRAR LA HOJA DE CONSULTA
-								return false;
+								if (seguimientoInfluenza == null) {
+									// NO PERMITIR CERRAR LA HOJA DE CONSULTA
+									return false;
+								}
 							}
 						}
 					}
-				}
-			} else {
-				String sql = "select h.secHojaConsulta "
-						+ " from HojaConsulta h "
-						+ " where h.codExpediente= :codExpediente " 
-						+ " and h.consulta = 'Inicial' "
-						//+ " and h.fechaCierre is not null " 
-						+ " order by h.secHojaConsulta desc ";
+				} else {
+					String sql = "select h.secHojaConsulta "
+							+ " from HojaConsulta h "
+							+ " where h.codExpediente= :codExpediente " 
+							+ " and h.consulta = 'Inicial' "
+							//+ " and h.fechaCierre is not null " 
+							+ " order by h.secHojaConsulta desc ";
 
-				Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-				query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
-				query.setMaxResults(1);
+					Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+					query.setParameter("codExpediente", hojaConsulta.getCodExpediente());
+					query.setMaxResults(1);
 
-				Integer secHojaConsulta = 0;
-				secHojaConsulta = ((Integer) query.uniqueResult()).intValue();
+					Integer secHojaConsulta = 0;
+					secHojaConsulta = ((Integer) query.uniqueResult()).intValue();
 
-				if (secHojaConsulta > 0) {
+					if (secHojaConsulta > 0) {
 
-					sql = " select hi from HojaInfluenza hi " 
-							+ " where hi.secHojaConsulta =:secHojaConsulta";
+						sql = " select hi from HojaInfluenza hi " 
+								+ " where hi.secHojaConsulta =:secHojaConsulta";
 
-					query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-					query.setParameter("secHojaConsulta", secHojaConsulta);
+						query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+						query.setParameter("secHojaConsulta", secHojaConsulta);
 
-					HojaInfluenza hojaInfluenza = ((HojaInfluenza) query.uniqueResult());
+						HojaInfluenza hojaInfluenza = ((HojaInfluenza) query.uniqueResult());
 
-					if (hojaInfluenza != null) {
-						if (hojaInfluenza.getFechaCierre() == null) {
-							DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-							String strDate = dateFormat.format(hojaConsulta.getFechaConsulta());
+						if (hojaInfluenza != null) {
+							if (hojaInfluenza.getFechaCierre() == null) {
+								DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+								String strDate = dateFormat.format(hojaConsulta.getFechaConsulta());
 
-							sql = " select a from SeguimientoInfluenza a "
-									+ " where a.secHojaInfluenza =:secHojaInfluenza "
-									+ " and to_char(a.fechaSeguimiento, 'yyyyMMdd') =:fechaSeguimiento)";
+								sql = " select a from SeguimientoInfluenza a "
+										+ " where a.secHojaInfluenza =:secHojaInfluenza "
+										+ " and to_char(a.fechaSeguimiento, 'yyyyMMdd') =:fechaSeguimiento)";
 
-							query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
-							query.setParameter("secHojaInfluenza", hojaInfluenza.getSecHojaInfluenza());
-							query.setParameter("fechaSeguimiento", strDate);
+								query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+								query.setParameter("secHojaInfluenza", hojaInfluenza.getSecHojaInfluenza());
+								query.setParameter("fechaSeguimiento", strDate);
 
-							SeguimientoInfluenza seguimientoInfluenza = ((SeguimientoInfluenza) query.uniqueResult());
+								SeguimientoInfluenza seguimientoInfluenza = ((SeguimientoInfluenza) query.uniqueResult());
 
-							if (seguimientoInfluenza == null) {
-								// NO PERMITIR CERRAR LA HOJA DE CONSULTA
-								return false;
+								if (seguimientoInfluenza == null) {
+									// NO PERMITIR CERRAR LA HOJA DE CONSULTA
+									return false;
+								}
 							}
 						}
 					}
-				}
+				}	
 			}
 		}
 		return true;
@@ -985,7 +1029,7 @@ public class HojaCierreDA implements HojaCierreService {
 	 * Fecha Creacion: 14/01/2020 - SC
 	 */
 	private boolean validarCrearHojaZika(HojaConsulta hojaConsulta) {
-		if (hojaConsulta.getCategoria() != null) {
+		if (hojaConsulta.getCategoria() != null && hojaConsulta.getSerologiaDengue() != null) {
 			if (hojaConsulta.getCategoria().trim().equals("D") && hojaConsulta.getFis() != null 
 	    			&& hojaConsulta.getSerologiaDengue().toString().compareTo("0") == 0) {
 	    		return true;
@@ -1115,4 +1159,68 @@ public class HojaCierreDA implements HojaCierreService {
 		return result;
 	}
 	
+	/*
+	 * Metodo para obtener los supervisores establecidos en los parametros 
+	 * y retornar uno de forma aleatoria 
+	 * */
+	public String supervisorHojaConsulta(Short usuarioMedico, Short medicoCambioTurno) {
+		String supervisor = null;
+		try {
+			String sql = "select valores " + 
+					" from ParametrosSistemas p where p.nombreParametro ='SUPERVISORES_HC'";
+			
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			
+			String valorParametro = query.uniqueResult().toString();
+			if (valorParametro != null) {
+				String[] parts;
+				parts = valorParametro.split(",");
+				parts = removeElements(parts, String.valueOf(usuarioMedico));
+				if (medicoCambioTurno != null) {
+					parts = removeElements(parts, String.valueOf(medicoCambioTurno));
+				}
+				int indiceAleatorio = numeroAleatorioEnRango(0, parts.length - 1);
+				supervisor = parts[indiceAleatorio];
+			}
+			//String valor = "7";
+			/*if (valorParametro != null) {
+				String[] parts;
+				if (String.valueOf(usuarioMedico).equals("4") || String.valueOf(usuarioMedico).equals("27") 
+						|| String.valueOf(usuarioMedico).equals("20") || String.valueOf(usuarioMedico).equals("21") 
+						||  String.valueOf(usuarioMedico).equals("7")) {
+					parts = valorParametro.split(",");
+					parts = removeElements(parts, String.valueOf(usuarioMedico));
+				} else {
+					parts = valorParametro.split(",");
+				}
+				
+				int indiceAleatorio = numeroAleatorioEnRango(0, parts.length - 1);
+				supervisor = parts[indiceAleatorio];
+			}*/
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			HIBERNATE_RESOURCE.rollback();
+		} finally {
+            if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+            	HIBERNATE_RESOURCE.close();
+            }
+        }
+		return supervisor;
+	}
+	
+	public static int numeroAleatorioEnRango(int minimo, int maximo) {
+        // nextInt regresa en rango pero con límite superior exclusivo, por eso sumamos 1
+        return ThreadLocalRandom.current().nextInt(minimo, maximo + 1);
+    }
+	
+	public static String[] removeElements(String[] arr, String key) 
+    { 
+		int index = 0; 
+        for (int i=0; i<arr.length; i++) 
+            if (!arr[i].equals(key)) 
+                arr[index++] = arr[i]; 
+        return Arrays.copyOf(arr, index); 
+    } 
 }

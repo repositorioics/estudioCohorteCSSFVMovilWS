@@ -1,5 +1,7 @@
 package com.sts_ni.estudiocohortecssfv.webservice;
 
+import java.util.List;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebParam.Mode;
@@ -10,12 +12,15 @@ import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
+import org.json.simple.JSONObject;
+
 import com.sts.ni.estudiocohortecssfv.datos.diagnostico.DiagnosticoDA;
 import com.sts_ni.estudiocohortecssfv.datos.controlcambios.ControlCambiosDA;
 import com.sts_ni.estudiocohortecssfv.datos.enfermeria.EnfermeriaDA;
 import com.sts_ni.estudiocohortecssfv.datos.inicio.ExpedienteDA;
 import com.sts_ni.estudiocohortecssfv.datos.inicio.HojaCierreDA;
 import com.sts_ni.estudiocohortecssfv.datos.inicio.HojaConsultaDA;
+import com.sts_ni.estudiocohortecssfv.datos.inicio.HojaConsultaOfflineDA;
 import com.sts_ni.estudiocohortecssfv.datos.inicio.HojaConsultaReporteDA;
 import com.sts_ni.estudiocohortecssfv.datos.sintomas.SintomasDA;
 import com.sts_ni.estudiocohortecssfv.servicios.ControlCambiosService;
@@ -23,9 +28,13 @@ import com.sts_ni.estudiocohortecssfv.servicios.DiagnosticoService;
 import com.sts_ni.estudiocohortecssfv.servicios.EnfermeriaService;
 import com.sts_ni.estudiocohortecssfv.servicios.ExpedienteService;
 import com.sts_ni.estudiocohortecssfv.servicios.HojaCierreService;
+import com.sts_ni.estudiocohortecssfv.servicios.HojaConsultaOfflineService;
 import com.sts_ni.estudiocohortecssfv.servicios.HojaConsultaReporteService;
 import com.sts_ni.estudiocohortecssfv.servicios.HojaConsultaService;
 import com.sts_ni.estudiocohortecssfv.servicios.SintomasService;
+
+import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
+import ni.com.sts.estudioCohorteCSSFV.modelo.Paciente;
 
 @WebService(name = "EstudioCohorteCSSFVMovilWSService")
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
@@ -41,6 +50,8 @@ public class EstudioCohorteCSSFVMovilWS {
 
 	private HojaConsultaReporteService HOJA_CONSULTA_REPORTE_SERVICE = new HojaConsultaReporteDA();
 	private ControlCambiosService CONTROL_CAMBIOS_SERVICE = new ControlCambiosDA();
+	
+	private HojaConsultaOfflineService HOJA_CONSULTA_OFFLINE_SERVICE = new HojaConsultaOfflineDA();
 
 	@WebMethod(operationName = "getHojaConsultaTest")
 	@WebResult(name = "listaHojaResultadoJSON")
@@ -827,4 +838,62 @@ public class EstudioCohorteCSSFVMovilWS {
 		return HOJA_CONSULTA_SERVICE.getListaConsultasRespitatorio();
 	}
 	//--------------------------------------------------------------------------------
+	// Metodos que se ultilizaran en la hoja de consulta offline
+	@WebMethod(operationName = "getHojasConsultasOffline")
+	@WebResult(name = "listaHojasConsultasJSON")
+	public String getHojasConsultasOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getHojasConsultasOffline();
+			//@WebParam(name = "paramHojaConsulta", partName = "paramHojaConsulta", mode = Mode.IN) String paramHojaConsulta
+		
+	}
+	
+	@WebMethod(operationName = "getUsuariosOffline")
+	@WebResult(name = "listaUsuariosJSON")
+	public String getUsuariosOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getUsuariosOffline();
+	}
+	
+	@WebMethod(operationName = "getRolesOffline")
+	@WebResult(name = "listaRolesJSON")
+	public String getRolesOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getRolesOffline();
+	}
+	
+	@WebMethod(operationName = "getEstudiosOffline")
+	@WebResult(name = "listaEstudiosJSON")
+	public String getEstudiosOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getEstudiosOffline();
+	}
+	
+	@WebMethod(operationName = "getParticipantesOffline")
+	@WebResult(name = "listaPacientesJSON")
+	public String getParticipantesOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getParticipantesOffline();
+	}
+	
+	@WebMethod(operationName = "getEstadosHojasOffline")
+	@WebResult(name = "listaEstadosHojasJSON")
+	public String getEstadosHojasOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getEstadosHojasOffline();
+	}
+	
+	@WebMethod(operationName = "getConsEstudiosOffline")
+	@WebResult(name = "listaConsEstudiosJSON")
+	public String getConsEstudiosOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getConsEstudiosOffline();
+	}
+	
+	@WebMethod(operationName = "getCantidadHojasConsultas")
+	@WebResult(name = "listaConsEstudiosJSON")
+	public String getCantidadHojasConsultas() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getCantidadHojasConsultas();
+	}
+	
+	@WebMethod(operationName = "guardarHojaConsultaOffline")
+	@WebResult(name = "guardarHojaConsultaOfflineJSON")
+	public String guardarHojaConsultaOffline(
+			@WebParam(name = "paramHojaConsulta", partName = "paramHojaConsulta", mode = Mode.IN) String paramHojaConsulta) {
+		return HOJA_CONSULTA_OFFLINE_SERVICE
+				.guardarHojaConsultaOffline(paramHojaConsulta);
+	}
 }

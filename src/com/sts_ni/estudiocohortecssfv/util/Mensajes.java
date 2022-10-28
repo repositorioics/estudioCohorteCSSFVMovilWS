@@ -133,6 +133,10 @@ public class Mensajes {
     
     public static final String NO_PACIENTE_CONSULTA_RESPIRATORIO="No hay pacientes para Consulta Respiratoria.";
     
-    public static final String ERROR_NUM_HOJA_CONSULTA_DUPLICADA="Error al generar la hoja de consulta, intente nuevamente: ";
+    public static final String ERROR_NUM_HOJA_CONSULTA_DUPLICADA="Error al generar la hoja de consulta, intente nuevamente. ";
+    
+    public static final String ERROR_GUARDAR_SEGUIMIENTO="Error al guardar el seguimiento dia ";
+    
+    public static final String ERROR_SUPERVISOR="Error al guardar el supervisor, intente nuevamente. ";
     
 }

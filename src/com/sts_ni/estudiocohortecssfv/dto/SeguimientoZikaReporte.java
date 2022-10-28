@@ -799,6 +799,8 @@ public class SeguimientoZikaReporte {
 	private String sudoracionDia12;
 	private String sudoracionDia13;
 	private String sudoracionDia14;
+	
+	private String supervisorHZ;
     
     
 	public int getCodExpediente() {
@@ -5270,5 +5272,11 @@ public class SeguimientoZikaReporte {
 	}
 	public void setSudoracionDia14(String sudoracionDia14) {
 		this.sudoracionDia14 = sudoracionDia14;
+	}
+	public String getSupervisorHZ() {
+		return supervisorHZ;
+	}
+	public void setSupervisorHZ(String supervisorHZ) {
+		this.supervisorHZ = supervisorHZ;
 	}
 }

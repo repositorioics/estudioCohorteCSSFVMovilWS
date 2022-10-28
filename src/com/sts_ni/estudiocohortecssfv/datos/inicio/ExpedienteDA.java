@@ -2,6 +2,7 @@ package com.sts_ni.estudiocohortecssfv.datos.inicio;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,7 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
+import ni.com.sts.estudioCohorteCSSFV.modelo.BitacoraSeguimientoInfluenza;
 import ni.com.sts.estudioCohorteCSSFV.modelo.Departamentos;
 import ni.com.sts.estudioCohorteCSSFV.modelo.EstudioCatalogo;
 import ni.com.sts.estudioCohorteCSSFV.modelo.HojaConsulta;
@@ -74,7 +77,7 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " to_char(h.fechaCierre, 'HH:MI:SS AM'), "
 					+ " e.descripcion, " + 
 					" (select um.nombre from UsuariosView um where h.usuarioMedico = um.id),  " +
-					" h.secHojaConsulta "
+					" h.secHojaConsulta, h.hojaImpresa "
 					+ " from HojaConsulta h, EstadosHoja e"
 					+ " where h.estado = e.codigo ";
 
@@ -109,6 +112,7 @@ public class ExpedienteDA implements ExpedienteService {
 					fila.put("estado", object[3].toString());
 					fila.put("medicoCierre", (object[4] != null) ? object[4] : "--");
 					fila.put("secHojaConsulta", object[5]);
+					fila.put("hojaImpresa", object[6] != null ? object[6] : "");
 
 					oLista.add(fila);
 
@@ -604,6 +608,7 @@ public class ExpedienteDA implements ExpedienteService {
 	public String guardarSeguimientoInfluenza(String paramHojaInfluenza,
 			String paramSeguimientoInfluenza, String user) {
 		String result = null;
+		boolean hojaCerrada = false;
 		try {
 
 			int codExpediente;
@@ -717,6 +722,13 @@ public class ExpedienteDA implements ExpedienteService {
 					hojaInfluenza.setFechaCierre(df.parse(hojaInfluenzaJSON
 							.get("fechaCierre").toString()));
 					hojaInfluenza.setUsuarioCerroHoja(user);
+					 /*Obteniendo el supervisor*/
+			        String supervisor = supervisorHojasSeguimiento(seguimientoInfluenzaArray);
+			        if (supervisor == null) {
+			        	return result = UtilResultado.parserResultado(null, Mensajes.ERROR_SUPERVISOR, UtilResultado.ERROR);
+			        }
+			        hojaInfluenza.setSupervisor(supervisor.trim());
+			        hojaCerrada = true;
 				}
 				
 				if (hojaInfluenza.getFechaCierre() != null) {
@@ -740,8 +752,7 @@ public class ExpedienteDA implements ExpedienteService {
 				HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaInfluenza);
 				HIBERNATE_RESOURCE.commit();
 	
-				if (paramSeguimientoInfluenza != "") {
-	
+				if (paramSeguimientoInfluenza != "") {	
 					for (int i = 0; i < seguimientoInfluenzaArray.size(); i++) {
 						seguimientoInfluenza = new SeguimientoInfluenza();
 						obj = new Object();
@@ -756,130 +767,205 @@ public class ExpedienteDA implements ExpedienteService {
 						query.setParameter("controlDia", Integer.valueOf((String) seguimientoInfluenzaJSON
 								.get("controlDia"))) ;	
 	
+						
 						if ((query.uniqueResult() != null))
 							seguimientoInfluenza = (SeguimientoInfluenza) query
 									.uniqueResult();
+						/**
+						 * Solo se guardaran los nuevos datos ingresados
+						 * **/
 						
-						seguimientoInfluenza.setSecHojaInfluenza(hojaInfluenza.getSecHojaInfluenza());
+						if (seguimientoInfluenza.getFechaSeguimiento() == null 
+								&& seguimientoInfluenza.getControlDia() <= 0) {	//indica que es nuevo seguimiento - 29/10/2021
+							
+							seguimientoInfluenza.setSecHojaInfluenza(hojaInfluenza.getSecHojaInfluenza());
+							
+							seguimientoInfluenza.setControlDia(Integer.valueOf((String) seguimientoInfluenzaJSON
+									.get("controlDia")));
+							seguimientoInfluenza.setFechaSeguimiento(df.parse(
+									seguimientoInfluenzaJSON.get("fechaSeguimiento").toString()));
+							seguimientoInfluenza.setUsuarioMedico(((Number) seguimientoInfluenzaJSON.
+									get("usuarioMedico")).shortValue());
+		
+							seguimientoInfluenza
+									.setConsultaInicial(((String) seguimientoInfluenzaJSON
+											.get("consultaInicial")));
+							seguimientoInfluenza.setFiebre(((String) seguimientoInfluenzaJSON
+									.get("fiebre")));
+							seguimientoInfluenza.setTos(((String) seguimientoInfluenzaJSON
+									.get("tos")));
+							seguimientoInfluenza
+									.setSecrecionNasal(((String) seguimientoInfluenzaJSON
+											.get("secrecionNasal")));
+							seguimientoInfluenza
+									.setDolorGarganta(((String) seguimientoInfluenzaJSON
+											.get("dolorGarganta")));
+							seguimientoInfluenza
+									.setCongestionNasa(((String) seguimientoInfluenzaJSON
+											.get("congestionNasa")));
+							seguimientoInfluenza
+									.setDolorCabeza(((String) seguimientoInfluenzaJSON
+											.get("dolorCabeza")));
+							seguimientoInfluenza
+									.setFaltaApetito(((String) seguimientoInfluenzaJSON
+											.get("faltaApetito")));
+							seguimientoInfluenza
+									.setDolorMuscular(((String) seguimientoInfluenzaJSON
+											.get("dolorMuscular")));
+							seguimientoInfluenza
+									.setDolorArticular(((String) seguimientoInfluenzaJSON
+											.get("dolorArticular")));
+							seguimientoInfluenza.setDolorOido(((String) seguimientoInfluenzaJSON
+									.get("dolorOido")));
+							seguimientoInfluenza
+									.setRespiracionRapida(((String) seguimientoInfluenzaJSON
+											.get("respiracionRapida")));
+							seguimientoInfluenza
+									.setDificultadRespirar(((String) seguimientoInfluenzaJSON
+											.get("dificultadRespirar")));
+							seguimientoInfluenza
+									.setFaltaEscuela(((String) seguimientoInfluenzaJSON
+											.get("faltaEscuela")));
+							seguimientoInfluenza
+									.setQuedoEnCama(((String) seguimientoInfluenzaJSON
+											.get("quedoEnCama")));
+							
+							/*Nuevos campos agregados*/
+							
+							seguimientoInfluenza
+									.setCuadroConfusional(((String) seguimientoInfluenzaJSON.get("cuadroConfusional")));
+							seguimientoInfluenza
+									.setCuadroNeurologico(((String) seguimientoInfluenzaJSON.get("cuadroNeurologico")));
+							seguimientoInfluenza
+									.setConfusionMental(((String) seguimientoInfluenzaJSON.get("confusionMental")));
+							seguimientoInfluenza.setAnosmia(((String) seguimientoInfluenzaJSON.get("anosmia")));
+							seguimientoInfluenza.setAgeusia(((String) seguimientoInfluenzaJSON.get("ageusia")));
+							seguimientoInfluenza.setMareo(((String) seguimientoInfluenzaJSON.get("mareo")));
+							seguimientoInfluenza.setIctus(((String) seguimientoInfluenzaJSON.get("ictus")));
+							seguimientoInfluenza.setSincope(((String) seguimientoInfluenzaJSON.get("sincope")));
+							/********/
+							/*Nuevos campos agregados 24/09/2019*/
+							fiebreLeve = ((String) seguimientoInfluenzaJSON.get("fiebreLeve"));
+							fiebreModerada = ((String) seguimientoInfluenzaJSON.get("fiebreModerada"));
+							fiebreSevera = ((String) seguimientoInfluenzaJSON.get("fiebreSevera"));
+							tosLeve = ((String) seguimientoInfluenzaJSON.get("tosLeve"));
+							tosModerada = ((String) seguimientoInfluenzaJSON.get("tosModerada"));
+							tosSevera = ((String) seguimientoInfluenzaJSON.get("tosSevera"));
+							secrecionNasalLeve = ((String) seguimientoInfluenzaJSON.get("secrecionNasalLeve"));
+							secrecionNasalModerada = ((String) seguimientoInfluenzaJSON.get("secrecionNasalModerada"));
+							secrecionNasalSevera = ((String) seguimientoInfluenzaJSON.get("secrecionNasalSevera"));
+							dolorGargantaLeve = ((String) seguimientoInfluenzaJSON.get("dolorGargantaLeve"));
+							dolorGargantaModerada = ((String) seguimientoInfluenzaJSON.get("dolorGargantaModerada"));
+							dolorGargantaSevera = ((String) seguimientoInfluenzaJSON.get("dolorGargantaSevera"));
+							dolorCabezaLeve = ((String) seguimientoInfluenzaJSON.get("dolorCabezaLeve"));
+							dolorCabezaModerada = ((String) seguimientoInfluenzaJSON.get("dolorCabezaModerada"));
+							dolorCabezaSevera = ((String) seguimientoInfluenzaJSON.get("dolorCabezaSevera"));
+							dolorMuscularLeve = ((String) seguimientoInfluenzaJSON.get("dolorMuscularLeve"));
+							dolorMuscularModerada = ((String) seguimientoInfluenzaJSON.get("dolorMuscularModerada"));
+							dolorMuscularSevera = ((String) seguimientoInfluenzaJSON.get("dolorMuscularSevera"));
+							dolorArticularLeve = ((String) seguimientoInfluenzaJSON.get("dolorArticularLeve"));
+							dolorArticularModerada = ((String) seguimientoInfluenzaJSON.get("dolorArticularModerada"));
+							dolorArticularSevera = ((String) seguimientoInfluenzaJSON.get("dolorArticularSevera"));
+							
+							/*Se validaron los sintomas que tienen intensidad - 29/10/2021*/
+							String fiebre = ((String) seguimientoInfluenzaJSON.get("fiebre"));
+							if (fiebre.trim().equals("S")) {
+								if (fiebreLeve == null && fiebreModerada == null && fiebreSevera == null) {
+									return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_SEGUIMIENTO 
+											+ seguimientoInfluenza.getControlDia() + ", falta intesidad Fiebre" + " intente nuevamente: ", UtilResultado.ERROR);
+								}
+							}
+							seguimientoInfluenza.setFiebreLeve(fiebreLeve);
+							seguimientoInfluenza.setFiebreModerada(fiebreModerada);
+							seguimientoInfluenza.setFiebreSevera(fiebreSevera);
+														
+							String tos = ((String) seguimientoInfluenzaJSON.get("tos"));
+							if (tos.trim().equals("S")) {
+								if (tosLeve == null && tosModerada == null && tosSevera == null) {
+									return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_SEGUIMIENTO 
+											+ seguimientoInfluenza.getControlDia() + ", falta intesidad Tos" + " intente nuevamente: ", UtilResultado.ERROR);
+								}
+							}
+							seguimientoInfluenza.setTosLeve(tosLeve);
+							seguimientoInfluenza.setTosModerada(tosModerada);
+							seguimientoInfluenza.setTosSevera(tosSevera);
+							
+							String secrecionNasal = ((String) seguimientoInfluenzaJSON.get("secrecionNasal"));
+							/*Validando la secrecion nasal S*/
+							if (secrecionNasal.trim().equals("S")) {	
+								if (secrecionNasalLeve == null && secrecionNasalModerada == null && secrecionNasalSevera == null) {
+									return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_SEGUIMIENTO 
+											+ seguimientoInfluenza.getControlDia() + ", falta intesidad Secrecion Nasal" + " intente nuevamente: ", UtilResultado.ERROR);
+								}
+							}
+							seguimientoInfluenza.setSecrecionNasalLeve(secrecionNasalLeve);
+							seguimientoInfluenza.setSecrecionNasalModerada(secrecionNasalModerada);
+							seguimientoInfluenza.setSecrecionNasalSevera(secrecionNasalSevera);
+							
+							String doloGarganta = ((String) seguimientoInfluenzaJSON.get("dolorGarganta"));
+							if (doloGarganta.trim().equals("S")) {
+								if (dolorGargantaLeve == null && dolorGargantaModerada == null && dolorGargantaSevera == null) {
+									return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_SEGUIMIENTO 
+											+ seguimientoInfluenza.getControlDia() + ", falta intesidad Dolor Garganta" + " intente nuevamente: ", UtilResultado.ERROR);
+								}
+							}
+							seguimientoInfluenza.setDolorGargantaLeve(dolorGargantaLeve);
+							seguimientoInfluenza.setDolorGargantaModerada(dolorGargantaModerada);
+							seguimientoInfluenza.setDolorGargantaSevera(dolorGargantaSevera);
+							
+							String dolorCabeza = ((String) seguimientoInfluenzaJSON.get("dolorCabeza"));
+							if (dolorCabeza.trim().equals("S")) {
+								if (dolorCabezaLeve == null && dolorCabezaModerada == null && dolorCabezaSevera == null) {
+									return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_SEGUIMIENTO 
+											+ seguimientoInfluenza.getControlDia() + ", falta intesidad Dolor Cabeza" + " intente nuevamente: ", UtilResultado.ERROR);
+								}
+							}
+							seguimientoInfluenza.setDolorCabezaLeve(dolorCabezaLeve);
+							seguimientoInfluenza.setDolorCabezaModerada(dolorCabezaModerada);
+							seguimientoInfluenza.setDolorCabezaSevera(dolorCabezaSevera);
+							
+							String dolorMuscular = ((String) seguimientoInfluenzaJSON.get("dolorMuscular"));
+							if (dolorMuscular.trim().equals("S")) {
+								if (dolorMuscularLeve == null && dolorMuscularModerada == null && dolorMuscularSevera == null) {
+									return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_SEGUIMIENTO 
+											+ seguimientoInfluenza.getControlDia() + ", " + " intente nuevamente: ", UtilResultado.ERROR);
+								}
+							}
+							seguimientoInfluenza.setDolorMuscularLeve(dolorMuscularLeve);
+							seguimientoInfluenza.setDolorMuscularModerada(dolorMuscularModerada);
+							seguimientoInfluenza.setDolorMuscularSevera(dolorMuscularSevera);
+							
+							String dolorArticular = ((String) seguimientoInfluenzaJSON.get("dolorArticular"));
+							if (dolorArticular.trim().equals("S")) {
+								if (dolorArticularLeve == null && dolorArticularModerada == null && dolorArticularSevera == null) {
+									return result = UtilResultado.parserResultado(null, Mensajes.ERROR_GUARDAR_SEGUIMIENTO 
+											+ seguimientoInfluenza.getControlDia() + ", " + " intente nuevamente: ", UtilResultado.ERROR);
+								}
+							}
+							seguimientoInfluenza.setDolorArticularLeve(dolorArticularLeve);
+							seguimientoInfluenza.setDolorArticularModerada(dolorArticularModerada);
+							seguimientoInfluenza.setDolorArticularSevera(dolorArticularSevera);
+							
+							guardarBitacoraSeguimientoinfluenza(seguimientoInfluenza);
+							
+						}
 						
-						seguimientoInfluenza.setControlDia(Integer.valueOf((String) seguimientoInfluenzaJSON
-								.get("controlDia")));
-						seguimientoInfluenza.setFechaSeguimiento(df.parse(
-								seguimientoInfluenzaJSON.get("fechaSeguimiento").toString()));
-						seguimientoInfluenza.setUsuarioMedico(((Number) seguimientoInfluenzaJSON.
-								get("usuarioMedico")).shortValue());
-	
-						seguimientoInfluenza
-								.setConsultaInicial(((String) seguimientoInfluenzaJSON
-										.get("consultaInicial")));
-						seguimientoInfluenza.setFiebre(((String) seguimientoInfluenzaJSON
-								.get("fiebre")));
-						seguimientoInfluenza.setTos(((String) seguimientoInfluenzaJSON
-								.get("tos")));
-						seguimientoInfluenza
-								.setSecrecionNasal(((String) seguimientoInfluenzaJSON
-										.get("secrecionNasal")));
-						seguimientoInfluenza
-								.setDolorGarganta(((String) seguimientoInfluenzaJSON
-										.get("dolorGarganta")));
-						seguimientoInfluenza
-								.setCongestionNasa(((String) seguimientoInfluenzaJSON
-										.get("congestionNasa")));
-						seguimientoInfluenza
-								.setDolorCabeza(((String) seguimientoInfluenzaJSON
-										.get("dolorCabeza")));
-						seguimientoInfluenza
-								.setFaltaApetito(((String) seguimientoInfluenzaJSON
-										.get("faltaApetito")));
-						seguimientoInfluenza
-								.setDolorMuscular(((String) seguimientoInfluenzaJSON
-										.get("dolorMuscular")));
-						seguimientoInfluenza
-								.setDolorArticular(((String) seguimientoInfluenzaJSON
-										.get("dolorArticular")));
-						seguimientoInfluenza.setDolorOido(((String) seguimientoInfluenzaJSON
-								.get("dolorOido")));
-						seguimientoInfluenza
-								.setRespiracionRapida(((String) seguimientoInfluenzaJSON
-										.get("respiracionRapida")));
-						seguimientoInfluenza
-								.setDificultadRespirar(((String) seguimientoInfluenzaJSON
-										.get("dificultadRespirar")));
-						seguimientoInfluenza
-								.setFaltaEscuela(((String) seguimientoInfluenzaJSON
-										.get("faltaEscuela")));
-						seguimientoInfluenza
-								.setQuedoEnCama(((String) seguimientoInfluenzaJSON
-										.get("quedoEnCama")));
-						
-						/*Nuevos campos agregados*/
-						
-						seguimientoInfluenza
-								.setCuadroConfusional(((String) seguimientoInfluenzaJSON.get("cuadroConfusional")));
-						seguimientoInfluenza
-								.setCuadroNeurologico(((String) seguimientoInfluenzaJSON.get("cuadroNeurologico")));
-						seguimientoInfluenza
-								.setConfusionMental(((String) seguimientoInfluenzaJSON.get("confusionMental")));
-						seguimientoInfluenza.setAnosmia(((String) seguimientoInfluenzaJSON.get("anosmia")));
-						seguimientoInfluenza.setAgeusia(((String) seguimientoInfluenzaJSON.get("ageusia")));
-						seguimientoInfluenza.setMareo(((String) seguimientoInfluenzaJSON.get("mareo")));
-						seguimientoInfluenza.setIctus(((String) seguimientoInfluenzaJSON.get("ictus")));
-						seguimientoInfluenza.setSincope(((String) seguimientoInfluenzaJSON.get("sincope")));
-						/********/
-						/*Nuevos campos agregados 24/09/2019*/
-						fiebreLeve = ((String) seguimientoInfluenzaJSON.get("fiebreLeve"));
-						fiebreModerada = ((String) seguimientoInfluenzaJSON.get("fiebreModerada"));
-						fiebreSevera = ((String) seguimientoInfluenzaJSON.get("fiebreSevera"));
-						tosLeve = ((String) seguimientoInfluenzaJSON.get("tosLeve"));
-						tosModerada = ((String) seguimientoInfluenzaJSON.get("tosModerada"));
-						tosSevera = ((String) seguimientoInfluenzaJSON.get("tosSevera"));
-						secrecionNasalLeve = ((String) seguimientoInfluenzaJSON.get("secrecionNasalLeve"));
-						secrecionNasalModerada = ((String) seguimientoInfluenzaJSON.get("secrecionNasalModerada"));
-						secrecionNasalSevera = ((String) seguimientoInfluenzaJSON.get("secrecionNasalSevera"));
-						dolorGargantaLeve = ((String) seguimientoInfluenzaJSON.get("dolorGargantaLeve"));
-						dolorGargantaModerada = ((String) seguimientoInfluenzaJSON.get("dolorGargantaModerada"));
-						dolorGargantaSevera = ((String) seguimientoInfluenzaJSON.get("dolorGargantaSevera"));
-						dolorCabezaLeve = ((String) seguimientoInfluenzaJSON.get("dolorCabezaLeve"));
-						dolorCabezaModerada = ((String) seguimientoInfluenzaJSON.get("dolorCabezaModerada"));
-						dolorCabezaSevera = ((String) seguimientoInfluenzaJSON.get("dolorCabezaSevera"));
-						dolorMuscularLeve = ((String) seguimientoInfluenzaJSON.get("dolorMuscularLeve"));
-						dolorMuscularModerada = ((String) seguimientoInfluenzaJSON.get("dolorMuscularModerada"));
-						dolorMuscularSevera = ((String) seguimientoInfluenzaJSON.get("dolorMuscularSevera"));
-						dolorArticularLeve = ((String) seguimientoInfluenzaJSON.get("dolorArticularLeve"));
-						dolorArticularModerada = ((String) seguimientoInfluenzaJSON.get("dolorArticularModerada"));
-						dolorArticularSevera = ((String) seguimientoInfluenzaJSON.get("dolorArticularSevera"));
-						
-						seguimientoInfluenza.setFiebreLeve(fiebreLeve);
-						seguimientoInfluenza.setFiebreModerada(fiebreModerada);
-						seguimientoInfluenza.setFiebreSevera(fiebreSevera);
-						seguimientoInfluenza.setTosLeve(tosLeve);
-						seguimientoInfluenza.setTosModerada(tosModerada);
-						seguimientoInfluenza.setTosSevera(tosSevera);
-						seguimientoInfluenza.setSecrecionNasalLeve(secrecionNasalLeve);
-						seguimientoInfluenza.setSecrecionNasalModerada(secrecionNasalModerada);
-						seguimientoInfluenza.setSecrecionNasalSevera(secrecionNasalSevera);
-						seguimientoInfluenza.setDolorGargantaLeve(dolorGargantaLeve);
-						seguimientoInfluenza.setDolorGargantaModerada(dolorGargantaModerada);
-						seguimientoInfluenza.setDolorGargantaSevera(dolorGargantaSevera);
-						seguimientoInfluenza.setDolorCabezaLeve(dolorCabezaLeve);
-						seguimientoInfluenza.setDolorCabezaModerada(dolorCabezaModerada);
-						seguimientoInfluenza.setDolorCabezaSevera(dolorCabezaSevera);
-						seguimientoInfluenza.setDolorMuscularLeve(dolorMuscularLeve);
-						seguimientoInfluenza.setDolorMuscularModerada(dolorMuscularModerada);
-						seguimientoInfluenza.setDolorMuscularSevera(dolorMuscularSevera);
-						seguimientoInfluenza.setDolorArticularLeve(dolorArticularLeve);
-						seguimientoInfluenza.setDolorArticularModerada(dolorArticularModerada);
-						seguimientoInfluenza.setDolorArticularSevera(dolorArticularSevera);
 
 						/*--------------------*/
 						
-	
 						HIBERNATE_RESOURCE.begin();
 						HIBERNATE_RESOURCE.getSession().saveOrUpdate(
 								seguimientoInfluenza);
 						HIBERNATE_RESOURCE.commit();
 					}
 				}
+				
+				if (hojaCerrada) {
+					UtilitarioReporte ureporte = new UtilitarioReporte();
+					ureporte.imprimirDocumentoV2("rptSeguimientoInfluenza_" + numHojaSeguimiento,
+							getSeguimientoInfluenzaPdf(numHojaSeguimiento), 0);
+				}
+				
 				List oLista = new LinkedList();
 				Map fila = null;
 				fila = new HashMap();
@@ -1082,6 +1168,7 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " h.num_hoja_seguimiento \"numHojaSeguimiento\", "
 					+ " h.fis, h.fif, h.fecha_inicio \"fechaInicio\", "
 					+ " h.fecha_cierre  \"fechaCierre\", "
+					+ " (select uv.codigopersonal from usuarios_view uv where CAST(h.supervisor AS INTEGER) = uv.id) \"supervisor\", "
 					+ " s1.consulta_inicial \"consultaInicialDia1\", "
 					+ " s2.consulta_inicial \"consultaInicialDia2\", "
 					+ " s3.consulta_inicial \"consultaInicialDia3\", "
@@ -2510,6 +2597,16 @@ public class ExpedienteDA implements ExpedienteService {
 		String result = null;
 		try {
 			consultaReporteService = new HojaConsultaReporteDA();
+			
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(QUERY_HOJA_CONSULTA_BY_ID);
+			query.setParameter("id", paramsecHojaConsulta);
+			
+			HojaConsulta hojaConsulta = ((HojaConsulta) query.uniqueResult());
+			
+			hojaConsulta.setHojaImpresa('S');
+			HIBERNATE_RESOURCE.begin();
+            HIBERNATE_RESOURCE.getSession().saveOrUpdate(hojaConsulta);
+            HIBERNATE_RESOURCE.commit();
 
 			try {
             	consultaReporteService.reImprimirHojaConsultaPdf(paramsecHojaConsulta, consultorio);
@@ -3027,6 +3124,7 @@ public class ExpedienteDA implements ExpedienteService {
 	public String guardarSeguimientoZika(String paramHojaZika,
 			String paramSeguimientoZika, String user) {
 		String result = null;
+		boolean hojaCerrada = false;
 		try {
 
 			int codExpediente;
@@ -3106,6 +3204,13 @@ public class ExpedienteDA implements ExpedienteService {
 					hojaZika.setFechaCierre(df.parse(hojaZikaJSON
 							.get("fechaCierre").toString()));
 					hojaZika.setUsuarioCerroHoja(user);
+					/*Obteniendo el supervisor*/
+			        String supervisor = supervisorHojasSeguimiento(seguimientoZikaArray);
+			        if (supervisor == null) {
+			        	return result = UtilResultado.parserResultado(null, Mensajes.ERROR_SUPERVISOR, UtilResultado.ERROR);
+			        }
+			        hojaZika.setSupervisor(supervisor.trim());
+			        hojaCerrada = true;
 				}
 				
 				if (hojaZika.getFechaCierre() != null) {
@@ -3159,8 +3264,9 @@ public class ExpedienteDA implements ExpedienteService {
 								seguimientoZikaJSON.get("fechaSeguimiento").toString()));
 						seguimientoZika.setUsuarioMedico(((Number) seguimientoZikaJSON.
 								get("usuarioMedico")).shortValue());
-						seguimientoZika.setSupervisor(((Number) seguimientoZikaJSON.
-								get("supervisor")).shortValue());
+						/*seguimientoZika.setSupervisor(((Number) seguimientoZikaJSON.
+								get("supervisor")).shortValue());*/
+						seguimientoZika.setSupervisor((short) 0);
 						seguimientoZika
 								.setConsultaInicial(((String) seguimientoZikaJSON
 										.get("consultaInicial")));
@@ -3279,6 +3385,15 @@ public class ExpedienteDA implements ExpedienteService {
 						HIBERNATE_RESOURCE.commit();
 					}
 				}
+				
+				if (hojaCerrada) {
+					UtilitarioReporte ureporte = new UtilitarioReporte();
+					ureporte.imprimirDocumentoV2("rptSeguimientoZika_"
+							+ numHojaSeguimiento,
+							getSeguimientoZikaPdf(numHojaSeguimiento), 0);
+				}
+				
+				
 				List oLista = new LinkedList();
 				Map fila = null;
 				fila = new HashMap();
@@ -3320,6 +3435,7 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " h.sintoma_inicial2 \"sintomaInicial2\", "
 					+ " h.sintoma_inicial3 \"sintomaInicial3\", "
 					+ " h.sintoma_inicial4 \"sintomaInicial4\", "
+					+ " (select uv.codigopersonal from usuarios_view uv where CAST(h.supervisor AS INTEGER) = uv.id) \"supervisorHZ\", "
 					
 					+ " s1.consulta_inicial \"consultaInicialDia1\", "
 					+ " s2.consulta_inicial \"consultaInicialDia2\", "
@@ -4072,7 +4188,7 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " (select um.codigopersonal from usuarios_view um where s13.usuario_medico = um.id) \"nombreMedico13\", "
 					+ " (select um.codigopersonal from usuarios_view um where s14.usuario_medico = um.id) \"nombreMedico14\", "
 					
-					+ " (select um.codigopersonal from usuarios_view um where s1.supervisor = um.id) \"supervisor1\", "
+					/*+ " (select um.codigopersonal from usuarios_view um where s1.supervisor = um.id) \"supervisor1\", "
 					+ " (select um.codigopersonal from usuarios_view um where s2.supervisor = um.id) \"supervisor2\", "
 					+ " (select um.codigopersonal from usuarios_view um where s3.supervisor = um.id) \"supervisor3\", "
 					+ " (select um.codigopersonal from usuarios_view um where s4.supervisor = um.id) \"supervisor4\", "
@@ -4085,7 +4201,7 @@ public class ExpedienteDA implements ExpedienteService {
 					+ " (select um.codigopersonal from usuarios_view um where s11.supervisor = um.id) \"supervisor11\", "
 					+ " (select um.codigopersonal from usuarios_view um where s12.supervisor = um.id) \"supervisor12\", "
 					+ " (select um.codigopersonal from usuarios_view um where s13.supervisor = um.id) \"supervisor13\", "
-					+ " (select um.codigopersonal from usuarios_view um where s14.supervisor = um.id) \"supervisor14\", "
+					+ " (select um.codigopersonal from usuarios_view um where s14.supervisor = um.id) \"supervisor14\", "*/
 					
 					
 					+ " to_char(s1.fecha_seguimiento, 'dd/MM/yyyy') \"fechaSeguimiento1\", "
@@ -4955,5 +5071,131 @@ public class ExpedienteDA implements ExpedienteService {
 				+ numHojaConsulta,
 				getFichaEpiSindromesFebrilesPdf(numHojaConsulta), consultorio);
 	}
+	
+	public void guardarBitacoraSeguimientoinfluenza (SeguimientoInfluenza seguimientoInfluenza) {
+		try {
+			BitacoraSeguimientoInfluenza bitacoraSeguimientoInfluenza = new BitacoraSeguimientoInfluenza();
+			bitacoraSeguimientoInfluenza.setSecHojaInfluenza(seguimientoInfluenza.getSecHojaInfluenza());
+			bitacoraSeguimientoInfluenza.setFechaSeguimiento(seguimientoInfluenza.getFechaSeguimiento());
+			bitacoraSeguimientoInfluenza.setUsuarioMedico(seguimientoInfluenza.getUsuarioMedico());
+			bitacoraSeguimientoInfluenza.setConsultaInicial(seguimientoInfluenza.getConsultaInicial());
+			bitacoraSeguimientoInfluenza.setFiebre(seguimientoInfluenza.getFiebre());
+			bitacoraSeguimientoInfluenza.setTos(seguimientoInfluenza.getTos());
+			bitacoraSeguimientoInfluenza.setSecrecionNasal(seguimientoInfluenza.getSecrecionNasal());
+			bitacoraSeguimientoInfluenza.setDolorGarganta(seguimientoInfluenza.getDolorGarganta());
+			bitacoraSeguimientoInfluenza.setCongestionNasa(seguimientoInfluenza.getCongestionNasa());
+			bitacoraSeguimientoInfluenza.setDolorCabeza(seguimientoInfluenza.getDolorCabeza());
+			bitacoraSeguimientoInfluenza.setFaltaApetito(seguimientoInfluenza.getFaltaApetito());
+			bitacoraSeguimientoInfluenza.setDolorMuscular(seguimientoInfluenza.getDolorMuscular());
+			bitacoraSeguimientoInfluenza.setDolorArticular(seguimientoInfluenza.getDolorArticular());
+			bitacoraSeguimientoInfluenza.setDolorOido(seguimientoInfluenza.getDolorOido());
+			bitacoraSeguimientoInfluenza.setRespiracionRapida(seguimientoInfluenza.getRespiracionRapida());
+			bitacoraSeguimientoInfluenza.setDificultadRespirar(seguimientoInfluenza.getDificultadRespirar());
+			bitacoraSeguimientoInfluenza.setFaltaEscuela(seguimientoInfluenza.getFaltaEscuela());
+			bitacoraSeguimientoInfluenza.setQuedoEnCama(seguimientoInfluenza.getQuedoEnCama());
+			bitacoraSeguimientoInfluenza.setControlDia(seguimientoInfluenza.getControlDia());
+			
+			bitacoraSeguimientoInfluenza.setFiebreLeve(seguimientoInfluenza.getFiebreLeve());
+			bitacoraSeguimientoInfluenza.setFiebreModerada(seguimientoInfluenza.getFiebreModerada());
+			bitacoraSeguimientoInfluenza.setFiebreSevera(seguimientoInfluenza.getFiebreSevera());
+
+			bitacoraSeguimientoInfluenza.setTosLeve(seguimientoInfluenza.getTosLeve());
+			bitacoraSeguimientoInfluenza.setTosModerada(seguimientoInfluenza.getTosModerada());
+			bitacoraSeguimientoInfluenza.setTosSevera(seguimientoInfluenza.getTosSevera());
+
+			bitacoraSeguimientoInfluenza.setSecrecionNasalLeve(seguimientoInfluenza.getSecrecionNasalLeve());
+			bitacoraSeguimientoInfluenza.setSecrecionNasalModerada(seguimientoInfluenza.getSecrecionNasalModerada());
+			bitacoraSeguimientoInfluenza.setSecrecionNasalSevera(seguimientoInfluenza.getSecrecionNasalSevera());
+
+			bitacoraSeguimientoInfluenza.setDolorGargantaLeve(seguimientoInfluenza.getDolorGargantaLeve());
+			bitacoraSeguimientoInfluenza.setDolorGargantaModerada(seguimientoInfluenza.getDolorGargantaModerada());
+			bitacoraSeguimientoInfluenza.setDolorGargantaSevera(seguimientoInfluenza.getDolorGargantaSevera());
+
+			bitacoraSeguimientoInfluenza.setDolorCabezaLeve(seguimientoInfluenza.getDolorCabezaLeve());
+			bitacoraSeguimientoInfluenza.setDolorCabezaModerada(seguimientoInfluenza.getDolorCabezaModerada());
+			bitacoraSeguimientoInfluenza.setDolorCabezaSevera(seguimientoInfluenza.getDolorCabezaSevera());
+
+			bitacoraSeguimientoInfluenza.setDolorMuscularLeve(seguimientoInfluenza.getDolorMuscularLeve());
+			bitacoraSeguimientoInfluenza.setDolorMuscularModerada(seguimientoInfluenza.getDolorMuscularModerada());
+			bitacoraSeguimientoInfluenza.setDolorMuscularSevera(seguimientoInfluenza.getDolorMuscularSevera());
+
+			bitacoraSeguimientoInfluenza.setDolorArticularLeve(seguimientoInfluenza.getDolorArticularLeve());
+			bitacoraSeguimientoInfluenza.setDolorArticularModerada(seguimientoInfluenza.getDolorArticularModerada());
+			bitacoraSeguimientoInfluenza.setDolorArticularSevera(seguimientoInfluenza.getDolorArticularSevera());
+			
+			bitacoraSeguimientoInfluenza.setCuadroConfusional(seguimientoInfluenza.getCuadroConfusional());
+			bitacoraSeguimientoInfluenza.setCuadroNeurologico(seguimientoInfluenza.getCuadroNeurologico());
+			bitacoraSeguimientoInfluenza.setConfusionMental(seguimientoInfluenza.getConfusionMental());
+			bitacoraSeguimientoInfluenza.setAnosmia(seguimientoInfluenza.getAnosmia());
+			bitacoraSeguimientoInfluenza.setAgeusia(seguimientoInfluenza.getAgeusia());
+			bitacoraSeguimientoInfluenza.setMareo(seguimientoInfluenza.getMareo());
+			bitacoraSeguimientoInfluenza.setIctus(seguimientoInfluenza.getIctus());
+			bitacoraSeguimientoInfluenza.setSincope(seguimientoInfluenza.getSincope());
+			
+			HIBERNATE_RESOURCE.begin();
+			HIBERNATE_RESOURCE.getSession().saveOrUpdate(
+					bitacoraSeguimientoInfluenza);
+			HIBERNATE_RESOURCE.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+	}
+	
+	/*
+	 * Metodo para obtener los supervisores establecidos en los parametros 
+	 * y retornar uno de forma aleatoria 
+	 * */
+	public String supervisorHojasSeguimiento(JSONArray paramSeguimiento) {
+		String supervisor = null;
+		try {
+			String sql = "select valores " + 
+					" from ParametrosSistemas p where p.nombreParametro ='SUPERVISORES_HC'";
+			
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			
+			String valorParametro = query.uniqueResult().toString();
+			String[] parts = valorParametro.split(",");
+			JSONParser parser = new JSONParser();
+			
+			for (int i = 0; i < paramSeguimiento.size(); i++) {
+				Object obj = new Object();
+				obj = (Object) parser.parse(paramSeguimiento.get(i).toString());
+				JSONObject seguimientoJSON = (JSONObject) obj;
+				short usuarioMedico = ((Number) seguimientoJSON.get("usuarioMedico")).shortValue();
+				if (valorParametro != null) {
+					parts = removeElements(parts, String.valueOf(usuarioMedico));
+				}
+			}
+			
+			int indiceAleatorio = numeroAleatorioEnRango(0, parts.length - 1);
+			supervisor = parts[indiceAleatorio];
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			HIBERNATE_RESOURCE.rollback();
+		} finally {
+            if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+            	HIBERNATE_RESOURCE.close();
+            }
+        }
+		return supervisor;
+	}
+	
+	public static int numeroAleatorioEnRango(int minimo, int maximo) {
+        // nextInt regresa en rango pero con límite superior exclusivo, por eso sumamos 1
+        return ThreadLocalRandom.current().nextInt(minimo, maximo + 1);
+    }
+	
+	public static String[] removeElements(String[] arr, String key) 
+    { 
+		int index = 0; 
+        for (int i=0; i<arr.length; i++) 
+            if (!arr[i].equals(key)) 
+                arr[index++] = arr[i]; 
+        return Arrays.copyOf(arr, index); 
+    } 
 	
 }

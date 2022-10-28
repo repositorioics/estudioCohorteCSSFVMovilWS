@@ -1387,6 +1387,7 @@ public class SeguimientoInfluenzaReporte {
     private String sincopeDia27;
     private String sincopeDia28;
     
+    private String supervisor;
     
 	public String getDolorCabezaDia1() {
 		return dolorCabezaDia1;
@@ -9177,6 +9178,12 @@ public class SeguimientoInfluenzaReporte {
 	}
 	public void setSincopeDia1(String sincopeDia1) {
 		this.sincopeDia1 = sincopeDia1;
+	}
+	public String getSupervisor() {
+		return supervisor;
+	}
+	public void setSupervisor(String supervisor) {
+		this.supervisor = supervisor;
 	}
 	
 }
