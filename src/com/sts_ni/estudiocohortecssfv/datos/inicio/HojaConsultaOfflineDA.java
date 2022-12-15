@@ -386,6 +386,60 @@ public class HojaConsultaOfflineDA implements HojaConsultaOfflineService {
 		System.gc();
     }
 	
+	@Override
+	public String getPartesHojasConsultasOffline() {
+		String result = null;
+		try {
+			List oLista = new LinkedList();
+			Map fila = null;
+			
+			String sql = "SELECT secHojaConsulta, codExpediente, numHojaConsulta, "
+					+ "estado, fechaConsulta, usuarioEnfermeria, usuarioMedico, fis, fif "
+					+ "FROM HojaConsulta "
+					//+ "ORDER BY numHojaConsulta DESC "
+					+ "WHERE estado in('7') ORDER BY numHojaConsulta DESC";
+			
+			Query query = HIBERNATE_RESOURCE.getSession().createQuery(sql);
+			
+			List<Object[]> objLista = (query.list() != null) ? (List<Object[]>) query.list() : new ArrayList<Object[]>();
+			
+			if (objLista != null && objLista.size() > 0) {
+				
+				for (Object[] object : objLista) {
+					// Construir la fila del registro actual usando arreglos
+					
+					fila = new HashMap();
+					fila.put("secHojaConsulta", object[0].toString());
+					fila.put("codExpediente", object[1].toString());
+					fila.put("numHojaConsulta", object[2].toString());
+					fila.put("estado", object[3].toString());
+					fila.put("fechaConsulta", object[4].toString());
+					fila.put("usuarioEnfermeria", object[5] != null ? object[5].toString() : null);
+					fila.put("usuarioMedico", object[6] != null ? object[6].toString() : null);
+					fila.put("fis", object[7] != null ? object[7].toString() : null);
+					fila.put("fif", object[8] != null ? object[8].toString() : null);
+					oLista.add(fila);
+				}
+				
+			}
+			
+			result = UtilResultado.parserResultado(oLista, "",
+					UtilResultado.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+				e.printStackTrace();
+				result = UtilResultado.parserResultado(null, Mensajes.ERROR_NO_CONTROLADO,
+						UtilResultado.ERROR);
+			 
+		} finally {
+			if (HIBERNATE_RESOURCE.getSession().isOpen()) {
+				HIBERNATE_RESOURCE.close();
+			}
+			freememory();
+		}
+		return result;
+	}
+	
 	/***
 	 * Metodo obtener todos los usuarios para trabajar de forma offline.
 	 */
@@ -1201,7 +1255,7 @@ public class HojaConsultaOfflineDA implements HojaConsultaOfflineService {
 							hojaConsulta.setFis(null);
 						}
 						if(fif != null && !fif.isEmpty()) {
-							Date fechaInicioFiebre = format.parse(fis);
+							Date fechaInicioFiebre = format.parse(fif);
 							hojaConsulta.setFif(fechaInicioFiebre);
 							//hojaConsulta.setFif( fif.trim().length() > 0 ? new SimpleDateFormat("dd/MM/yyyy").parse(fif) : null);
 						} else {

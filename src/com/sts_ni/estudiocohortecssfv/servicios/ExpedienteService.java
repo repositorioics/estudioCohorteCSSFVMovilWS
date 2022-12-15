@@ -11,7 +11,7 @@ public interface ExpedienteService {
 	
 	public String buscarPacienteSeguimientoInfluenza(int codExpediente);
 	
-	public String guardarSeguimientoInfluenza(String paramHojaInfluenza, String paramSeguimientoInfluenza, String user);
+	public String guardarSeguimientoInfluenza(String paramHojaInfluenza, String paramSeguimientoInfluenza, String user, String consultorio);
 	
 	public String getListaSeguimientoInfluenza(int paramSecHojaInfluenza);
 	
@@ -31,7 +31,7 @@ public interface ExpedienteService {
 	
 	public String crearSeguimientoZika(String paramCrearHoja);
 	
-	public String guardarSeguimientoZika(String paramHojaZika, String paramSeguimientoZika, String user);
+	public String guardarSeguimientoZika(String paramHojaZika, String paramSeguimientoZika, String user, String consultorio);
 	
 	public byte[] getSeguimientoZikaPdf(int paramSecHojaZika);
 	

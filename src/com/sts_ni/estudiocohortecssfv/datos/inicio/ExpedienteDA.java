@@ -606,7 +606,7 @@ public class ExpedienteDA implements ExpedienteService {
 	 */
 	@Override
 	public String guardarSeguimientoInfluenza(String paramHojaInfluenza,
-			String paramSeguimientoInfluenza, String user) {
+			String paramSeguimientoInfluenza, String user, String consultorio) {
 		String result = null;
 		boolean hojaCerrada = false;
 		try {
@@ -961,9 +961,19 @@ public class ExpedienteDA implements ExpedienteService {
 				}
 				
 				if (hojaCerrada) {
-					UtilitarioReporte ureporte = new UtilitarioReporte();
-					ureporte.imprimirDocumentoV2("rptSeguimientoInfluenza_" + numHojaSeguimiento,
-							getSeguimientoInfluenzaPdf(numHojaSeguimiento), 0);
+					if (consultorio.trim().equals("Medico")) {
+						UtilitarioReporte ureporte = new UtilitarioReporte();
+						ureporte.imprimirDocumentoV2("rptSeguimientoInfluenza_" + numHojaSeguimiento,
+								getSeguimientoInfluenzaPdf(numHojaSeguimiento), 0);
+					} else if (consultorio.trim().equals("Resp")) {
+						UtilitarioReporte ureporte = new UtilitarioReporte();
+						ureporte.imprimirDocumentoV2("rptSeguimientoInfluenza_" + numHojaSeguimiento,
+								getSeguimientoInfluenzaPdf(numHojaSeguimiento), 1);
+					} else {
+						UtilitarioReporte ureporte = new UtilitarioReporte();
+						ureporte.imprimirDocumentoV2("rptSeguimientoInfluenza_" + numHojaSeguimiento,
+								getSeguimientoInfluenzaPdf(numHojaSeguimiento), 0);
+					}
 				}
 				
 				List oLista = new LinkedList();
@@ -2929,7 +2939,7 @@ public class ExpedienteDA implements ExpedienteService {
 				fila.put("secHojaZika", ((Integer)paciente[8]).intValue());
 				fila.put("cerrado", paciente[9].toString().charAt(0));
 				fila.put("categoria", (paciente[10] != null) ? paciente[10].toString() : "");
-				fila.put("sintomaIncial1", (paciente[11] != null) ? paciente[11].toString() : "");
+				fila.put("sintomaInicial1", (paciente[11] != null) ? paciente[11].toString() : "");
 				fila.put("sintomaInicial2", (paciente[12] != null) ? paciente[12].toString() : "");
 				fila.put("sintomaInicial3", (paciente[13] != null) ? paciente[13].toString() : "");
 				fila.put("sintomaInicial4", (paciente[14] != null) ? paciente[14].toString() : "");
@@ -3122,7 +3132,7 @@ public class ExpedienteDA implements ExpedienteService {
 	 */
 	@Override
 	public String guardarSeguimientoZika(String paramHojaZika,
-			String paramSeguimientoZika, String user) {
+			String paramSeguimientoZika, String user, String consultorio) {
 		String result = null;
 		boolean hojaCerrada = false;
 		try {
@@ -3387,10 +3397,24 @@ public class ExpedienteDA implements ExpedienteService {
 				}
 				
 				if (hojaCerrada) {
-					UtilitarioReporte ureporte = new UtilitarioReporte();
-					ureporte.imprimirDocumentoV2("rptSeguimientoZika_"
-							+ numHojaSeguimiento,
-							getSeguimientoZikaPdf(numHojaSeguimiento), 0);
+					/*
+					 * UtilitarioReporte ureporte = new UtilitarioReporte();
+					 * ureporte.imprimirDocumentoV2("rptSeguimientoZika_" + numHojaSeguimiento,
+					 * getSeguimientoZikaPdf(numHojaSeguimiento), 0);
+					 */
+					if (consultorio.trim().equals("Medico")) {
+						UtilitarioReporte ureporte = new UtilitarioReporte();
+						ureporte.imprimirDocumentoV2("rptSeguimientoZika_" + numHojaSeguimiento,
+						getSeguimientoZikaPdf(numHojaSeguimiento), 0);
+					} else if (consultorio.trim().equals("Resp")) {
+						UtilitarioReporte ureporte = new UtilitarioReporte();
+						ureporte.imprimirDocumentoV2("rptSeguimientoZika_" + numHojaSeguimiento,
+						getSeguimientoZikaPdf(numHojaSeguimiento), 1);
+					} else {
+						UtilitarioReporte ureporte = new UtilitarioReporte();
+						ureporte.imprimirDocumentoV2("rptSeguimientoZika_" + numHojaSeguimiento,
+						getSeguimientoZikaPdf(numHojaSeguimiento), 0);
+					}
 				}
 				
 				

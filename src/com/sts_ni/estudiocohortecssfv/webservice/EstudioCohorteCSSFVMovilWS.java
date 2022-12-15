@@ -453,9 +453,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	public String guardarSeguimientoInfluenza(
 			@WebParam(name = "paramHojaInfluenza", partName = "paramHojaInfluenza", mode = Mode.IN) String paramHojaInfluenza,
 			@WebParam(name = "paramSeguimientoInfluenza", partName = "paramSeguimientoInfluenza", mode = Mode.IN) String paramSeguimientoInfluenza, 
-			@WebParam(name = "user", partName = "user", mode = Mode.IN) String user) {
+			@WebParam(name = "user", partName = "user", mode = Mode.IN) String user, 
+			@WebParam(name = "consultorio", partName = "consultorio", mode = Mode.IN) String consultorio) {
 		return EXPEDIENTE_SERVICE.guardarSeguimientoInfluenza(
-				paramHojaInfluenza, paramSeguimientoInfluenza, user);
+				paramHojaInfluenza, paramSeguimientoInfluenza, user, consultorio);
 	}
 
 	@WebMethod(operationName = "actualizarEstadoEnConsulta")
@@ -710,9 +711,10 @@ public class EstudioCohorteCSSFVMovilWS {
 	public String guardarSeguimientoZika(
 			@WebParam(name = "paramHojaZika", partName = "paramHojaZika", mode = Mode.IN) String paramHojaZika,
 			@WebParam(name = "paramSeguimientoZika", partName = "paramSeguimientoZika", mode = Mode.IN) String paramSeguimientoZika,
-			@WebParam(name = "user", partName = "user", mode = Mode.IN) String user) {
+			@WebParam(name = "user", partName = "user", mode = Mode.IN) String user, 
+			@WebParam(name = "consultorio", partName = "consultorio", mode = Mode.IN) String consultorio) {
 		return EXPEDIENTE_SERVICE.guardarSeguimientoZika(
-				paramHojaZika, paramSeguimientoZika, user);
+				paramHojaZika, paramSeguimientoZika, user, consultorio);
 	}
 	
 	@WebMethod(operationName = "getSeguimientoZikaPdf")
@@ -895,5 +897,12 @@ public class EstudioCohorteCSSFVMovilWS {
 			@WebParam(name = "paramHojaConsulta", partName = "paramHojaConsulta", mode = Mode.IN) String paramHojaConsulta) {
 		return HOJA_CONSULTA_OFFLINE_SERVICE
 				.guardarHojaConsultaOffline(paramHojaConsulta);
+	}
+	
+	@WebMethod(operationName = "getPartesHojasConsultasOffline")
+	@WebResult(name = "listaHojasConsultasJSON")
+	public String getPartesHojasConsultasOffline() {
+		return HOJA_CONSULTA_OFFLINE_SERVICE.getPartesHojasConsultasOffline();
+		
 	}
 }

@@ -20,5 +20,7 @@ public interface HojaConsultaOfflineService {
 	public String getCantidadHojasConsultas();
 
 	public String guardarHojaConsultaOffline(String paramHojaConsulta);
+
+	public String getPartesHojasConsultasOffline();
 	
 }

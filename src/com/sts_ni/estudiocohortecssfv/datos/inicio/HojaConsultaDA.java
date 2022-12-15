@@ -2249,9 +2249,23 @@ public class HojaConsultaDA implements HojaConsultaService {
 				hojaConsulta.setOtroExamenLab("HCV");
 				hojaConsulta.setDiagnostico2((short) 101);
 			} else {
-				hojaConsulta.setOel('1');
-				hojaConsulta.setOtroExamenLab(null);
-				hojaConsulta.setDiagnostico2(null);
+				if (hojaConsulta.getOtroExamenLab() != null && hojaConsulta.getOtroExamenLab() != "") {
+					if (hojaConsulta.getOtroExamenLab().equals("HCV")) {
+						hojaConsulta.setOel('1');
+						hojaConsulta.setOtroExamenLab(null);
+					}
+				}
+				if (hojaConsulta.getDiagnostico2() != null) {
+					if (hojaConsulta.getDiagnostico2() > 0) {
+						if (hojaConsulta.getDiagnostico2().toString().equals("101")) {
+							hojaConsulta.setDiagnostico2(null);
+						}
+					}
+				}
+				/*
+				 * hojaConsulta.setOtroExamenLab(null); 
+				 * hojaConsulta.setDiagnostico2(null);
+				 */
 			}
 
 			HIBERNATE_RESOURCE.begin();

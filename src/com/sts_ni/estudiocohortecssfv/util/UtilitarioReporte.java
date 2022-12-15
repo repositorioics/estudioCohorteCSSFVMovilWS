@@ -127,7 +127,7 @@ public class UtilitarioReporte  {
 	            }
 	            
 	            if(datosAdicionales != null) {
-	            	if ((datosAdicionales.getHistoriaExamenFisico() != null && 
+	            	/*if ((datosAdicionales.getHistoriaExamenFisico() != null && 
 	            			datosAdicionales.getHistoriaExamenFisico().trim().length() > 2000) &&
 	            			(datosAdicionales.getPlanes() != null && datosAdicionales.getPlanes().trim().length() > 460)) {
 	            		
@@ -165,8 +165,8 @@ public class UtilitarioReporte  {
 		            	String pathPag3 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"3").contains(".jasper")?(nombreReporte+"3"):(nombreReporte+"3") + ".jasper");
 		            	JasperPrint fileAnexo2 = JasperFillManager.fillReport(pathPag3, params, new JRBeanCollectionDataSource(collectionDataSource));
 		            	report.addPage(fileAnexo2.removePage( 0 ));
-	            	}
-	            	/*HashMap params = new HashMap(); 
+	            	}*/
+	            	HashMap params = new HashMap(); 
 	            	params.put("planes", datosAdicionales.getPlanes());
 	            	params.put("historiaExamenFisico", datosAdicionales.getHistoriaExamenFisico());
 	            	params.put("numHojaConsulta", datosAdicionales.getNumHojaConsulta());
@@ -175,7 +175,7 @@ public class UtilitarioReporte  {
 	            	
 	            	String pathPag3 = System.getProperty("jboss.server.data.dir") + System.getProperty("file.separator").charAt(0) + config.getString("ruta.reporte") + ( (nombreReporte+"3").contains(".jasper")?(nombreReporte+"3"):(nombreReporte+"3") + ".jasper");
 	            	JasperPrint fileAnexo2 = JasperFillManager.fillReport(pathPag3, params, new JRBeanCollectionDataSource(collectionDataSource));
-	            	report.addPage(fileAnexo2.removePage( 0 ));*/
+	            	report.addPage(fileAnexo2.removePage( 0 ));
 	            }
             }
           return  JasperExportManager.exportReportToPdf(report);
